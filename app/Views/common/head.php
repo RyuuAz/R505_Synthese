@@ -10,7 +10,7 @@
     <body>
         <nav class="d-flex justify-content-between align-items-center p-3 bg bg-primary">
             <!-- Titre à gauche -->
-            <h1 class="m-0 text-light">Dashboard</h1>
+            <a href="/"> <h1 class="m-0 text-light">Dashboard</h1> </a>
 
             <!-- Icônes à droite, dans des div séparés -->
             <div class="d-flex gap-5">
@@ -26,4 +26,3 @@
                 </div>
             </div>
         </nav>
-
