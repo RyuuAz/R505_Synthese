@@ -28,6 +28,7 @@ $routes->post('/reset_password', 'AuthController::updatePassword');
 $routes->group('', ['filter' => 'auth'], function($routes) {
 
 	$routes->get('/dashboard', 'DashboardController::index');
+$routes->post('/dashboard/addproject', 'DashboardController::addProject');
 	$routes->get('/task/edit/(:num)', 'TaskController::edit/$1');
 	$routes->post('/task/update/(:num)', 'TaskController::update/$1');
 	$routes->get('/profile', 'UserController::profile');

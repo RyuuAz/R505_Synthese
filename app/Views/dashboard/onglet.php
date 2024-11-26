@@ -25,9 +25,40 @@
     <div class="tab-content p-3">
         <div class="tab-pane fade show active" id="tasks" role="tabpanel" aria-labelledby="tasks-tab">
 
+            <div class="container-fluid">
+                <!-- Ligne qui occupe toute la largeur -->
+                <div class="d-flex justify-content-end pt-3">
+                    <!-- Bouton avec icône "+" aligné à droite -->
+                    <button class="btn btn-primary">
+                    <i class="bi bi-plus fs-3"></i> <!-- Icône "+" -->
+                </button>
+            </div>
+            <?php 
+            include 'component/case.php';
+
+            echo genererBandeauTache(
+                'Tâche 1', 
+                '12/12/2024', 
+                'Description de la tâche 1', 
+                ['Commentaire 1', 'Commentaire 2']);?>
+        </div>
         </div>
         <div class="tab-pane fade" id="projects" role="tabpanel" aria-labelledby="projects-tab">
             <p>Liste des projets en cours.</p>
+            <?php if (isset($projects) && !empty($projects)) : ?>
+                <ul class="list-group">
+                    <?php foreach ($projects as $project) : ?>
+                        <li class="list-group item">
+                            <h5><?php echo $project['title']; ?></h5>
+                            <p><?php echo $project['description']; ?></p>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php else : ?>
+                <p>Aucun projet en cours.</p>
+            <?php endif; ?>
+
+            <br>
 
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AjoutProjet">
                 Ajouter un projet
@@ -41,19 +72,19 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form>
-                                <div class="mb-3">
-                                    <label for="nomProjet" class="col-form-label">Nom du projet:</label>
-                                    <input type="text" class="form-control" id="nomProjet">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="descriptionProjet" class="col-form-label">Description du projet:</label>
-                                    <textarea class="form-control" id="descriptionProjet"></textarea>
-                                </div>
+                            <form action="dashboard/addproject" method="post">
+
+                                <?php echo form_label('Nom du projet:', 'nomProjet'); ?>
+                                <?php echo form_input('nomProjet', '', ['class' => 'form-control']); ?>
+
+                                <?php echo form_label('Description du projet:', 'descriptionProjet'); ?>
+                                <?php echo form_textarea('descriptionProjet', '', ['class' => 'form-control']); ?>
                         </div>
                         <div class="modal-footer">
+                            <?php echo form_submit('submit', 'Créer le projet', ['class' => 'btn btn-primary']); ?>
+                            <?php echo form_close(); ?>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                            <button type="button" class="btn btn-primary">Créer le projet</button>
+
                         </div>
                     </div>
                 </div>
@@ -61,9 +92,50 @@
 
 
         </div>
-        <div class="tab-pane fade" id="isolated-tasks" role="tabpanel" aria-labelledby="isolated-tasks-tab">
-            <p>Tâches isolées à accomplir.</p>
+        <div class="modal fade" id="AjoutTache" tabindex="-1" aria-labelledby="ajouttache" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ajouttache">Ajout d'une nouvelle tâche</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="dashboard/addLoneTask" method="post">
+
+                            <!-- Titre -->
+                            <?php echo form_label('Titre de la tâche :', 'title'); ?>
+                            <?php echo form_input('title', '', ['class' => 'form-control', 'required' => 'required']); ?>
+
+                            <!-- Description -->
+                            <?php echo form_label('Description :', 'description'); ?>
+                            <?php echo form_textarea('description', '', ['class' => 'form-control']); ?>
+
+                            <!-- Date d'échéance -->
+                            <?php echo form_label('Date d\'échéance :', 'due_date'); ?>
+                            <?php echo form_input('due_date', '', ['class' => 'form-control', 'type' => 'date', 'required' => 'required']); ?>
+
+                            <!-- Priorité -->
+                            <?php echo form_label('Priorité :', 'prio_id'); ?>
+                            <select name="prio_id" id="prio_id" class="form-control" required>
+                                <option value="">-- Sélectionnez une priorité --</option>
+                                <?php foreach ($priorities as $priority): ?>
+                                    <option value="<?= esc($priority['prio_id']) ?>">
+                                        <?= esc($priority['name']) ?> (<?= esc($priority['color']) ?>)
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+
+                    </div>
+                    <div class="modal-footer">
+                        <!-- Bouton pour soumettre -->
+                        <?php echo form_submit('submit', 'Créer la tâche', ['class' => 'btn btn-primary']); ?>
+                        <?php echo form_close(); ?>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
         </div>
+
     </div>
 </div>
 
