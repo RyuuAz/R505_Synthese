@@ -45,21 +45,24 @@
             </div>
         </div>
         <div class="tab-pane fade" id="projects" role="tabpanel" aria-labelledby="projects-tab">
-            <p>Liste des projets en cours.</p>
-            <?php if (isset($projects) && !empty($projects)) : ?>
-                <ul class="list-group">
-                    <?php foreach ($projects as $project) : ?>
-                        <li class="list-group item">
-                            <h5><?php echo $project['title']; ?></h5>
-                            <p><?php echo $project['description']; ?></p>
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
-            <?php else : ?>
+            <?php if (isset($projects) && !empty($projects)): ?>
+                <div class="container mt-4">
+                    <div class="d-flex flex-wrap justify-content-left">
+                        <?php foreach ($projects as $project): ?>
+                            <div class="card m-2" style="width: 18rem; height: 250px;">
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title"><?= htmlspecialchars($project['title']) ?></h5>
+                                    <p class="card-text flex-grow-1"><?= htmlspecialchars($project['description']) ?></p>
+                                    <button class="btn btn-primary mt-auto">Voir le projet</button>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            <?php else: ?>
                 <p>Aucun projet en cours.</p>
             <?php endif; ?>
 
-            <br>
 
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AjoutProjet">
                 Ajouter un projet
