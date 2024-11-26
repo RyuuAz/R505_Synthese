@@ -6,10 +6,8 @@ Thumbs.db
 .env
 
 # Exclure les caches et logs
-/writable/cache/
-/writable/logs/
-/writable/session/
-/writable/uploads/
+/writable/*
+
 
 # Exclure les fichiers de configuration sensibles (si personnalisés pour l'environnement)
 # /application/config/*.php
