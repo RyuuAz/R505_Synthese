@@ -24,3 +24,10 @@
     border: 1px solid #ff7f00;
     padding: 10px;
 }
+
+.rotate-icon {
+    transition: transform 0.3s ease-in-out; /* Animation fluide */
+}
+.rotate-icon.rotated {
+    transform: rotate(90deg); /* Rotation de 90° vers la droite */
+}

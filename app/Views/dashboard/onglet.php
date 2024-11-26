@@ -21,7 +21,23 @@
     <!-- Contenu des onglets -->
     <div class="tab-content p-3">
         <div class="tab-pane fade show active" id="tasks" role="tabpanel" aria-labelledby="tasks-tab">
-        
+            <div class="container-fluid">
+                <!-- Ligne qui occupe toute la largeur -->
+                <div class="d-flex justify-content-end pt-3">
+                    <!-- Bouton avec icône "+" aligné à droite -->
+                    <button class="btn btn-primary">
+                    <i class="bi bi-plus fs-3"></i> <!-- Icône "+" -->
+                </button>
+            </div>
+            <?php 
+            include 'component/case.php';
+
+            echo genererBandeauTache(
+                'Tâche 1', 
+                '12/12/2024', 
+                'Description de la tâche 1', 
+                ['Commentaire 1', 'Commentaire 2']);?>
+        </div>
         </div>
         <div class="tab-pane fade" id="projects" role="tabpanel" aria-labelledby="projects-tab">
             <p>Liste des projets en cours.</p>
