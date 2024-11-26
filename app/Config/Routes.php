@@ -21,6 +21,7 @@ $routes->get('/register', 'AuthController::register');
 $routes->post('/login', 'AuthController::processLogin');
 $routes->post('/register', 'AuthController::processRegister');
 $routes->get('/dashboard', 'DashboardController::index');
+$routes->post('/dashboard/addproject', 'DashboardController::addProject');
 $routes->get('/task/edit/(:num)', 'TaskController::edit/$1');
 $routes->post('/task/update/(:num)', 'TaskController::update/$1');
 $routes->get('/profile', 'UserController::profile');

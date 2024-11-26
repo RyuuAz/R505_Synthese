@@ -28,6 +28,20 @@
         </div>
         <div class="tab-pane fade" id="projects" role="tabpanel" aria-labelledby="projects-tab">
             <p>Liste des projets en cours.</p>
+            <?php if (isset($projects) && !empty($projects)) : ?>
+                <ul class="list-group">
+                <?php foreach ($projects as $project) : ?>
+                <li class="list-group item">
+                    <h5><?php echo $project['title']; ?></h5>
+                    <p><?php echo $project['description']; ?></p>
+                </li>
+                <?php endforeach; ?>
+            </ul>
+            <?php else : ?>
+                <p>Aucun projet en cours.</p>
+            <?php endif; ?>
+
+            <br>
 
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AjoutProjet">
                 Ajouter un projet
@@ -41,19 +55,19 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form>
-                                <div class="mb-3">
-                                    <label for="nomProjet" class="col-form-label">Nom du projet:</label>
-                                    <input type="text" class="form-control" id="nomProjet">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="descriptionProjet" class="col-form-label">Description du projet:</label>
-                                    <textarea class="form-control" id="descriptionProjet"></textarea>
-                                </div>
+                            <form action="dashboard/addproject" method="post">
+
+                                <?php echo form_label('Nom du projet:', 'nomProjet'); ?>
+                                <?php echo form_input('nomProjet', '', ['class' => 'form-control']); ?>
+
+                                <?php echo form_label('Description du projet:', 'descriptionProjet'); ?>
+                                <?php echo form_textarea('descriptionProjet', '', ['class' => 'form-control']); ?>
                         </div>
                         <div class="modal-footer">
+                            <?php echo form_submit('submit', 'Créer le projet', ['class' => 'btn btn-primary']); ?>
+                            <?php echo form_close(); ?>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                            <button type="button" class="btn btn-primary">Créer le projet</button>
+
                         </div>
                     </div>
                 </div>
