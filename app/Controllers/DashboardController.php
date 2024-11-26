@@ -1,3 +1,5 @@
+<?php
+
 namespace App\Controllers;
 
 use App\Models\TaskModel;
@@ -8,6 +10,6 @@ class DashboardController extends BaseController
     {
         $model = new TaskModel();
         $tasks = $model->where('usr_id', session()->get('user_id'))->findAll();
-        return view('dashboard/index', ['tasks' => $tasks]);
+        return view('index', ['tasks' => $tasks]);
     }
 }

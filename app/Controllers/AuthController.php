@@ -1,3 +1,5 @@
+<?php
+
 namespace App\Controllers;
 
 use App\Models\UserModel;
@@ -6,12 +8,12 @@ class AuthController extends BaseController
 {
     public function login()
     {
-        return view('auth/login');
+        return view('login');
     }
 
     public function register()
     {
-        return view('auth/register');
+        return view('register');
     }
 
     public function processLogin()

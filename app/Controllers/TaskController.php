@@ -1,3 +1,5 @@
+<?php
+
 namespace App\Controllers;
 
 use App\Models\TaskModel;
@@ -6,7 +8,7 @@ class TaskController extends BaseController
 {
     public function create()
     {
-        return view('tasks/create');
+        return view('create');
     }
 
     public function store()
@@ -27,7 +29,7 @@ class TaskController extends BaseController
     {
         $model = new TaskModel();
         $task = $model->find($id);
-        return view('tasks/edit', ['task' => $task]);
+        return view('edit', ['task' => $task]);
     }
 
     public function update($id)
