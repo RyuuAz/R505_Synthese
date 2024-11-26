@@ -2,27 +2,20 @@
 .DS_Store
 Thumbs.db
 
-# Exclure les fichiers de logs
-*.log
-
 # Exclure les fichiers d'environnement
 .env
 
-# Exclure les dépendances de Composer
+# Exclure les caches et logs
+/writable/cache/
+/writable/logs/
+/writable/session/
+/writable/uploads/
+
+# Exclure les fichiers de configuration sensibles (si personnalisés pour l'environnement)
+# /application/config/*.php
+
+# Exclure les dépendances de Composer (si utilisées)
 /vendor/
-
-# Exclure les caches de framework (par exemple Symfony, Laravel, etc.)
-/bootstrap/cache/
-/storage/*.key
-/storage/*.log
-/storage/framework/cache/
-/storage/framework/sessions/
-/storage/framework/views/
-/storage/logs/
-
-# Exclure les caches de PHP (session, opcache, etc.)
-/tmp/
-*.cache
 
 # Exclure les fichiers générés par IDEs/éditeurs
 .idea/
@@ -32,3 +25,17 @@ Thumbs.db
 # Exclure les fichiers de configuration utilisateur Git
 .gitconfig
 .gitattributes
+
+# Exclure les fichiers et caches PHP
+/tmp/
+*.cache
+
+# Exclure les fichiers des systèmes d’exploitation
+.DS_Store
+Thumbs.db
+
+# Exclure les autres fichiers temporaires
+*.log
+*.bak
+*.swp
+*.tmp
