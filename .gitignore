@@ -1,0 +1,34 @@
+# Exclure tous les fichiers cachés système
+.DS_Store
+Thumbs.db
+
+# Exclure les fichiers de logs
+*.log
+
+# Exclure les fichiers d'environnement
+.env
+
+# Exclure les dépendances de Composer
+/vendor/
+
+# Exclure les caches de framework (par exemple Symfony, Laravel, etc.)
+/bootstrap/cache/
+/storage/*.key
+/storage/*.log
+/storage/framework/cache/
+/storage/framework/sessions/
+/storage/framework/views/
+/storage/logs/
+
+# Exclure les caches de PHP (session, opcache, etc.)
+/tmp/
+*.cache
+
+# Exclure les fichiers générés par IDEs/éditeurs
+.idea/
+/.vscode/
+/nbproject/
+
+# Exclure les fichiers de configuration utilisateur Git
+.gitconfig
+.gitattributes
