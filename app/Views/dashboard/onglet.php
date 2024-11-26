@@ -30,18 +30,19 @@
                 <div class="d-flex justify-content-end pt-3">
                     <!-- Bouton avec icône "+" aligné à droite -->
                     <button class="btn btn-primary">
-                    <i class="bi bi-plus fs-3"></i> <!-- Icône "+" -->
-                </button>
-            </div>
-            <?php 
-            include 'component/case.php';
+                        <i class="bi bi-plus fs-3"></i> <!-- Icône "+" -->
+                    </button>
+                </div>
+                <?php
+                include 'component/case.php';
 
-            echo genererBandeauTache(
-                'Tâche 1', 
-                '12/12/2024', 
-                'Description de la tâche 1', 
-                ['Commentaire 1', 'Commentaire 2']);?>
-        </div>
+                echo genererBandeauTache(
+                    'Tâche 1',
+                    '12/12/2024',
+                    'Description de la tâche 1',
+                    ['Commentaire 1', 'Commentaire 2']
+                ); ?>
+            </div>
         </div>
         <div class="tab-pane fade" id="projects" role="tabpanel" aria-labelledby="projects-tab">
             <p>Liste des projets en cours.</p>
@@ -118,11 +119,15 @@
                             <?php echo form_label('Priorité :', 'prio_id'); ?>
                             <select name="prio_id" id="prio_id" class="form-control" required>
                                 <option value="">-- Sélectionnez une priorité --</option>
-                                <?php foreach ($priorities as $priority): ?>
-                                    <option value="<?= esc($priority['prio_id']) ?>">
-                                        <?= esc($priority['name']) ?> (<?= esc($priority['color']) ?>)
-                                    </option>
-                                <?php endforeach; ?>
+                                <?php if (isset($priorities) && !empty($priorities)) : ?>
+                                    <?php foreach ($priorities as $priority): ?>
+                                        <option value="<?= esc($priority['prio_id']) ?>">
+                                            <?= esc($priority['name']) ?> (<?= esc($priority['color']) ?>)
+                                        </option>
+                                    <?php endforeach; ?>
+                                <?php else : ?>
+                                    <p>Aucune priorité.</p>
+                                <?php endif; ?>
                             </select>
 
                     </div>
