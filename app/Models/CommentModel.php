@@ -9,10 +9,10 @@ class CommentModel extends Model
     protected $table = 'comments';
     protected $primaryKey = 'cmt_id';
     protected $allowedFields = [
-        'tsk_id', 
-        'usr_id', 
-        'content', 
-        'cmt_created_at', 
+        'tsk_id',
+        'usr_id',
+        'content',
+        'cmt_created_at',
         'cmt_updated_at'
     ];
     protected $useTimestamps = true;
@@ -45,5 +45,15 @@ class CommentModel extends Model
     public function del(int $id)
     {
         return $this->delete($id);
+    }
+
+    /**
+     * Récupère tous les commentaires d'une tâche
+     * @param int $taskId ID de la tâche
+     * @return array Liste des commentaires
+     */
+    public function getCommentsByTask(int $taskId)
+    {
+        return $this->where('tsk_id', $taskId)->findAll();
     }
 }

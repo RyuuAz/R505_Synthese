@@ -24,22 +24,24 @@ class CommentController extends BaseController
         return view('comment/create');
     }
 
-    // Traite le formulaire d'ajout de commentaire
+    /**
+     * Traite l'ajout d'un commentaire pour une tâche
+     * @return \CodeIgniter\HTTP\RedirectResponse Redirige vers la page de la tâche
+     */
     public function store()
     {
-        if (!$this->validate($this->rules)) {
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-        }
-
         $data = [
             'tsk_id' => $this->request->getPost('tsk_id'),
             'usr_id' => session()->get('usr_id'),
             'content' => $this->request->getPost('content')
         ];
 
-        $this->commentModel->add($data);
-        return redirect()->to('/comments')->with('success', 'Commentaire ajouté.');
+        $commentModel = new \App\Models\CommentModel();
+        $commentModel->add($data);
+
+        return redirect()->to('tasks/show/' . $data['tsk_id'])->with('success', 'Commentaire ajouté.');
     }
+
 
     // Supprime un commentaire
     public function delete($id)

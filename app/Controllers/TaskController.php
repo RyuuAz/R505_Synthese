@@ -100,4 +100,27 @@ class TaskController extends BaseController
         $tasks = $this->taskModel->getTasksByUserWithoutProject($userId);
         return $this->response->setJSON($tasks);
     }
+
+    /**
+     * Affiche les détails d'une tâche avec les commentaires
+     * @param int $taskId ID de la tâche
+     * @return string Vue avec les commentaires
+     */
+    public function show($taskId)
+    {
+        $taskModel = new \App\Models\TaskModel();
+        $commentModel = new \App\Models\CommentModel();
+
+        // Récupérer les détails de la tâche
+        $task = $taskModel->find($taskId);
+
+        // Récupérer les commentaires associés à la tâche
+        $comments = $commentModel->getCommentsByTask($taskId);
+
+        // Passer les données à la vue
+        return view('task/show', [
+            'task' => $task,
+            'comments' => $comments
+        ]);
+    }
 }

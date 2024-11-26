@@ -34,6 +34,7 @@ $routes->get('tasks/delete/(:num)', 'TaskController::delete/$1'); // Suppression
 $routes->get('tasks/user/(:num)', 'TaskController::listByUser/$1'); // Tâches d'un utilisateur
 $routes->get('tasks/project/(:num)', 'TaskController::listByProject/$1'); // Tâches d'un projet
 $routes->get('tasks/user-without-project/(:num)', 'TaskController::listByUserWithoutProject/$1'); // Tâches d'un utilisateur sans projet
+$routes->get('tasks/show/(:num)', 'TaskController::show/$1'); // Affiche les commentaires d'une tâche
 
 // Routes pour PriorityController
 $routes->get('priorities/create', 'PriorityController::create'); // Formulaire de création de priorité
