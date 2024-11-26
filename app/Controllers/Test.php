@@ -6,7 +6,9 @@ class Test extends BaseController
 {
     public function index()
     {
-        echo view('common/head');
+        echo view('common/head', [
+            'titre' => 'test'
+        ]);
         echo view('dashboard/onglet', [
             'title' => 'Dashboard',
             'userProfile' => [
