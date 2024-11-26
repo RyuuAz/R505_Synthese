@@ -9,13 +9,13 @@ class TaskModel extends Model
     protected $table = 'tasks';
     protected $primaryKey = 'tsk_id';
     protected $allowedFields = [
-        'usr_id', 
-        'prj_id', 
-        'title', 
-        'description', 
-        'due_date', 
-        'status', 
-        'tsk_created_at', 
+        'usr_id',
+        'prj_id',
+        'title',
+        'description',
+        'due_date',
+        'status',
+        'tsk_created_at',
         'tsk_updated_at'
     ];
     protected $useTimestamps = true;
@@ -59,5 +59,35 @@ class TaskModel extends Model
     public function del(int $id)
     {
         return $this->delete($id);
+    }
+
+    /**
+     * Récupère toutes les tâches d'un utilisateur
+     * @param int $userId ID de l'utilisateur
+     * @return array Liste des tâches
+     */
+    public function getTasksByUser(int $userId)
+    {
+        return $this->where('usr_id', $userId)->findAll();
+    }
+
+    /**
+     * Récupère toutes les tâches d'un projet
+     * @param int $projectId ID du projet
+     * @return array Liste des tâches
+     */
+    public function getTasksByProject(int $projectId)
+    {
+        return $this->where('prj_id', $projectId)->findAll();
+    }
+
+    /**
+     * Récupère toutes les tâches d'un utilisateur qui n'appartiennent pas à un projet
+     * @param int $userId ID de l'utilisateur
+     * @return array Liste des tâches
+     */
+    public function getTasksByUserWithoutProject(int $userId)
+    {
+        return $this->where('usr_id', $userId)->where('prj_id', null)->findAll();
     }
 }

@@ -52,4 +52,37 @@ class TaskController extends BaseController
         $this->taskModel->del($id);
         return redirect()->to('/tasks')->with('success', 'Tâche supprimée.');
     }
+
+    /**
+     * Récupère toutes les tâches d'un utilisateur
+     * @param int $userId ID de l'utilisateur
+     * @return \CodeIgniter\HTTP\ResponseInterface JSON avec les tâches
+     */
+    public function listByUser($userId)
+    {
+        $tasks = $this->taskModel->getTasksByUser($userId);
+        return $this->response->setJSON($tasks);
+    }
+
+    /**
+     * Récupère toutes les tâches d'un projet
+     * @param int $projectId ID du projet
+     * @return \CodeIgniter\HTTP\ResponseInterface JSON avec les tâches
+     */
+    public function listByProject($projectId)
+    {
+        $tasks = $this->taskModel->getTasksByProject($projectId);
+        return $this->response->setJSON($tasks);
+    }
+
+    /**
+     * Récupère toutes les tâches d'un utilisateur sans projet
+     * @param int $userId ID de l'utilisateur
+     * @return \CodeIgniter\HTTP\ResponseInterface JSON avec les tâches
+     */
+    public function listByUserWithoutProject($userId)
+    {
+        $tasks = $this->taskModel->getTasksByUserWithoutProject($userId);
+        return $this->response->setJSON($tasks);
+    }
 }

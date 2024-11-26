@@ -9,11 +9,11 @@ class ProjectModel extends Model
     protected $table = 'project';
     protected $primaryKey = 'prj_id';
     protected $allowedFields = [
-        'usr_id', 
-        'title', 
-        'description', 
-        'status', 
-        'prj_created_at', 
+        'usr_id',
+        'title',
+        'description',
+        'status',
+        'prj_created_at',
         'prj_updated_at'
     ];
     protected $useTimestamps = true;
@@ -57,5 +57,15 @@ class ProjectModel extends Model
     public function del(int $id)
     {
         return $this->delete($id);
+    }
+
+    /**
+     * Récupère tous les projets d'un utilisateur
+     * @param int $userId ID de l'utilisateur
+     * @return array Liste des projets
+     */
+    public function getProjectsByUser(int $userId)
+    {
+        return $this->where('usr_id', $userId)->findAll();
     }
 }

@@ -49,4 +49,16 @@ class ProjectController extends BaseController
         $this->projectModel->del($id);
         return redirect()->to('/projects')->with('success', 'Projet supprimé.');
     }
+
+    /**
+     * Affiche tous les projets d'un utilisateur
+     * @param int $userId ID de l'utilisateur
+     * @return string Vue avec les projets
+     */
+    public function listByUser($userId)
+    {
+        $projects = $this->projectModel->getProjectsByUser($userId);
+
+        return view('project/list', ['projects' => $projects]);
+    }
 }

@@ -1,0 +1,39 @@
+CRITICAL - 2024-11-26 08:15:10 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "user/register.php"
+[Method: GET, Route: users/register]
+in SYSTEMPATH/Exceptions/FrameworkException.php on line 41.
+ 1 SYSTEMPATH/View/View.php(222): CodeIgniter\Exceptions\FrameworkException::forInvalidFile()
+ 2 SYSTEMPATH/Common.php(1169): CodeIgniter\View\View->render()
+ 3 APPPATH/Controllers/UserController.php(24): view()
+ 4 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\UserController->register()
+ 5 SYSTEMPATH/CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController()
+ 6 SYSTEMPATH/CodeIgniter.php(355): CodeIgniter\CodeIgniter->handleRequest()
+ 7 SYSTEMPATH/Boot.php(325): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter()
+ 9 FCPATH/index.php(56): CodeIgniter\Boot::bootWeb()
+10 SYSTEMPATH/rewrite.php(44): require_once('/home/etudiant/gt220862/TP/s5/r5.05_prog_avancee/TP-synthese/R505_Synthese/public/index.php')
+CRITICAL - 2024-11-26 08:15:28 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "user/register.php"
+[Method: GET, Route: users/register]
+in SYSTEMPATH/Exceptions/FrameworkException.php on line 41.
+ 1 SYSTEMPATH/View/View.php(222): CodeIgniter\Exceptions\FrameworkException::forInvalidFile()
+ 2 SYSTEMPATH/Common.php(1169): CodeIgniter\View\View->render()
+ 3 APPPATH/Controllers/UserController.php(24): view()
+ 4 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\UserController->register()
+ 5 SYSTEMPATH/CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController()
+ 6 SYSTEMPATH/CodeIgniter.php(355): CodeIgniter\CodeIgniter->handleRequest()
+ 7 SYSTEMPATH/Boot.php(325): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter()
+ 9 FCPATH/index.php(56): CodeIgniter\Boot::bootWeb()
+10 SYSTEMPATH/rewrite.php(44): require_once('/home/etudiant/gt220862/TP/s5/r5.05_prog_avancee/TP-synthese/R505_Synthese/public/index.php')
+CRITICAL - 2024-11-26 08:15:46 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "project/create.php"
+[Method: GET, Route: projects/create]
+in SYSTEMPATH/Exceptions/FrameworkException.php on line 41.
+ 1 SYSTEMPATH/View/View.php(222): CodeIgniter\Exceptions\FrameworkException::forInvalidFile()
+ 2 SYSTEMPATH/Common.php(1169): CodeIgniter\View\View->render()
+ 3 APPPATH/Controllers/ProjectController.php(25): view()
+ 4 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\ProjectController->create()
+ 5 SYSTEMPATH/CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController()
+ 6 SYSTEMPATH/CodeIgniter.php(355): CodeIgniter\CodeIgniter->handleRequest()
+ 7 SYSTEMPATH/Boot.php(325): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter()
+ 9 FCPATH/index.php(56): CodeIgniter\Boot::bootWeb()
+10 SYSTEMPATH/rewrite.php(44): require_once('/home/etudiant/gt220862/TP/s5/r5.05_prog_avancee/TP-synthese/R505_Synthese/public/index.php')
