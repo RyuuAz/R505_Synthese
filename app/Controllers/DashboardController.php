@@ -10,6 +10,6 @@ class DashboardController extends BaseController
     {
         $model = new TaskModel();
         $tasks = $model->where('usr_id', session()->get('user_id'))->findAll();
-        return view('index', ['tasks' => $tasks]);
+        return view('/dashboard/onglet', ['tasks' => $tasks]);
     }
 }
