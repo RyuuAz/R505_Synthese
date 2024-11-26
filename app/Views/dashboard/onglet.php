@@ -118,20 +118,6 @@
                             <?php echo form_label('Date d\'échéance :', 'due_date'); ?>
                             <?php echo form_input('due_date', '', ['class' => 'form-control', 'type' => 'date', 'required' => 'required']); ?>
 
-                            <!-- Priorité -->
-                            <?php echo form_label('Priorité :', 'prio_id'); ?>
-                            <select name="prio_id" id="prio_id" class="form-control" required>
-                                <option value="">-- Sélectionnez une priorité --</option>
-                                <?php if (isset($priorities) && !empty($priorities)) : ?>
-                                    <?php foreach ($priorities as $priority): ?>
-                                        <option value="<?= esc($priority['prio_id']) ?>">
-                                            <?= esc($priority['name']) ?> (<?= esc($priority['color']) ?>)
-                                        </option>
-                                    <?php endforeach; ?>
-                                <?php else : ?>
-                                    <p>Aucune priorité.</p>
-                                <?php endif; ?>
-                            </select>
 
                     </div>
                     <div class="modal-footer">

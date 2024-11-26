@@ -18,12 +18,6 @@ class UserController extends BaseController
         helper('form'); // Chargement du helper form
     }
 
-    // Affiche le formulaire d'inscription
-    public function register()
-    {
-        return view('user/register');
-    }
-
     // Traite le formulaire d'inscription
     public function store()
     {
