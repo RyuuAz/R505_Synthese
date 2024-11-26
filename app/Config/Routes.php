@@ -21,8 +21,6 @@ $routes->get('/register', 'AuthController::register');
 $routes->post('/login', 'AuthController::processLogin');
 $routes->post('/register', 'AuthController::processRegister');
 $routes->get('/dashboard', 'DashboardController::index');
-$routes->get('/task/create', 'TaskController::create');
-$routes->post('/task/store', 'TaskController::store');
 $routes->get('/task/edit/(:num)', 'TaskController::edit/$1');
 $routes->post('/task/update/(:num)', 'TaskController::update/$1');
 $routes->get('/profile', 'UserController::profile');
@@ -42,13 +40,13 @@ $routes->get('projects/delete/(:num)', 'ProjectController::delete/$1'); // Suppr
 $routes->get('projects/user/(:num)', 'ProjectController::listByUser/$1'); // Liste des projets d'un utilisateur
 
 // Routes pour TaskController
-$routes->get('tasks/create', 'TaskController::create'); // Formulaire de création de tâche
-$routes->post('tasks/store', 'TaskController::store'); // Traitement de la création
-$routes->get('tasks/delete/(:num)', 'TaskController::delete/$1'); // Suppression d'une tâche
-$routes->get('tasks/user/(:num)', 'TaskController::listByUser/$1'); // Tâches d'un utilisateur
-$routes->get('tasks/project/(:num)', 'TaskController::listByProject/$1'); // Tâches d'un projet
-$routes->get('tasks/user-without-project/(:num)', 'TaskController::listByUserWithoutProject/$1'); // Tâches d'un utilisateur sans projet
-$routes->get('tasks/show/(:num)', 'TaskController::show/$1'); // Affiche les commentaires d'une tâche
+$routes->get('task/create', 'TaskController::create'); // Formulaire de création de tâche
+$routes->post('task/store', 'TaskController::store'); // Traitement de la création
+$routes->get('task/delete/(:num)', 'TaskController::delete/$1'); // Suppression d'une tâche
+$routes->get('task/user/(:num)', 'TaskController::listByUser/$1'); // Tâches d'un utilisateur
+$routes->get('task/project/(:num)', 'TaskController::listByProject/$1'); // Tâches d'un projet
+$routes->get('task/user-without-project/(:num)', 'TaskController::listByUserWithoutProject/$1'); // Tâches d'un utilisateur sans projet
+$routes->get('task/show/(:num)', 'TaskController::show/$1'); // Affiche les commentaires d'une tâche
 
 // Routes pour PriorityController
 $routes->get('priorities/create', 'PriorityController::create'); // Formulaire de création de priorité
