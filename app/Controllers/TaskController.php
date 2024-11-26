@@ -1,6 +1,10 @@
 <?php
 namespace App\Controllers;
+
 use App\Models\TaskModel;
+use App\Models\PriorityModel;
+use App\Models\CommentModel;
+
 class TaskController extends BaseController
 {
     protected $taskModel;
@@ -23,7 +27,7 @@ class TaskController extends BaseController
     public function create()
     {
         $userId = session()->get('usr_id'); // Récupère l'utilisateur connecté
-        $priorityModel = new \App\Models\PriorityModel(); // Charge le modèle PriorityModel
+        $priorityModel = new PriorityModel(); // Charge le modèle PriorityModel
         $priorities = $priorityModel->getPrioritiesByUser($userId); // Récupère les priorités de l'utilisateur
 
         return view('task/create', ['priorities' => $priorities]); // Passe les priorités à la vue
@@ -72,7 +76,6 @@ class TaskController extends BaseController
         $model->update($id, $data);
         return redirect()->to('/dashboard');
     }
-}
 
     // Supprime une tâche
     public function delete($id)
@@ -121,8 +124,8 @@ class TaskController extends BaseController
      */
     public function show($taskId)
     {
-        $taskModel = new \App\Models\TaskModel();
-        $commentModel = new \App\Models\CommentModel();
+        $taskModel = new TaskModel();
+        $commentModel = new CommentModel();
 
         // Récupérer les détails de la tâche
         $task = $taskModel->find($taskId);
