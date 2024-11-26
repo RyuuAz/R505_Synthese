@@ -16,7 +16,7 @@
                             <input type="password" class="form-control w-75" name="password" placeholder="Mot de passe" required/>
                             <!-- Lien mot de passe oublié -->
                             <div class="w-75 text-start mt-1">
-                                <a href="/" class="text-decoration-none">Mot de passe oublié ?</a>
+                                <a href="/forgot_password" class="text-decoration-none">Mot de passe oublié ?</a>
                             </div>
                         </div>
                         <!-- Bouton Connexion -->

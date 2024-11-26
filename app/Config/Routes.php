@@ -18,8 +18,12 @@ $routes->setAutoRoute(false); // Désactive l'autoroute pour plus de sécurité
 
 $routes->get('/', 'AuthController::login');
 $routes->get('/register', 'AuthController::register');
+$routes->get('/forgot_password', 'AuthController::forgotPassword');
+$routes->get('/reset_password/(:alphanum)', 'AuthController::resetPassword/$1');
 $routes->post('/login', 'AuthController::processLogin');
 $routes->post('/register', 'AuthController::processRegister');
+$routes->post('/forgot_password', 'AuthController::sendResetLink');
+$routes->post('/reset_password', 'AuthController::updatePassword');
 
 $routes->group('', ['filter' => 'auth'], function($routes) {
 

@@ -21,6 +21,11 @@ class AuthController extends BaseController
         return view('register');
     }
 
+    public function forgotPassword()
+    {
+        return view('forgot_password');
+    }
+
     public function processLogin()
     {
         $userModel = new UserModel();
@@ -125,4 +130,76 @@ class AuthController extends BaseController
         delete_cookie('user_id_cookie'); // Supprimer le cookie utilisateur
         return redirect()->to('/')->with('success', 'Déconnexion réussie.');
     }
+
+    public function sendResetLink()
+	{
+		$email = $this->request->getPost('email');
+		$userModel = new UserModel();
+		$user = $userModel->getUserByEmail($email);
+		// Dans la méthode sendResetLink du contrôleur ForgotPasswordController
+		echo 'Adresse e-mail soumise : ' . $email. ' ';
+		if ($user) {
+			// Générer un jeton de réinitialisation de MDP et enregistrer-le dans BD
+			$token = bin2hex(random_bytes(16));
+			$expiration = date('Y-m-d H:i:s', strtotime('+1 hour'));
+			$userModel->set('reset_token', $token)
+			->set('reset_token_exp', $expiration)
+			->update($user['usr_id']);
+			// Envoyer l'e-mail avec le lien de réinitialisation
+			$resetLink = site_url("reset_password/$token");
+			$message = "Cliquez sur le lien suivant pour réinitialiser MDP: $resetLink";
+			// Utilisez la classe Email de CodeIgniter pour envoyer l'e-mail
+			$emailService = \Config\Services::email();
+			//paramètres du mail
+			$from = \Config\Services::email()->fromEmail;
+			$to = $this->request->getPost('to');
+			$subject = $this->request->getPost('subject');
+			//envoi du mail
+			$emailService->setTo($email);
+			$emailService->setFrom($from);
+			$emailService->setSubject('Réinitialisation de mot de passe');
+			$emailService->setMessage($message);
+			if ($emailService->send()) {
+			echo 'E-mail envoyé avec succès.';
+			} else {
+				echo $emailService->printDebugger();
+			}
+		} else {
+			echo 'Adresse e-mail non valide.';
+		}
+	}
+
+    public function resetPassword($token)
+	{
+		helper(['form']);
+		$userModel = new UserModel();
+		$user = $userModel->getUserByResetToken($token);
+		if ($user) {
+			return view('update_password', ['token' => $token]);
+		} else {
+			return 'Lien de réinitialisation non valide.';
+		}
+	}
+	public function updatePassword()
+	{
+		$token = $this->request->getPost('token');
+		$password = $this->request->getPost('password');
+		$confirmPassword = $this->request->getPost('confirm_password');
+		// Valider et traiter les données du formulaire
+		$userModel = new UserModel();
+		$user = $userModel->getUserByResetTokenAndValid($token);
+		if ($user && $password === $confirmPassword) {
+			// Mettre à jour le mot de passe et réinitialiser le jeton
+			$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+			$userModel->set('password', $hashedPassword)
+			->set('reset_token', null)
+			->set('reset_token_exp', null)
+			->update($user['usr_id']);
+			return 'Mot de passe réinitialisé avec succès.';
+		} else {
+			echo ($user);
+			return 'Erreur lors de la réinitialisation du mot de passe.';
+		}
+	}
+    
 }
