@@ -3,8 +3,8 @@
     <!-- Barre principale -->
     <div class="task-bar d-flex align-items-center justify-content-between">
         <div class="d-flex align-items-center">
-            <strong class="me-3"> <?php $nomTache ?> </strong>
-            <span> <?php $dateTache ?> </span>
+            <strong class="me-3"> <?php $title ?> </strong>
+            <span> <?php $due_date ?> </span>
         </div>
         <div class="d-flex align-items-center">
             <!-- Icônes d\'édition et de suppression -->

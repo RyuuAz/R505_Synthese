@@ -21,6 +21,7 @@
     <!-- Contenu des onglets -->
     <div class="tab-content p-3">
         <div class="tab-pane fade show active" id="tasks" role="tabpanel" aria-labelledby="tasks-tab">
+        
         </div>
         <div class="tab-pane fade" id="projects" role="tabpanel" aria-labelledby="projects-tab">
             <p>Liste des projets en cours.</p>

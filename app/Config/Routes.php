@@ -62,3 +62,5 @@ $routes->get('comments/delete/(:num)', 'CommentController::delete/$1'); // Suppr
 $routes->get('notifications/create', 'NotificationController::create'); // Formulaire de création de notification
 $routes->post('notifications/store', 'NotificationController::store'); // Traitement de la création
 $routes->get('notifications/delete/(:num)', 'NotificationController::delete/$1'); // Suppression d'une notification
+
+$routes->get('test', 'Test::index'); // Test de la classe de notification
