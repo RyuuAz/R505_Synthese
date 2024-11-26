@@ -1,4 +1,6 @@
-<?php echo view('common/head'); ?>
+<?php echo view('common/head', [
+        'titre' => 'login'
+    ]);  ?>
 
 <div class="container my-5">
     <div class="row justify-content-center">
