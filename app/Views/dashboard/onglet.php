@@ -96,9 +96,50 @@
 
 
         </div>
-        <div class="tab-pane fade" id="isolated-tasks" role="tabpanel" aria-labelledby="isolated-tasks-tab">
-            <p>Tâches isolées à accomplir.</p>
+        <div class="modal fade" id="AjoutTache" tabindex="-1" aria-labelledby="ajouttache" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ajouttache">Ajout d'une nouvelle tâche</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="dashboard/addLoneTask" method="post">
+
+                            <!-- Titre -->
+                            <?php echo form_label('Titre de la tâche :', 'title'); ?>
+                            <?php echo form_input('title', '', ['class' => 'form-control', 'required' => 'required']); ?>
+
+                            <!-- Description -->
+                            <?php echo form_label('Description :', 'description'); ?>
+                            <?php echo form_textarea('description', '', ['class' => 'form-control']); ?>
+
+                            <!-- Date d'échéance -->
+                            <?php echo form_label('Date d\'échéance :', 'due_date'); ?>
+                            <?php echo form_input('due_date', '', ['class' => 'form-control', 'type' => 'date', 'required' => 'required']); ?>
+
+                            <!-- Priorité -->
+                            <?php echo form_label('Priorité :', 'prio_id'); ?>
+                            <select name="prio_id" id="prio_id" class="form-control" required>
+                                <option value="">-- Sélectionnez une priorité --</option>
+                                <?php foreach ($priorities as $priority): ?>
+                                    <option value="<?= esc($priority['prio_id']) ?>">
+                                        <?= esc($priority['name']) ?> (<?= esc($priority['color']) ?>)
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+
+                    </div>
+                    <div class="modal-footer">
+                        <!-- Bouton pour soumettre -->
+                        <?php echo form_submit('submit', 'Créer la tâche', ['class' => 'btn btn-primary']); ?>
+                        <?php echo form_close(); ?>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
         </div>
+
     </div>
 </div>
 
