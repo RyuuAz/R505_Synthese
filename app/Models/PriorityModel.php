@@ -9,9 +9,9 @@ class PriorityModel extends Model
     protected $table = 'priority';
     protected $primaryKey = 'prio_id';
     protected $allowedFields = [
-        'ordre', 
-        'name', 
-        'color', 
+        'ordre',
+        'name',
+        'color',
         'tsk_id'
     ];
 
@@ -52,5 +52,15 @@ class PriorityModel extends Model
     public function del(int $id)
     {
         return $this->delete($id);
+    }
+
+    /**
+     * Récupère toutes les priorités d'un utilisateur
+     * @param int $userId ID de l'utilisateur
+     * @return array Liste des priorités
+     */
+    public function getPrioritiesByUser(int $userId)
+    {
+        return $this->where('usr_id', $userId)->orderBy('ordre', 'ASC')->findAll();
     }
 }

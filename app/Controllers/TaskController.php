@@ -20,13 +20,25 @@ class TaskController extends BaseController
         helper('form');
     }
 
-    // Affiche le formulaire de création de tâche
+    /**
+     * Affiche le formulaire de création de tâche
+     * @return string Vue du formulaire
+     */
     public function create()
     {
-        return view('task/create');
+        $userId = session()->get('usr_id'); // Récupère l'utilisateur connecté
+        $priorityModel = new \App\Models\PriorityModel(); // Charge le modèle PriorityModel
+        $priorities = $priorityModel->getPrioritiesByUser($userId); // Récupère les priorités de l'utilisateur
+
+        return view('task/create', ['priorities' => $priorities]); // Passe les priorités à la vue
     }
 
-    // Traite le formulaire de création
+
+
+    /**
+     * Traite le formulaire de création de tâche
+     * @return \CodeIgniter\HTTP\RedirectResponse Redirection avec un message
+     */
     public function store()
     {
         if (!$this->validate($this->rules)) {
@@ -36,15 +48,18 @@ class TaskController extends BaseController
         $data = [
             'usr_id' => session()->get('usr_id'),
             'prj_id' => $this->request->getPost('prj_id'),
+            'prio_id' => $this->request->getPost('prio_id'), // ID de la priorité sélectionnée
             'title' => $this->request->getPost('title'),
             'description' => $this->request->getPost('description'),
             'due_date' => $this->request->getPost('due_date'),
-            'status' => $this->request->getPost('status')
+            'status' => 'pending'
         ];
 
         $this->taskModel->add($data);
-        return redirect()->to('/tasks')->with('success', 'Tâche créée.');
+
+        return redirect()->to('/tasks')->with('success', 'Tâche créée avec succès.');
     }
+
 
     // Supprime une tâche
     public function delete($id)
