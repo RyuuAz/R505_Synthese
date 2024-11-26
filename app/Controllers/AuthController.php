@@ -195,6 +195,9 @@ class AuthController extends BaseController
 			->set('reset_token', null)
 			->set('reset_token_exp', null)
 			->update($user['usr_id']);
+
+            $userModel->deleteResetToken($user['usr_id']);
+
 			return 'Mot de passe réinitialisé avec succès.';
 		} else {
 			echo ($user);

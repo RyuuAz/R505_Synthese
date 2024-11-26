@@ -1,5 +1,5 @@
 <?php echo view('common/head', [
-        'titre' => 'login'
+        'titre' => 'Connexion'
     ]); ?>
 
 <div class="container my-5">

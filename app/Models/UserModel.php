@@ -115,4 +115,15 @@ class UserModel extends Model
         return null;
     }
 
+    /**
+     * Supprime le token de réinitialisation d'un utilisateur
+     * @param int $id ID de l'utilisateur
+     * @return bool Succès ou échec de l'opération
+     */
+
+    public function deleteResetToken(int $id)
+    {
+        return $this->update($id, ['reset_token' => null, 'reset_token_exp' => null]);
+    }
+
 }
