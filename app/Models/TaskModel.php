@@ -9,13 +9,14 @@ class TaskModel extends Model
     protected $table = 'tasks';
     protected $primaryKey = 'tsk_id';
     protected $allowedFields = [
-        'usr_id',
-        'prj_id',
-        'title',
-        'description',
-        'due_date',
-        'status',
-        'tsk_created_at',
+        'usr_id', 
+        'prj_id', 
+        'prio_id', 
+        'title', 
+        'description', 
+        'due_date', 
+        'status', 
+        'tsk_created_at', 
         'tsk_updated_at'
     ];
     protected $useTimestamps = true;

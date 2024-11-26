@@ -9,10 +9,10 @@ class PriorityModel extends Model
     protected $table = 'priority';
     protected $primaryKey = 'prio_id';
     protected $allowedFields = [
-        'ordre',
-        'name',
-        'color',
-        'tsk_id'
+        'usr_id', 
+        'ordre', 
+        'name', 
+        'color'
     ];
 
     /**
