@@ -9,6 +9,13 @@
                 <div class="card-body">
                     <h3 class="text-center mb-4">Connexion</h3>
                     <form method="post" action="/login">
+                        <?php if (session()->getFlashdata('error')): ?>
+                            <div class="alert alert-danger"><?= session()->getFlashdata('error') ?></div>
+                        <?php endif; ?>
+
+                        <?php if (session()->getFlashdata('success')): ?>
+                            <div class="alert alert-success"><?= session()->getFlashdata('success') ?></div>
+                        <?php endif; ?>
                         <!-- Champ E mail -->
                         <div class="mb-3 d-flex justify-content-center">
                             <input type="email" class="form-control w-75" name="email" placeholder="E-mail" required />

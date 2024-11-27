@@ -18,28 +18,72 @@ class UserController extends BaseController
         helper('form'); // Chargement du helper form
     }
 
-    // Traite le formulaire d'inscription
-    public function store()
+    // Affiche les informations de l'utilisateur connecté
+    public function index()
     {
-        if (!$this->validate($this->rules)) {
+        $user = $this->userModel->find(session()->get('user_id'));
+        return view('profile', ['user' => $user]);
+    }
+
+    // Met à jour les informations de l'utilisateur connecté
+    public function update()
+    {
+        $userId = session()->get('user_id');
+        if (!$userId) {
+            return redirect()->to('/login')->with('error', 'Vous devez être connecté pour effectuer cette action.');
+        }
+
+        // Récupération des données
+        $email = $this->request->getPost('email');
+        $password = $this->request->getPost('password');
+        $confirmPassword = $this->request->getPost('confirm_password');
+
+        // Validation
+        $rules = ['email' => 'required|valid_email'];
+        if (!empty($password)) {
+            $rules['password'] = 'required|min_length[8]';
+        }
+
+        if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $data = [
-            'email' => $this->request->getPost('email'),
-            'password' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
-            'is_active' => false
-        ];
+        if (!empty($password) && $password !== $confirmPassword) {
+            return redirect()->back()->with('error', 'Les mots de passe ne correspondent pas.');
+        }
 
-        $this->userModel->add($data);
-        return redirect()->to('/login')->with('success', 'Inscription réussie, activez votre compte.');
+        // Mise à jour des informations
+        $data = ['email' => $email];
+        if (!empty($password)) {
+            $data['password'] = password_hash($password, PASSWORD_DEFAULT);
+        }
+
+        $this->userModel->upd($userId, $data);
+
+        return redirect()->to('/profile')->with('success', 'Informations mises à jour avec succès.');
     }
 
-    // Supprime un utilisateur
-    public function delete($id)
+    // Supprime le compte de l'utilisateur connecté
+    public function deleteAccount()
     {
-        $this->userModel->del($id);
-        return redirect()->to('/users')->with('success', 'Utilisateur supprimé.');
+        $userId = session()->get('user_id');
+        if (!$userId) {
+            return redirect()->to('/login')->with('error', 'Vous devez être connecté pour effectuer cette action.');
+        }
+
+        //Afficher une pop-up de confirmation
+
+        $confirm = $this->request->getPost('confirm');
+        if (empty($confirm)) {
+            return redirect()->back()->with('error', 'Vous devez confirmer la suppression de votre compte.');
+        }
+
+        $this->userModel->del($userId);
+
+        // Déconnecte l'utilisateur
+        session()->destroy();
+
+        return redirect()->to('/')->with('success', 'Compte supprimé avec succès.');
     }
 
     // Active un utilisateur

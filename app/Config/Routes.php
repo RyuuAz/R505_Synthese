@@ -20,6 +20,7 @@ $routes->get('/', 'AuthController::login');
 $routes->get('/register', 'AuthController::register');
 $routes->get('/forgot_password', 'AuthController::forgotPassword');
 $routes->get('/reset_password/(:alphanum)', 'AuthController::resetPassword/$1');
+$routes->get('/active_account/(:alphanum)', 'AuthController::activeAccount/$1');
 $routes->post('/login', 'AuthController::processLogin');
 $routes->post('/register', 'AuthController::processRegister');
 $routes->post('/forgot_password', 'AuthController::sendResetLink');
@@ -31,14 +32,12 @@ $routes->group('', ['filter' => 'auth'], function($routes) {
 	$routes->post('/dashboard/addproject', 'DashboardController::addProject');
 	$routes->get('/task/edit/(:num)', 'TaskController::edit/$1');
 	$routes->post('/task/update/(:num)', 'TaskController::update/$1');
-	$routes->get('/profile', 'UserController::profile');
-	$routes->post('/profile/update', 'UserController::updateProfile');
 	$routes->get('/logout', 'AuthController::logout');
 
 	// Routes pour UserController
-	$routes->get('users/register', 'UserController::register'); // Formulaire d'inscription
-	$routes->post('users/store', 'UserController::store'); // Traitement de l'inscription
-	$routes->get('users/delete/(:num)', 'UserController::delete/$1'); // Suppression d'un utilisateur
+	$routes->get('users', 'UserController::index'); // Liste des utilisateurs
+	$routes->post('users/update', 'UserController::update'); // Mise à jour d'un utilisateur
+	$routes->post('users/delete', 'UserController::deleteAccount'); // Suppression d'un utilisateur
 	$routes->get('users/activate/(:num)', 'UserController::activate/$1'); // Activation d'un utilisateur
 	$routes->get('users/deactivate/(:num)', 'UserController::deactivate/$1'); // Désactivation d'un utilisateur
 
