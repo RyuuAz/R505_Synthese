@@ -126,4 +126,25 @@ class UserModel extends Model
         return $this->update($id, ['reset_token' => null, 'reset_token_exp' => null]);
     }
 
+    /**
+     * Vérifie que le compte est activé
+     * @param string $email Email de l'utilisateur
+     * @return bool True si le compte est activé, false sinon
+     */
+    public function isActivated(string $email)
+    {
+        $user = $this->getUserByEmail($email);
+        return $user['is_active'];
+    }
+
+    /**
+     * Vérifie si un email est déjà utilisé et retourne l'utilisateur
+     * @param string $email Email à vérifier
+     * @return array|false Utilisateur ou false si non trouvé
+     */
+    public function emailExists(string $email)
+    {
+        return $this->where('email', $email)->first();
+    }
+
 }

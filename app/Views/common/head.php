@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" >
         <link rel="stylesheet" href="/assets/css/global.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </head>
     <body>
         <nav class="d-flex justify-content-between align-items-center p-3 bg bg-primary">
@@ -17,10 +18,10 @@
             <div class="d-flex gap-5">
                 
                 <div>
-                    <a href="/#" class="text-light"><i class="bi bi-person-circle fs-1"></i></a>
+                    <a href="/users" class="text-light"><i class="bi bi-person-circle fs-1"></i></a>
                 </div>
                 <div>
-                    <a href="/#" class="text-light"><i class="bi bi-gear-fill fs-1"></i></a>
+                    <a href="/settings" class="text-light"><i class="bi bi-gear-fill fs-1"></i></a>
                 </div>
                 <div>
                     <a href="/logout" class="hover-danger text-light"><i class="bi bi-door-closed fs-1 hover-text-danger"></i></a>
