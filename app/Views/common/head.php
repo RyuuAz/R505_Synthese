@@ -21,7 +21,7 @@
                     <a href="/users" class="text-light"><i class="bi bi-person-circle fs-1"></i></a>
                 </div>
                 <div>
-                    <a href="/#" class="text-light"><i class="bi bi-gear-fill fs-1"></i></a>
+                    <a href="/settings" class="text-light"><i class="bi bi-gear-fill fs-1"></i></a>
                 </div>
                 <div>
                     <a href="/logout" class="hover-danger text-light"><i class="bi bi-door-closed fs-1 hover-text-danger"></i></a>
