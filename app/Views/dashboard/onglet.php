@@ -48,20 +48,34 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form action="dashboard/addtask" method="post">
+                            <form action="dashboard/addLoneTask" method="post">
 
                                 <?php echo form_label('Nom de la tâche:', 'nomTache'); ?>
                                 <?php echo form_input('nomTache', '', ['class' => 'form-control']); ?>
 
-                                <?php echo form_label('Date de fin de la tâche:', 'dateTache'); ?>
-                                <?php echo form_input(['type' => 'date', 'name' => 'datetache', 'class' => 'form-control']); ?>
-
                                 <?php echo form_label('Description de la tâche:', 'descriptionTache'); ?>
                                 <?php echo form_textarea('descriptionTache', '', ['class' => 'form-control']); ?>
 
-                                <label for="menuSelection" class="form-label">Choisissez une option :</label>
-                                <select name="menuSelection" id="menuSelection" class="form-select">
-                                </select>
+                                <?php 
+                                    echo form_label('Choisissez votre priorité :', 'menuSelection', ['class' => 'form-label']); 
+
+                                    // Préparation des options pour le dropdown
+                                    $options = [];
+                                    foreach ($priorities as $priority) {
+                                        $options[$priority['prio_id']] = $priority['name'];
+                                    }
+
+                                    var_dump($options);
+
+                                    // Génération du dropdown
+                                    echo form_dropdown('menuSelection', $options, '', [
+                                        'id' => 'menuSelection', 
+                                        'class' => 'form-select'
+                                    ]); 
+                                ?>
+
+                                <?php echo form_label('Date de fin de la tâche:', 'dateTache'); ?>
+                                <?php echo form_input(['type' => 'date', 'name' => 'datetache', 'class' => 'form-control']); ?>
                         </div>
                         <div class="modal-footer">
                             <?php echo form_submit('submit', 'Créer la tâche', ['class' => 'btn btn-primary']); ?>
@@ -74,16 +88,13 @@
             </div>
             
             <?php
-            
-
-            foreach ($tasks as $task) {
-                echo view('dashboard/component/case', [
-                    'titre' => $task['title'],
-                    'date' => $task['due_date'],
-                    'description' => $task['description'],
-                ]);
-            }
-            ?>
+                if ((isset($taches) && !empty($taches))) : ?>
+                    <?php foreach ($taches as $tache): ?>
+                        <?php echo \App\Views\dashboard\component\TaskCase::genererBandeauTache($tache["title"],$tache['due_date'],$tache['description']) ?>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p>Aucune tâche pour ce projet.</p>
+                <?php endif; ?>
         </div>
     </div>
 

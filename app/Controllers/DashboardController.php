@@ -16,43 +16,17 @@ class DashboardController extends BaseController
     public function index()
     {
         $model = new TaskModel();
+        $modelpriority = new PriorityModel();
         $projectModel = new ProjectModel();
-        $tasks = $model->getTasksByUser(session()->get("user_id"));
-        $projects = $projectModel->getProjectsByUser(session()->get("user_id"));
+        $tasks = $model->getTasksByUser(session()->get('user_id'));
+        $projects = $projectModel->getProjectsByUser(session()->get('user_id'));
+        $priorities = $modelpriority->getPrioritiesByUser(session()->get('user_id'));
 
         echo view('dashboard/dashboard', [
             'tasks' => $tasks,
-            'projects' => $projects
+            'projects' => $projects,
+            'priorities' => $priorities
         ]);
-    }
-
-    public function traitementTasks()
-    {
-        $validation = \Config\Services::validation();
-        $validation->setRules([
-            'nomTache' => 'required',
-            'descriptionTache' => 'required'
-        ]);
-
-        if($this->validate($validation->getRules())){
-            $this->addTask();
-        }
-    }
-
-    public function addTask()
-    {
-        
-        $model = new TaskModel();
-        if ($this->request->getMethod() === 'POST' ) {
-            $model = new TaskModel();
-            $model->add([
-                'title' => $this->request->getPost(''),
-                'description' => $this->request->getPost('descriptionTache'),
-                'usr_id' => (int) session()->get('user_id')
-            ]);
-            session()->setFlashdata('active_tab', value: 'tasks');
-        }
-        return redirect()->to('/dashboard');
     }
 
     public function traitement()
@@ -95,23 +69,25 @@ class DashboardController extends BaseController
 
         // Si la méthode HTTP est POST, traite le formulaire
         if ($this->request->getMethod() === 'POST') {
-            if (!$this->validate([
-                'title' => 'required|max_length[255]',
-                'due_date' => 'required|valid_date',
-                'prio_id' => 'required|integer'
-            ])) {
-                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-            }
+            // Définir les règles de validation
+            $validationRules = [
+                'nomTache' => 'required|max_length[255]',
+                'dateTache' => 'required|valid_date',
+                'prio_id' => 'required|integer',
+            ];
 
-            $taskModel->add([
-                'usr_id' => session()->get('usr_id'),
-                'prio_id' => $this->request->getPost('prio_id'), // ID de la priorité sélectionnée
-                'prj_id' => null, // Pas de projet associé
-                'title' => $this->request->getPost('title'),
-                'description' => $this->request->getPost('description'),
-                'due_date' => $this->request->getPost('due_date'),
+            // Ajouter la tâche dans la base de données
+            $data = [
+                'usr_id' => (int) session()->get('user_id'),
+                'prio_id' =>(int) $this->request->getPost('menuSelection'), // ID de la priorité sélectionnée
+                'title' => $this->request->getPost('nomTache'),
+                'description' => $this->request->getPost('descriptionTache'),
+                'due_date' => $this->request->getPost('datetache'),
                 'status' => 'pending'
-            ]);
+            ];
+            $taskModel->add($data);
+
+            
 
             return redirect()->to('/dashboard')->with('success', 'Tâche ajoutée avec succès.');
         }
@@ -122,4 +98,6 @@ class DashboardController extends BaseController
 
         return view('task/create', ['priorities' => $priorities]);
     }
+
+
 }
