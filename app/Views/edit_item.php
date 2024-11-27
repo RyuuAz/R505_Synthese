@@ -15,7 +15,7 @@
 
         <div class="text-center">
             <button type="submit" class="btn btn-primary">Mettre à jour</button>
-            <a href="/database/view/<?= $table ?>" class="btn btn-secondary">Annuler</a>
+            <a href="/database" class="btn btn-secondary">Annuler</a>
         </div>
     </form>
 </div>

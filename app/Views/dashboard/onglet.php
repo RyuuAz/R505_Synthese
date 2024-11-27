@@ -90,7 +90,8 @@
                     <?php foreach ($tasks as $task): ?>
                         <?php foreach ($priorities as $priority): ?>
                             <?php if ($priority['prio_id'] === $task['prio_id'])
-                                echo \App\Views\dashboard\component\TaskCase::genererBandeauTache($task["title"],$task['due_date'],$task['description'] ,$priority['color'], ["commentaire 1"]); ?>
+                                echo \App\Views\dashboard\component\TaskCase::genererBandeauTache($task['tsk_id']
+                        ,$task["title"],$task['due_date'],$task['description'] ,$priority['color'], ["commentaire 1"]); ?>
                         <?php endforeach; ?>
                     <?php endforeach; ?>
                 <?php else: ?>
