@@ -31,3 +31,14 @@
 .rotate-icon.rotated {
     transform: rotate(90deg); /* Rotation de 90° vers la droite */
 }
+
+.card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: scale(1.02); /* Léger agrandissement */
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+.card {
+    visibility: visible !important; /* Assure que les cartes restent visibles */
+    opacity: 1 !important;          /* Assure une opacité complète */
+}

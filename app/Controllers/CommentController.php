@@ -32,14 +32,14 @@ class CommentController extends BaseController
     {
         $data = [
             'tsk_id' => $this->request->getPost('tsk_id'),
-            'usr_id' => session()->get('usr_id'),
+            'usr_id' => session()->get('user_id'),
             'content' => $this->request->getPost('content')
         ];
 
         $commentModel = new \App\Models\CommentModel();
         $commentModel->add($data);
 
-        return redirect()->to('tasks/show/' . $data['tsk_id'])->with('success', 'Commentaire ajouté.');
+        return redirect()->to('/dashboard')->with('success', 'Commentaire ajouté.');
     }
 
 
