@@ -37,10 +37,6 @@ class TaskCase {
         $textarea = form_textarea('content', 'Contenu du commentaire', ['class' => 'form-control']);
         $submit = form_submit('submit', 'Mettre un commentaire', ['class' => 'btn btn-primary']);
 
-
-        // Couleur éclaircie pour la partie dépliable
-        $lightenedColor = self::lightenColor($bgColor, 30); // Éclaircir de 30%
-
         // Générer le bandeau HTML
         return '
         <div class="container mt-0 p-0 mb-3">
@@ -114,28 +110,5 @@ class TaskCase {
             </div>
         </div>
         ';
-    }
-
-    /**
-     * Éclaircit une couleur HEX d'un certain pourcentage.
-     * @param string $hex Couleur au format HEX (#RRGGBB)
-     * @param int $percent Pourcentage d'éclaircissement (0-100)
-     * @return string Couleur HEX éclaircie
-     */
-    static function lightenColor($hex, $percent) {
-        $hex = str_replace('#', '', $hex);
-        if (strlen($hex) === 3) {
-            $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
-        }
-        $r = hexdec(substr($hex, 0, 2));
-        $g = hexdec(substr($hex, 2, 2));
-        $b = hexdec(substr($hex, 4, 2));
-
-        // Calculer les nouvelles valeurs RGB
-        $r = min(255, $r + ($r * $percent / 100));
-        $g = min(255, $g + ($g * $percent / 100));
-        $b = min(255, $b + ($b * $percent / 100));
-
-        return sprintf("#%02x%02x%02x", $r, $g, $b);
     }
 }

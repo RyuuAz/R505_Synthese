@@ -41,45 +41,58 @@
             </div>
 
             <div class="modal fade" id="AjoutTache" tabindex="-1" aria-labelledby="ajouttache" aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="ajouttache">Création d'une nouvelle tâche</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form action="dashboard/addLoneTask" method="post">
+                            <form action="dashboard/addLoneTask" method="post" class="needs-validation" novalidate>
+                                <div class="row">
+                                    <!-- Champ nom de la tâche -->
+                                    <div class="col-md-12 mb-3">
+                                        <?php echo form_label('Nom de la tâche:', 'nomTache', ['class' => 'form-label']); ?>
+                                        <?php echo form_input('nomTache', '', ['class' => 'form-control', 'required' => true]); ?>
+                                    </div>
 
-                                <?php echo form_label('Nom de la tâche:', 'nomTache'); ?>
-                                <?php echo form_input('nomTache', '', ['class' => 'form-control']); ?>
+                                    <!-- Champ description -->
+                                    <div class="col-md-12 mb-3">
+                                        <?php echo form_label('Description de la tâche:', 'descriptionTache', ['class' => 'form-label']); ?>
+                                        <?php echo form_textarea('descriptionTache', '', [
+                                            'class' => 'form-control',
+                                            'style' => 'height: 75px;',
+                                            'required' => true
+                                        ]); ?>
+                                    </div>
 
-                                <?php echo form_label('Description de la tâche:', 'descriptionTache'); ?>
-                                <?php echo form_textarea('descriptionTache', '', ['class' => 'form-control']); ?>
+                                    <!-- Champ priorité -->
+                                    <div class="col-md-6 mb-3">
+                                        <?php 
+                                            echo form_label('Choisissez votre priorité :', 'menuSelection', ['class' => 'form-label mb-0']); // Retrait de la marge inférieure
+                                            $options = [];
+                                            foreach ($priorities as $priority) {
+                                                $options[$priority['prio_id']] = $priority['name'];
+                                            }
+                                            echo form_dropdown('menuSelection', $options, '', [
+                                                'id' => 'menuSelection', 
+                                                'class' => 'form-select',
+                                                'required' => true
+                                            ]); 
+                                        ?>
+                                    </div>
 
-                                <?php 
-                                    echo form_label('Choisissez votre priorité :', 'menuSelection', ['class' => 'form-label']); 
-
-                                    // Préparation des options pour le dropdown
-                                    $options = [];
-                                    foreach ($priorities as $priority) {
-                                        $options[$priority['prio_id']] = $priority['name'];
-                                    }
-
-                                    // Génération du dropdown
-                                    echo form_dropdown('menuSelection', $options, '', [
-                                        'id' => 'menuSelection', 
-                                        'class' => 'form-select'
-                                    ]); 
-                                ?>
-
-                                <?php echo form_label('Date de fin de la tâche:', 'dateTache'); ?>
-                                <?php echo form_input(['type' => 'date', 'name' => 'datetache', 'class' => 'form-control']); ?>
+                                    <!-- Champ date de fin -->
+                                    <div class="col-md-6 mb-3">
+                                        <?php echo form_label('Date de fin de la tâche:', 'dateTache', ['class' => 'form-label mb-0']); // Retrait de la marge inférieure ?>
+                                        <?php echo form_input(['type' => 'date', 'name' => 'datetache', 'class' => 'form-control', 'required' => true]); ?>
+                                    </div>
+                                </div>
                         </div>
                         <div class="modal-footer">
                             <?php echo form_submit('submit', 'Créer la tâche', ['class' => 'btn btn-primary']); ?>
                             <?php echo form_close(); ?>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-
                         </div>
                     </div>
                 </div>
@@ -90,8 +103,7 @@
                     <?php foreach ($tasks as $task): ?>
                         <?php foreach ($priorities as $priority): ?>
                             <?php if ($priority['prio_id'] === $task['prio_id'])
-                                echo \App\Views\dashboard\component\TaskCase::genererBandeauTache($task['tsk_id']
-                        ,$task["title"],$task['due_date'],$task['description'] ,$priority['color'], ["commentaire 1"]); ?>
+                                echo \App\Views\dashboard\component\TaskCase::genererBandeauTache($task['tsk_id'],$task["title"],$task['due_date'],$task['description'] ,$priority['color'], ["commentaire 1"]); ?>
                         <?php endforeach; ?>
                     <?php endforeach; ?>
                 <?php else: ?>
