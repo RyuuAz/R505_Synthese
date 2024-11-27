@@ -43,20 +43,44 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form action="dashboard/addtask" method="post">
+                            <form action="dashboard/addLoneTask" method="post">
 
                                 <?php echo form_label('Nom de la tâche:', 'nomTache'); ?>
                                 <?php echo form_input('nomTache', '', ['class' => 'form-control']); ?>
 
-                                <?php echo form_label('Date de fin de la tâche:', 'dateTache'); ?>
-                                <?php echo form_input(['type' => 'date', 'name' => 'datetache', 'class' => 'form-control']); ?>
-
                                 <?php echo form_label('Description de la tâche:', 'descriptionTache'); ?>
                                 <?php echo form_textarea('descriptionTache', '', ['class' => 'form-control']); ?>
 
-                                <label for="menuSelection" class="form-label">Choisissez une option :</label>
-                                <select name="menuSelection" id="menuSelection" class="form-select">
-                                </select>
+                                <?php 
+                                    echo form_label('Choisissez votre priorité :', 'menuSelection', ['class' => 'form-label']); 
+
+                                    // Préparation des options pour le dropdown
+                                    $options = [];
+                                    foreach ($priorities as $priority) {
+                                        $options[$priority['prio_id']] = $priority['name'];
+                                    }
+
+                                    // Génération du dropdown
+                                    echo form_dropdown('menuSelection', $options, '', [
+                                        'id' => 'menuSelection', 
+                                        'class' => 'form-select'
+                                    ]); 
+                                ?>
+
+                                <?php echo form_label('Date de fin de la tâche:', 'dateTache'); ?>
+                                <?php echo form_input(['type' => 'date', 'name' => 'datetache', 'class' => 'form-control']); ?>
+
+                                <div class="mb-3">
+                                    <?php echo form_label('Nombre de jours avant l\'échéance pour prévenir l\'utilisateur:', 'joursAvant', ['class' => 'form-label']); ?>
+                                    <input type="number" name="joursAvant" id="joursAvant" class="form-control" min="0" />
+                                </div>
+
+                                <!-- Ajout d'un champ pour la couleur -->
+                                <!-- <div class="mb-3">
+                                    echo form_label('Choisissez la couleur de la tâche:', 'couleurTache', ['class' => 'form-label']); ?>
+                                    echo form_input(['type' => 'color', 'name' => 'couleurTache', 'class' => 'form-control']); ?> 
+                                </div> -->
+
                         </div>
                         <div class="modal-footer">
                             <?php echo form_submit('submit', 'Créer la tâche', ['class' => 'btn btn-primary']); ?>
@@ -172,3 +196,32 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Fonction pour calculer la différence en jours
+    document.getElementById('datetache').addEventListener('input', function() {
+        var today = new Date();  // Date actuelle
+        var dueDate = new Date(this.value);  // Date d'échéance saisie
+
+        // Vérifier si la date d'échéance est valide
+        if (this.value) {
+            // Si une date est sélectionnée, activer l'input pour les jours
+            document.getElementById('joursAvant').disabled = false;
+        } else {
+            // Si aucune date n'est sélectionnée, désactiver l'input pour les jours
+            document.getElementById('joursAvant').disabled = true;
+            document.getElementById('joursAvant').value = '';  // Réinitialiser la valeur
+            return;
+        }
+
+        var timeDiff = dueDate - today;  // Différence en millisecondes
+        var daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));  // Convertir la différence en jours
+
+        // Si la date d'échéance est dans le passé, afficher 0
+        if (daysDiff < 0) {
+            daysDiff = 0;
+        }
+
+        // Mettre à jour la valeur de l'input avec le nombre de jours restant
+        document.getElementById('joursAvant').value = daysDiff;
+    });
+</script>
