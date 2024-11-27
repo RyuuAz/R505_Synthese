@@ -12,7 +12,6 @@ class ProjectModel extends Model
         'usr_id',
         'title',
         'description',
-        'status',
         'prj_created_at',
         'prj_updated_at'
     ];
@@ -60,6 +59,19 @@ class ProjectModel extends Model
     }
 
     /**
+     * Récupère tous les projets liés à un utilisateur via la table `project_user`
+     * @param int $userId ID de l'utilisateur
+     * @return array Liste des projets
+     */
+    /*public function getProjectsByUser(int $userId)
+    {
+        return $this->select('project.*')
+            ->join('project_user', 'project.prj_id = project_user.prj_id')
+            ->where('project_user.usr_id', $userId)
+            ->findAll();
+    }*/
+
+        /**
      * Récupère tous les projets d'un utilisateur
      * @param int $userId ID de l'utilisateur
      * @return array Liste des projets
@@ -68,7 +80,7 @@ class ProjectModel extends Model
     {
         return $this->where('usr_id', $userId)->findAll();
     }
-
+    
     public function getProjectById(int $prjID)
     {
         return $this->where('prj_id', $prjID)->first();
