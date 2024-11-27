@@ -26,6 +26,35 @@ class DashboardController extends BaseController
         ]);
     }
 
+    public function traitementTasks()
+    {
+        $validation = \Config\Services::validation();
+        $validation->setRules([
+            'nomTache' => 'required',
+            'descriptionTache' => 'required'
+        ]);
+
+        if($this->validate($validation->getRules())){
+            $this->addTask();
+        }
+    }
+
+    public function addTask()
+    {
+        
+        $model = new TaskModel();
+        if ($this->request->getMethod() === 'POST' ) {
+            $model = new TaskModel();
+            $model->add([
+                'title' => $this->request->getPost(''),
+                'description' => $this->request->getPost('descriptionTache'),
+                'usr_id' => (int) session()->get('user_id')
+            ]);
+            
+        }
+        return redirect()->to('/dashboard');
+    }
+
     public function traitement()
     {
         $validation = \Config\Services::validation();

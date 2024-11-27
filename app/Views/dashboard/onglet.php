@@ -4,7 +4,7 @@
         <li class="nav-item flex-fill text-center" role="presentation">
             <button class="nav-link active w-100" id="tasks-tab" data-bs-toggle="tab" data-bs-target="#tasks"
                 type="button" role="tab" aria-controls="tasks" aria-selected="true">
-                Tâches
+                Tâches individuelles
             </button>
         </li>
         <li class="nav-item flex-fill text-center" role="presentation">
@@ -16,7 +16,7 @@
         <li class="nav-item flex-fill text-center" role="presentation">
             <button class="nav-link w-100" id="isolated-tasks-tab" data-bs-toggle="tab" data-bs-target="#isolated-tasks"
                 type="button" role="tab" aria-controls="isolated-tasks" aria-selected="false">
-                Tâches isolées
+                Toutes les Tâches
             </button>
         </li>
     </ul>
@@ -29,20 +29,58 @@
                 <!-- Ligne qui occupe toute la largeur -->
                 <div class="d-flex justify-content-end pt-3">
                     <!-- Bouton avec icône "+" aligné à droite -->
-                    <button class="btn btn-primary">
-                        <i class="bi bi-plus fs-3"></i> <!-- Icône "+" -->
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AjoutTache">
+                    <i class="bi bi-plus fs-3"></i> <!-- Icône "+" -->
                     </button>
                 </div>
-                <?php
-                include 'component/case.php';
-
-                echo genererBandeauTache(
-                    'Tâche 1',
-                    '12/12/2024',
-                    'Description de la tâche 1',
-                    ['Commentaire 1', 'Commentaire 2']
-                ); ?>
             </div>
+
+            <div class="modal fade" id="AjoutTache" tabindex="-1" aria-labelledby="ajouttache" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="ajouttache">Création d'une nouvelle tâche</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="dashboard/addtask" method="post">
+
+                                <?php echo form_label('Nom de la tâche:', 'nomTache'); ?>
+                                <?php echo form_input('nomTache', '', ['class' => 'form-control']); ?>
+
+                                <?php echo form_label('Date de fin de la tâche:', 'dateTache'); ?>
+                                <?php echo form_input(['type' => 'date', 'name' => 'datetache', 'class' => 'form-control']); ?>
+
+                                <?php echo form_label('Description de la tâche:', 'descriptionTache'); ?>
+                                <?php echo form_textarea('descriptionTache', '', ['class' => 'form-control']); ?>
+
+                                <label for="menuSelection" class="form-label">Choisissez une option :</label>
+                                <select name="menuSelection" id="menuSelection" class="form-select">
+                                </select>
+                        </div>
+                        <div class="modal-footer">
+                            <?php echo form_submit('submit', 'Créer la tâche', ['class' => 'btn btn-primary']); ?>
+                            <?php echo form_close(); ?>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <?php 
+            include 'component/case.php';
+
+            foreach ($tasks as $task) {
+                echo view('dashboard/component/case', [
+                    'titre' => $task['title'],
+                    'date' => $task['due_date'],
+                    'description' => $task['description'],
+                    'commentaires' => $task['comments']
+                ]);
+            }
+            ?>
+        </div>
         </div>
         <div class="tab-pane fade" id="projects" role="tabpanel" aria-labelledby="projects-tab">
             <?php if (isset($projects) && !empty($projects)): ?>
