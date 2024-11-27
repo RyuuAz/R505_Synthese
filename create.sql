@@ -21,16 +21,16 @@ DROP TYPE IF EXISTS notification_type CASCADE;
 DROP TYPE IF EXISTS notification_status CASCADE;
 
 -- Création des types ENUM pour les statuts des tâches et des projets
-CREATE TYPE task_status AS ENUM ('pending', 'completed', 'overdue');
+CREATE TYPE task_status AS ENUM ('a_faire', 'en_cours', 'termine');
 
 -- Création des types ENUM pour les notifications
 CREATE TYPE notification_type AS ENUM (
-    'reminder',
-    'account_activation',
-    'password_reset'
+    'rappel',
+    'activation',
+    'reset'
 );
 
-CREATE TYPE notification_status AS ENUM ('pending', 'sent', 'failed');
+CREATE TYPE notification_status AS ENUM ('a_faire', 'en_cours', 'termine');
 
 -- Table users
 CREATE TABLE users (
