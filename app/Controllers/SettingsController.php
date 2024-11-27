@@ -58,4 +58,26 @@ class SettingsController extends BaseController
         $this->priorityModel->delete($id);
         return redirect()->to('/settings')->with('success', 'Priorité supprimée avec succès.');
     }
+
+    /**
+     * Traite la mise à jour d'une priorité
+     */
+    public function updatePriority($id)
+    {
+        if (!$this->validate([
+            'name' => 'required|max_length[50]',
+            'color' => 'required|regex_match[/^#[0-9A-Fa-f]{6}$/]',
+            'ordre' => 'required|integer'
+        ])) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        $this->priorityModel->update($id, [
+            'name' => $this->request->getPost('name'),
+            'color' => $this->request->getPost('color'),
+            'ordre' => $this->request->getPost('ordre')
+        ]);
+
+        return redirect()->to('/settings')->with('success', 'Priorité modifiée avec succès.');
+    }
 }
