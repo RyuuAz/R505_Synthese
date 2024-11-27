@@ -25,7 +25,7 @@ $routes->post('/register', 'AuthController::processRegister');
 $routes->post('/forgot_password', 'AuthController::sendResetLink');
 $routes->post('/reset_password', 'AuthController::updatePassword');
 
-$routes->group('', ['filter' => 'auth'], function($routes) {
+$routes->group('', ['filter' => 'auth'], function ($routes) {
 
 	$routes->get('/dashboard', 'DashboardController::index');
 	$routes->post('/dashboard/addproject', 'DashboardController::addProject');
@@ -34,6 +34,10 @@ $routes->group('', ['filter' => 'auth'], function($routes) {
 	$routes->get('/profile', 'UserController::profile');
 	$routes->post('/profile/update', 'UserController::updateProfile');
 	$routes->get('/logout', 'AuthController::logout');
+	$routes->get('settings', 'SettingsController::index');
+	$routes->post('settings/create-priority', 'SettingsController::createPriority');
+	$routes->get('settings/delete-priority/(:num)', 'SettingsController::deletePriority/$1');
+
 
 	// Routes pour UserController
 	$routes->get('users/register', 'UserController::register'); // Formulaire d'inscription
