@@ -50,7 +50,7 @@ class DashboardController extends BaseController
                 'description' => $this->request->getPost('descriptionTache'),
                 'usr_id' => (int) session()->get('user_id')
             ]);
-            
+            session()->setFlashdata('active_tab', value: 'tasks');
         }
         return redirect()->to('/dashboard');
     }
@@ -79,6 +79,7 @@ class DashboardController extends BaseController
                 'description' => $this->request->getPost('descriptionProjet'),
                 'usr_id' => (int) session()->get('user_id')
             ]);
+            session()->setFlashdata('active_tab', 'projects');
         }
         return redirect()->to('/dashboard');
     }
