@@ -53,6 +53,7 @@ class DashboardController extends BaseController
                 'description' => $this->request->getPost('descriptionProjet'),
                 'usr_id' => (int) session()->get('user_id')
             ]);
+            session()->setFlashdata('active_tab', 'projects');
         }
         return redirect()->to('/dashboard');
     }

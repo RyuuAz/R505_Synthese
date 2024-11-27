@@ -60,7 +60,7 @@ class UserController extends BaseController
 
         $this->userModel->upd($userId, $data);
 
-        return redirect()->to('/profile')->with('success', 'Informations mises à jour avec succès.');
+        return redirect()->to('/users')->with('success', 'Informations mises à jour avec succès.');
     }
 
     // Supprime le compte de l'utilisateur connecté

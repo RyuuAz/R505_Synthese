@@ -13,10 +13,6 @@ class AuthController extends BaseController
 
     public function login()
     {
-        $userModel = new UserModel();
-        $user = $userModel->emailExists("max.galmant@gmail.com");
-
-        var_dump($user);
         return view('login');
     }
 

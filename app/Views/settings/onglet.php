@@ -42,9 +42,10 @@
                                     <?= form_label('Nom de la priorité', 'name', ['class' => 'form-label']) ?>
                                     <?= form_input('name', '', ['class' => 'form-control', 'required' => 'required']) ?>
                                 </div>
+                                <!-- Sélecteur de couleur pour la priorité -->
                                 <div class="mb-3">
-                                    <?= form_label('Couleur (sélecteur)', 'color', ['class' => 'form-label']) ?>
-                                    <?= form_input('color', '#000000', ['class' => 'form-control', 'type' => 'color', 'required' => 'required']) ?>
+                                    <?= form_label('Choisissez la couleur de la priorité:', 'color', ['class' => 'form-label']) ?>
+                                    <?= form_input(['type' => 'color', 'name' => 'color', 'class' => 'form-control', 'required' => 'required']) ?>
                                 </div>
                                 <div class="mb-3">
                                     <?= form_label('Ordre (sélectionnez un chiffre)', 'ordre', ['class' => 'form-label']) ?>

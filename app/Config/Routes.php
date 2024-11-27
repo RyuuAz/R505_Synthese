@@ -28,6 +28,11 @@ $routes->post('/reset_password', 'AuthController::updatePassword');
 
 $routes->group('', ['filter' => 'auth'], function ($routes) {
 
+	$routes->get('/database', 'DatabaseController::index'); // Affichage de toutes les tables
+	$routes->get('/database/edit/(:any)/(:num)', 'DatabaseController::edit/$1/$2'); // Modifier un élément
+	$routes->post('/database/update/(:any)/(:num)', 'DatabaseController::update/$1/$2'); // Mettre à jour un élément
+	$routes->get('/database/delete/(:any)/(:num)', 'DatabaseController::delete/$1/$2'); // Supprimer un élément
+
 	$routes->get('/dashboard', 'DashboardController::index');
 	$routes->post('/dashboard/addproject', 'DashboardController::addProject');
 	$routes->post('/dashboard/addLoneTask', 'DashboardController::addLoneTask');
