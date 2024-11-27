@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\ProjectModel;
+use App\Models\TaskModel;
 
 class ProjectController extends BaseController
 {
@@ -55,10 +56,14 @@ class ProjectController extends BaseController
      * @param int $userId ID de l'utilisateur
      * @return string Vue avec les projets
      */
-    public function listByUser($userId)
+    public function getProjectByID($prjID)
     {
-        $projects = $this->projectModel->getProjectsByUser($userId);
+        $projects = $this->projectModel->getProjectById($prjID);
+        $tacheModel = new TaskModel();
+        $taches = $tacheModel->getTasksByProject($prjID);
 
-        return view('project/list', ['projects' => $projects]);
+        return view('Projet/projet_vue', ['projet' => $projects, 'taches' => $taches]);
     }
+
+
 }

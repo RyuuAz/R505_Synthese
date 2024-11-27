@@ -1,6 +1,8 @@
 <?php
+
+namespace App\Views\Dashboard\Component;
 class TaskCase {
-    function genererBandeauTache($titre, $date, $description, $commentaires = []) {
+    static function genererBandeauTache($titre, $date, $description, $commentaires = []) {
         // Convertir les commentaires en HTML si le tableau n'est pas vide
         $commentairesHTML = '';
         if (!empty($commentaires)) {

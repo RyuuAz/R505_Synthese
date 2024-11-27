@@ -68,4 +68,9 @@ class ProjectModel extends Model
     {
         return $this->where('usr_id', $userId)->findAll();
     }
+
+    public function getProjectById(int $prjID)
+    {
+        return $this->where('prj_id', $prjID)->first();
+    }
 }
