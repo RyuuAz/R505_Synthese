@@ -65,8 +65,6 @@
                                         $options[$priority['prio_id']] = $priority['name'];
                                     }
 
-                                    var_dump($options);
-
                                     // Génération du dropdown
                                     echo form_dropdown('menuSelection', $options, '', [
                                         'id' => 'menuSelection', 
@@ -90,7 +88,10 @@
             <?php
                 if ((isset($tasks) && !empty($tasks))) : ?>
                     <?php foreach ($tasks as $task): ?>
-                        <?php echo \App\Views\dashboard\component\TaskCase::genererBandeauTache($task["title"],$task['due_date'],$task['description']) ?>
+                        <?php foreach ($priorities as $priority): ?>
+                            <?php if ($priority['prio_id'] === $task['prio_id'])
+                                echo \App\Views\dashboard\component\TaskCase::genererBandeauTache($task["title"],$task['due_date'],$task['description'] ,$priority['color'], ["commentaire 1"]); ?>
+                        <?php endforeach; ?>
                     <?php endforeach; ?>
                 <?php else: ?>
                     <p>Aucune tâche pour ce projet.</p>
@@ -194,16 +195,3 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<style>
-.card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transform: scale(1.02); /* Léger agrandissement */
-    transition: all 0.2s ease-in-out;
-    cursor: pointer;
-}
-.card {
-    visibility: visible !important; /* Assure que les cartes restent visibles */
-    opacity: 1 !important;          /* Assure une opacité complète */
-}
-
-</style>
