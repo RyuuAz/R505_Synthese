@@ -16,7 +16,12 @@
 
             <!-- Icônes à droite, dans des div séparés -->
             <div class="d-flex gap-5">
-                
+                <div>
+                    <a href="/dashboard" class="text-light"><i class="bi bi-house fs-1"></i></a>
+                </div>
+                <div>
+                    <a href="/database" class="text-light"><i class="bi bi-database-gear fs-1"></i></a>
+                </div>
                 <div>
                     <a href="/users" class="text-light"><i class="bi bi-person-circle fs-1"></i></a>
                 </div>
