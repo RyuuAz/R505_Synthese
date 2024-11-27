@@ -41,7 +41,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 	$routes->get('settings', 'SettingsController::index');
 	$routes->post('settings/create-priority', 'SettingsController::createPriority');
 	$routes->get('settings/delete-priority/(:num)', 'SettingsController::deletePriority/$1');
-
+	$routes->post('settings/update-priority/(:num)', 'SettingsController::updatePriority/$1');
 
 	// Routes pour UserController
 	$routes->get('users', 'UserController::index'); // Liste des utilisateurs
