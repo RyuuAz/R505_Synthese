@@ -91,4 +91,16 @@ class TaskModel extends Model
     {
         return $this->where('usr_id', $userId)->where('prj_id', null)->findAll();
     }
+
+
+    /**
+     * Récupère les commentaires 
+     * @param int $tsk_id ID de la tâche
+     * @return array Liste des commentaires
+     */
+    public function getComments(int $tsk_id)
+    {
+        $commentModel = new CommentModel();
+        return $commentModel->getCommentsByTask($tsk_id);
+    }
 }

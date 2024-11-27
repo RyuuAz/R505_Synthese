@@ -90,7 +90,8 @@
             <?php
                 if ((isset($tasks) && !empty($tasks))) : ?>
                     <?php foreach ($tasks as $task): ?>
-                        <?php echo \App\Views\dashboard\component\TaskCase::genererBandeauTache($task["title"],$task['due_date'],$task['description']) ?>
+                        <?php echo \App\Views\dashboard\component\TaskCase::genererBandeauTache($task['tsk_id']
+                        ,$task["title"],$task['due_date'],$task['description']) ?>
                     <?php endforeach; ?>
                 <?php else: ?>
                     <p>Aucune tâche pour ce projet.</p>
