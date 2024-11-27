@@ -13,6 +13,10 @@ class AuthController extends BaseController
 
     public function login()
     {
+        $userModel = new UserModel();
+        $user = $userModel->emailExists("max.galmant@gmail.com");
+
+        var_dump($user);
         return view('login');
     }
 
@@ -33,17 +37,31 @@ class AuthController extends BaseController
         $email = $this->request->getPost('email');
         $password = $this->request->getPost('password');
         
-        $user = $userModel->where('email', $email)->first();
+        // Récupérer l'utilisateur avec l'email donné
+        $user = $userModel->emailExists($email);
 
-        if ($user && password_verify($password, $user['password'])) {
+        // Vérifier si l'utilisateur existe
+        if (!$user) {
+            return redirect()->back()->with('error', 'E-mail ou mot de passe invalide');
+        }
+
+        // Vérifier si le compte est activé
+        if (empty($user['is_active']) || $user['is_active'] !== 't') {
+            return redirect()->back()->with('error', 'Votre compte n\'est pas activé.');
+        }
+        
+
+        // Vérifier le mot de passe
+        if (password_verify($password, $user['password'])) {
             // Démarrer la session utilisateur
             session()->set(['user_id' => $user['usr_id'], 'isLoggedIn' => true, 'session_start_time' => time()]);
             return redirect()->to('/dashboard');
         }
 
-        // Ajouter un message d'erreur si les identifiants sont incorrects
+        // Ajouter un message d'erreur si le mot de passe est incorrect
         return redirect()->back()->with('error', 'E-mail ou mot de passe invalide');
     }
+
 
     public function processRegister()
     {
@@ -69,7 +87,56 @@ class AuthController extends BaseController
         ];
 
         $userModel->save($data);
+
+        $email = $this->request->getPost('email');
+		$user = $userModel->getUserByEmail($email);
+		// Dans la méthode sendResetLink du contrôleur ForgotPasswordController
+		echo 'Adresse e-mail soumise : ' . $email. ' ';
+		if ($user) {
+			// Générer un jeton de réinitialisation de MDP et enregistrer-le dans BD
+			$token = bin2hex(random_bytes(16));
+			$expiration = date('Y-m-d H:i:s', strtotime('+1 hour'));
+			$userModel->set('reset_token', $token)
+			->set('reset_token_exp', $expiration)
+			->update($user['usr_id']);
+			// Envoyer l'e-mail avec le lien de réinitialisation
+			$activationLink = site_url("active_account/$token");
+			$message = "Cliquez sur le lien suivant pour activer votre compte: $activationLink";
+			// Utilisez la classe Email de CodeIgniter pour envoyer l'e-mail
+			$emailService = \Config\Services::email();
+			//paramètres du mail
+			$from = \Config\Services::email()->fromEmail;
+			$to = $this->request->getPost('to');
+			$subject = $this->request->getPost('subject');
+			//envoi du mail
+			$emailService->setTo($email);
+			$emailService->setFrom($from);
+			$emailService->setSubject('Activation de compte');
+			$emailService->setMessage($message);
+			if ($emailService->send()) {
+			echo 'E-mail envoyé avec succès.';
+			} else {
+				echo $emailService->printDebugger();
+			}
+		} else {
+			echo 'Adresse e-mail non valide.';
+		}
         return redirect()->to('/')->with('success', 'Inscription réussie. Veuillez vous connecter.');
+    }
+
+    public function activeAccount($token)
+    {
+        $userModel = new UserModel();
+        $user = $userModel->getUserByResetTokenAndValid($token);
+        if ($user) {
+            $userModel->set('is_active', true)
+            ->set('reset_token', null)
+            ->set('reset_token_exp', null)
+            ->update($user['usr_id']);
+            return redirect()->to('/')->with('success', 'Compte activé avec succès.');
+        } else {
+            return redirect()->to('/')->with('error', 'Lien d\'activation non valide.');
+        }
     }
 
     public function setSession()
@@ -177,7 +244,7 @@ class AuthController extends BaseController
 		if ($user) {
 			return view('update_password', ['token' => $token]);
 		} else {
-			return 'Lien de réinitialisation non valide.';
+			return redirect()->to('/forgot_password')->with('error', 'Lien de réinitialisation non valide.');
 		}
 	}
 	public function updatePassword()
@@ -198,10 +265,10 @@ class AuthController extends BaseController
 
             $userModel->deleteResetToken($user['usr_id']);
 
-			return 'Mot de passe réinitialisé avec succès.';
+			return redirect()->to('/login')->with('success', 'Mot de passe réinitialisé avec succès. Connectez-vous.');
 		} else {
 			echo ($user);
-			return 'Erreur lors de la réinitialisation du mot de passe.';
+			return redirect()->to('/forgot_password')->with('error', 'Erreur lors de la réinitialisation du mot de passe.');
 		}
 	}
     
