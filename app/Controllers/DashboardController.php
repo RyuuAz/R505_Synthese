@@ -22,8 +22,29 @@ class DashboardController extends BaseController
         $projects = $projectModel->getProjectsByUser(session()->get('user_id'));
         $priorities = $modelpriority->getPrioritiesByUser(session()->get('user_id'));
 
+        $tachesParStatut = [
+            'a_faire' => [],
+            'en_cours' => [],
+            'termine' => []
+        ];
+    
+        foreach ($tasks as $tache) {
+            switch ($tache['status']) {
+                case 'pending':
+                    $tachesParStatut['a_faire'][] = $tache;
+                    break;
+                case 'overdue':
+                    $tachesParStatut['en_cours'][] = $tache;
+                    break;
+                case 'completed':
+                    $tachesParStatut['termine'][] = $tache;
+                    break;
+            }
+        }
+
         echo view('dashboard/dashboard', [
             'tasks' => $tasks,
+            'tachesParStatut' => $tachesParStatut,
             'projects' => $projects,
             'priorities' => $priorities
         ]);

@@ -77,10 +77,10 @@ class ProjectController extends BaseController
                 case 'pending':
                     $tachesParStatut['a_faire'][] = $tache;
                     break;
-                case 2:
+                case 'overdue':
                     $tachesParStatut['en_cours'][] = $tache;
                     break;
-                case 3:
+                case 'completed':
                     $tachesParStatut['termine'][] = $tache;
                     break;
             }

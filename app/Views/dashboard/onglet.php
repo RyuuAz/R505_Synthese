@@ -65,8 +65,6 @@
                                         $options[$priority['prio_id']] = $priority['name'];
                                     }
 
-                                    var_dump($options);
-
                                     // Génération du dropdown
                                     echo form_dropdown('menuSelection', $options, '', [
                                         'id' => 'menuSelection', 
@@ -90,11 +88,89 @@
             <?php
                 if ((isset($tasks) && !empty($tasks))) : ?>
                     <?php foreach ($tasks as $task): ?>
-                        <?php echo \App\Views\dashboard\component\TaskCase::genererBandeauTache($task["title"],$task['due_date'],$task['description']) ?>
+                        <?php foreach ($priorities as $priority): ?>
+                            <?php if ($priority['prio_id'] === $task['prio_id'])
+                                echo \App\Views\dashboard\component\TaskCase::genererBandeauTache($task['tsk_id']
+                        ,$task["title"],$task['due_date'],$task['description'] ,$priority['color'], ["commentaire 1"]); ?>
+                        <?php endforeach; ?>
                     <?php endforeach; ?>
                 <?php else: ?>
                     <p>Aucune tâche pour ce projet.</p>
                 <?php endif; ?>
+
+                <div class="row mt-4">
+        <!-- Colonne À faire -->
+        <div class="col-md-4">
+            <div class="column-header text-center bg-warning text-white p-2 rounded mb-3">
+                <h3>À faire</h3>
+            </div>
+            <div class="task-list">
+                <?php if (!empty($tachesParStatut['a_faire'])): ?>
+                    <?php foreach ($tachesParStatut['a_faire'] as $tache): ?>
+                        <div class="card mb-3 shadow">
+                            <div class="card-body">
+                                <h5 class="card-title"><?= htmlspecialchars($tache["title"]); ?></h5>
+                                <p class="card-text"><?= htmlspecialchars($tache["description"]); ?></p>
+                                <p class="card-text text-end">
+                                    <small class="text-muted">Échéance : <?= htmlspecialchars($tache["due_date"]); ?></small>
+                                </p>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p class="text-muted text-center">Aucune tâche à faire.</p>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <!-- Colonne En cours -->
+        <div class="col-md-4">
+            <div class="column-header text-center bg-info text-white p-2 rounded mb-3">
+                <h3>En cours</h3>
+            </div>
+            <div class="task-list">
+                <?php if (!empty($tachesParStatut['en_cours'])): ?>
+                    <?php foreach ($tachesParStatut['en_cours'] as $tache): ?>
+                        <div class="card mb-3 shadow">
+                            <div class="card-body">
+                                <h5 class="card-title"><?= htmlspecialchars($tache["title"]); ?></h5>
+                                <p class="card-text"><?= htmlspecialchars($tache["description"]); ?></p>
+                                <p class="card-text text-end">
+                                    <small class="text-muted">Échéance : <?= htmlspecialchars($tache["due_date"]); ?></small>
+                                </p>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p class="text-muted text-center">Aucune tâche en cours.</p>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <!-- Colonne Terminé -->
+        <div class="col-md-4">
+            <div class="column-header text-center bg-success text-white p-2 rounded mb-3">
+                <h3>Terminé</h3>
+            </div>
+            <div class="task-list">
+                <?php if (!empty($tachesParStatut['termine'])): ?>
+                    <?php foreach ($tachesParStatut['termine'] as $tache): ?>
+                        <div class="card mb-3 shadow">
+                            <div class="card-body">
+                                <h5 class="card-title"><?= htmlspecialchars($tache["title"]); ?></h5>
+                                <p class="card-text"><?= htmlspecialchars($tache["description"]); ?></p>
+                                <p class="card-text text-end">
+                                    <small class="text-muted">Échéance : <?= htmlspecialchars($tache["due_date"]); ?></small>
+                                </p>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p class="text-muted text-center">Aucune tâche terminée.</p>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
         </div>
     </div>
 
@@ -194,16 +270,3 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<style>
-.card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transform: scale(1.02); /* Léger agrandissement */
-    transition: all 0.2s ease-in-out;
-    cursor: pointer;
-}
-.card {
-    visibility: visible !important; /* Assure que les cartes restent visibles */
-    opacity: 1 !important;          /* Assure une opacité complète */
-}
-
-</style>
