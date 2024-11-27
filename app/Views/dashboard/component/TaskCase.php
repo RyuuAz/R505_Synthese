@@ -1,15 +1,20 @@
 <?php
-
 namespace App\Views\Dashboard\Component;
+use App\Models\TaskModel;
+
 class TaskCase {
-    static function genererBandeauTache($titre, $date, $description, $commentaires = []) {
+    static function genererBandeauTache($tsk_id,$titre, $date, $description, $commentaires = []) {
+
+        $model = new TaskModel();
+        $commentaires = $model->getComments($tsk_id);
+
         // Convertir les commentaires en HTML si le tableau n'est pas vide
         $commentairesHTML = '';
         if (!empty($commentaires)) {
             foreach ($commentaires as $commentaire) {
                 $commentairesHTML .= '
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                    <p class="mb-0 text-dark">' . htmlspecialchars($commentaire) . '</p>
+                    <p class="mb-0 text-dark">' . htmlspecialchars($commentaire['content']) . '</p>
                     <div class="d-flex">
                         <!-- Icône de crayon pour l\'édition avec bouton stylisé -->
                         <button class="btn btn-sm btn-outline-primary me-2">
@@ -23,8 +28,14 @@ class TaskCase {
                 </div>';
             }
         } else {
-            $commentairesHTML = '<p>Aucun commentaire.</p>';
+            $commentairesHTML .= '<p>Aucun commentaire.</p>';
         }
+
+        // Générer les éléments du formulaire
+        $hidden = form_hidden('tsk_id', $tsk_id);
+        $textarea = form_textarea('content', 'Contenu du commentaire', ['class' => 'form-control']);
+        $submit = form_submit('submit', 'Mettre un commentaire', ['class' => 'btn btn-primary']);
+
     
         // Générer le bandeau HTML
         return '
@@ -62,6 +73,37 @@ class TaskCase {
                     <!-- Commentaires -->
                     <div class="task-comments">
                         <strong>Commentaires :</strong>
+
+                        <div class="container-fluid">
+                            <!-- Ligne qui occupe toute la largeur -->
+                            <div class="d-flex justify-content-end pt-3">
+                                <!-- Bouton avec icône "+" aligné à droite -->
+                                <button class="btn" data-bs-toggle="modal" data-bs-target="#AjoutCommentaire">
+                                    <i class="bi bi-plus-square fs-1"></i> <!-- Icône "+" -->
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="AjoutCommentaire" tabindex="-1" aria-labelledby="ajoutcommentaire" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="ajoutcommentaire">Création d\'un nouveau commentaire</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div> 
+                                <div class="modal-body">
+                                    <form action="/comments/store" method="post"> 
+                                    ' . $hidden . '
+                                    ' . $textarea . ' 
+                                    </div>
+                                <div class="modal-footer"> '.
+                                    $submit . '
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                         ' . $commentairesHTML . '
                     </div>
                 </div>
