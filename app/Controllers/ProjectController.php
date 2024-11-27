@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\ProjectModel;
 use App\Models\TaskModel;
+use App\Models\PriorityModel;
 
 class ProjectController extends BaseController
 {
@@ -58,11 +59,64 @@ class ProjectController extends BaseController
      */
     public function getProjectByID($prjID)
     {
+        session()->set('prj_id', $prjID);
         $projects = $this->projectModel->getProjectById($prjID);
         $tacheModel = new TaskModel();
         $taches = $tacheModel->getTasksByProject($prjID);
+        $prioriteModel = new PriorityModel();
+        $priorites = $prioriteModel->getPrioritiesByUser((int)session()->get('user_id'));
 
-        return view('Projet/projet_vue', ['projet' => $projects, 'taches' => $taches]);
+        $tachesParStatut = [
+            'a_faire' => [],
+            'en_cours' => [],
+            'termine' => []
+        ];
+    
+        foreach ($taches as $tache) {
+            switch ($tache['status']) {
+                case 'pending':
+                    $tachesParStatut['a_faire'][] = $tache;
+                    break;
+                case 2:
+                    $tachesParStatut['en_cours'][] = $tache;
+                    break;
+                case 3:
+                    $tachesParStatut['termine'][] = $tache;
+                    break;
+            }
+        }
+    
+        
+
+        return view('Projet/projet_vue', ['projet' => $projects, 'tachesParStatut' => $tachesParStatut, 'priorities' => $priorites]);
+    }
+
+    public function addTaskforProject() {
+        $priorityModel = new PriorityModel();
+        $taskModel = new TaskModel();
+
+        // Si la méthode HTTP est POST, traite le formulaire
+        if ($this->request->getMethod() === 'POST') {
+            // Définir les règles de validation
+            $validationRules = [
+                'nomTache' => 'required|max_length[255]',
+                'dateTache' => 'required|valid_date',
+                'prio_id' => 'required|integer',
+            ];
+
+            // Ajouter la tâche dans la base de données
+            $data = [
+                'usr_id' => (int) session()->get('user_id'),
+                'prio_id' =>(int) $this->request->getPost('menuSelection'), // ID de la priorité sélectionnée
+                'title' => $this->request->getPost('nomTache'),
+                'description' => $this->request->getPost('descriptionTache'),
+                'due_date' => $this->request->getPost('datetache'),
+                'status' => 'pending',
+                'prj_id' => (int) session()->get('prj_id')
+            ];
+            $taskModel->add($data);
+        }
+        return redirect()->to('/projects/view/'.session()->get('prj_id'));    
     }
 
 
