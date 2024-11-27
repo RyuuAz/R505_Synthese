@@ -26,13 +26,17 @@ $routes->post('/register', 'AuthController::processRegister');
 $routes->post('/forgot_password', 'AuthController::sendResetLink');
 $routes->post('/reset_password', 'AuthController::updatePassword');
 
-$routes->group('', ['filter' => 'auth'], function($routes) {
+$routes->group('', ['filter' => 'auth'], function ($routes) {
 
 	$routes->get('/dashboard', 'DashboardController::index');
 	$routes->post('/dashboard/addproject', 'DashboardController::addProject');
 	$routes->get('/task/edit/(:num)', 'TaskController::edit/$1');
 	$routes->post('/task/update/(:num)', 'TaskController::update/$1');
 	$routes->get('/logout', 'AuthController::logout');
+	$routes->get('settings', 'SettingsController::index');
+	$routes->post('settings/create-priority', 'SettingsController::createPriority');
+	$routes->get('settings/delete-priority/(:num)', 'SettingsController::deletePriority/$1');
+
 
 	// Routes pour UserController
 	$routes->get('users', 'UserController::index'); // Liste des utilisateurs
