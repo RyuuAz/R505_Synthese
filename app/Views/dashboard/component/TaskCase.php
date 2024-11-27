@@ -28,7 +28,7 @@ class TaskCase {
     
         // Générer le bandeau HTML
         return '
-        <div class="container mt-0 p-0">
+        <div class="container mt-0 p-0 mb-3">
             <!-- Barre principale -->
             <div class="task-bar d-flex align-items-center justify-content-between bg-orange p-3">
                 <div class="d-flex align-items-center">
