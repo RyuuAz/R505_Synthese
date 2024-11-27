@@ -7,6 +7,8 @@ DROP TABLE IF EXISTS priority CASCADE;
 
 DROP TABLE IF EXISTS tasks CASCADE;
 
+DROP TABLE IF EXISTS project_user CASCADE;
+
 DROP TABLE IF EXISTS project CASCADE;
 
 DROP TABLE IF EXISTS users CASCADE;
@@ -45,11 +47,17 @@ CREATE TABLE users (
 -- Table projects
 CREATE TABLE project (
     prj_id SERIAL PRIMARY KEY,
-    usr_id INT REFERENCES users(usr_id) ON DELETE CASCADE,
     title VARCHAR(255) NOT NULL,
     description TEXT,
     prj_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     prj_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table project_user (relation entre utilisateurs et projets)
+CREATE TABLE project_user (
+    prj_id INT REFERENCES project(prj_id) ON DELETE CASCADE,
+    usr_id INT REFERENCES users(usr_id) ON DELETE CASCADE,
+    PRIMARY KEY (prj_id, usr_id) -- Clé primaire composée
 );
 
 -- Table priority
@@ -58,7 +66,7 @@ CREATE TABLE priority (
     usr_id INT REFERENCES users(usr_id) ON DELETE CASCADE,
     ordre INT NOT NULL,
     name VARCHAR(50) NOT NULL,
-    color VARCHAR(7) NOT NULL  -- Hexadecimal code (e.g., #FF5733)
+    color VARCHAR(7) NOT NULL -- Hexadecimal code (e.g., #FF5733)
 );
 
 -- Table tasks
