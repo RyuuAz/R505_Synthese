@@ -60,6 +60,8 @@
                                         $options[$priority['prio_id']] = $priority['name'];
                                     }
 
+                                    var_dump($options);
+
                                     // Génération du dropdown
                                     echo form_dropdown('menuSelection', $options, '', [
                                         'id' => 'menuSelection', 
@@ -69,18 +71,6 @@
 
                                 <?php echo form_label('Date de fin de la tâche:', 'dateTache'); ?>
                                 <?php echo form_input(['type' => 'date', 'name' => 'datetache', 'class' => 'form-control']); ?>
-
-                                <div class="mb-3">
-                                    <?php echo form_label('Nombre de jours avant l\'échéance pour prévenir l\'utilisateur:', 'joursAvant', ['class' => 'form-label']); ?>
-                                    <input type="number" name="joursAvant" id="joursAvant" class="form-control" min="0" />
-                                </div>
-
-                                <!-- Ajout d'un champ pour la couleur -->
-                                <!-- <div class="mb-3">
-                                    echo form_label('Choisissez la couleur de la tâche:', 'couleurTache', ['class' => 'form-label']); ?>
-                                    echo form_input(['type' => 'color', 'name' => 'couleurTache', 'class' => 'form-control']); ?> 
-                                </div> -->
-
                         </div>
                         <div class="modal-footer">
                             <?php echo form_submit('submit', 'Créer la tâche', ['class' => 'btn btn-primary']); ?>
@@ -93,16 +83,13 @@
             </div>
             
             <?php
-            
-
-            foreach ($tasks as $task) {
-                echo view('dashboard/component/case', [
-                    'titre' => $task['title'],
-                    'date' => $task['due_date'],
-                    'description' => $task['description'],
-                ]);
-            }
-            ?>
+                if ((isset($taches) && !empty($taches))) : ?>
+                    <?php foreach ($taches as $tache): ?>
+                        <?php echo \App\Views\dashboard\component\TaskCase::genererBandeauTache($tache["title"],$tache['due_date'],$tache['description']) ?>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p>Aucune tâche pour ce projet.</p>
+                <?php endif; ?>
         </div>
     </div>
 
@@ -198,32 +185,3 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    // Fonction pour calculer la différence en jours
-    document.getElementById('datetache').addEventListener('input', function() {
-        var today = new Date();  // Date actuelle
-        var dueDate = new Date(this.value);  // Date d'échéance saisie
-
-        // Vérifier si la date d'échéance est valide
-        if (this.value) {
-            // Si une date est sélectionnée, activer l'input pour les jours
-            document.getElementById('joursAvant').disabled = false;
-        } else {
-            // Si aucune date n'est sélectionnée, désactiver l'input pour les jours
-            document.getElementById('joursAvant').disabled = true;
-            document.getElementById('joursAvant').value = '';  // Réinitialiser la valeur
-            return;
-        }
-
-        var timeDiff = dueDate - today;  // Différence en millisecondes
-        var daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));  // Convertir la différence en jours
-
-        // Si la date d'échéance est dans le passé, afficher 0
-        if (daysDiff < 0) {
-            daysDiff = 0;
-        }
-
-        // Mettre à jour la valeur de l'input avec le nombre de jours restant
-        document.getElementById('joursAvant').value = daysDiff;
-    });
-</script>
