@@ -38,8 +38,8 @@ CREATE TABLE users (
     is_active BOOLEAN DEFAULT FALSE,
     usr_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     usr_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    reset_token INT,
-    reset_token_ecp TIMESTAMP
+    reset_token VARCHAR(255),
+    reset_token_exp TIMESTAMP
 );
 
 -- Table projects
