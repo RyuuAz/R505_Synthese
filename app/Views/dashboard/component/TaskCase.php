@@ -1,14 +1,9 @@
 <?php
 namespace App\Views\Dashboard\Component;
-use App\Models\TaskModel;
 
 
 class TaskCase {
     static function genererBandeauTache($tsk_id,$titre, $date, $description, $bgColor, $commentaires = []) {
-
-        $model = new TaskModel();
-        $commentaires = $model->getComments($tsk_id);
-
         // Convertir les commentaires en HTML si le tableau n'est pas vide
         $commentairesHTML = '';
         if (!empty($commentaires)) {
@@ -53,7 +48,7 @@ class TaskCase {
                     <button class="icon-btn me-3"><i class="bi bi-trash"></i></button>
                     <!-- Bouton de dépliement -->
                     <button class="icon-btn" data-bs-toggle="collapse" data-bs-target="#task-details-' . md5($titre) . '" aria-expanded="false">
-                        <i class="bi bi-chevron-right rotate-icon"></i>
+                        <i type="button" class="bi bi-chevron-right rotate-icon"></i>
                     </button>
                 </div>
             </div>
@@ -92,14 +87,14 @@ class TaskCase {
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div> 
                                 <div class="modal-body">
-                                    <form action="/comments/store" method="post"> 
+                                    <form action="comments/store" method="post"> 
                                     ' . $hidden . '
                                     ' . $textarea . ' 
                                     </div>
-                                <div class="modal-footer"> '.
-                                    $submit . '
+                                <div class="modal-footer"> 
+                                '. $submit . '
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-
+                                </form>
                                 </div>
                             </div>
                         </div>

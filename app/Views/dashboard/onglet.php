@@ -103,7 +103,7 @@
                     <?php foreach ($tasks as $task): ?>
                         <?php foreach ($priorities as $priority): ?>
                             <?php if ($priority['prio_id'] === $task['prio_id'])
-                                echo \App\Views\dashboard\component\TaskCase::genererBandeauTache($task['tsk_id'],$task["title"],$task['due_date'],$task['description'] ,$priority['color'], ["commentaire 1"]); ?>
+                                echo \App\Views\dashboard\component\TaskCase::genererBandeauTache($task['tsk_id'],$task["title"],$task['due_date'],$task['description'] ,$priority['color']); ?>
                         <?php endforeach; ?>
                     <?php endforeach; ?>
                 <?php else: ?>
@@ -223,8 +223,8 @@
             <div class="d-flex flex-wrap justify-content-left">
                 <?php foreach ($projects as $project): ?>
                     <a href="<?= site_url('projects/view/' . $project['prj_id']) ?>" 
-                       class="card m-2 text-decoration-none" 
-                       style="width: 18rem; height: 150px; color: inherit;">
+                        class="card m-2 text-decoration-none" 
+                        style="width: 18rem; height: 150px; color: inherit;">
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title"><?= htmlspecialchars($project['title']) ?></h5>
                             <p class="card-text flex-grow-1"><?= htmlspecialchars($project['description']) ?></p>
