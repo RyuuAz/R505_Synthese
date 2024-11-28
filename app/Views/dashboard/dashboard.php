@@ -15,6 +15,7 @@
 <?php    
     echo view("dashboard/onglet.php", [
         'tasks' => $tasks,
+        'commentaires' => $commentaires,
         'projects' => $projects,
         'priorities' => $priorities
     ]); ?>

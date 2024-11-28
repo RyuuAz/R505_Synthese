@@ -47,6 +47,6 @@ class CommentController extends BaseController
     public function delete($id)
     {
         $this->commentModel->del($id);
-        return redirect()->to('/comments')->with('success', 'Commentaire supprimé.');
+        return redirect()->to('/dashboard')->with('success', 'Commentaire supprimé.');
     }
 }

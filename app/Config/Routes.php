@@ -74,7 +74,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 
 	// Routes pour CommentController
 	$routes->get('comments/create', 'CommentController::create'); // Formulaire d'ajout de commentaire
-	//$routes->post('comments/store', 'CommentController::store'); // Traitement de l'ajout
+	$routes->post('comments/store', 'CommentController::store'); // Traitement de l'ajout
 	$routes->get('comments/delete/(:num)', 'CommentController::delete/$1'); // Suppression d'un commentaire
 
 	// Routes pour NotificationController

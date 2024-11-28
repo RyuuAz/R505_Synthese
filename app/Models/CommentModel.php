@@ -56,4 +56,14 @@ class CommentModel extends Model
     {
         return $this->where('tsk_id', $taskId)->findAll();
     }
+
+    /**
+     * Récupère tout les commentaires 
+     * @param int $id ID du commentaire
+     * @return array|false Commentaire ou false si non trouvé
+     */
+    public function getCommentById(int $id)
+    {
+        return $this->findAll($id);
+    }
 }
