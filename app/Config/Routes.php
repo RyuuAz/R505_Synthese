@@ -36,6 +36,8 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 	$routes->get('/dashboard', 'DashboardController::index');
 	$routes->post('/dashboard/addproject', 'DashboardController::addProject');
 	$routes->post('/dashboard/addLoneTask', 'DashboardController::addLoneTask');
+	$routes->get('/dashboard/deleteLoneTask/(:num)', 'DashboardController::deleteLoneTask/$1');
+	$routes->post('settings/UpdateLoneTask/(:num)', 'DashboardController::UpdateLoneTask/$1');
 	$routes->get('/task/edit/(:num)', 'TaskController::edit/$1');
 	$routes->post('/task/update/(:num)', 'TaskController::update/$1');
 	$routes->get('/logout', 'AuthController::logout');
