@@ -120,5 +120,10 @@ class DashboardController extends BaseController
         return view('task/create', ['priorities' => $priorities]);
     }
 
-
+    public function deleteLoneTask($id)
+    {
+        $model = new TaskModel();
+        $model->del($id);
+        return redirect()->to('/dashboard');
+    }
 }
