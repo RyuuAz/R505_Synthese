@@ -66,6 +66,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 	$routes->get('task/project/(:num)', 'TaskController::listByProject/$1'); // Tâches d'un projet
 	$routes->get('task/user-without-project/(:num)', 'TaskController::listByUserWithoutProject/$1'); // Tâches d'un utilisateur sans projet
 	$routes->get('task/show/(:num)', 'TaskController::show/$1'); // Affiche les commentaires d'une tâche
+	$routes->post('updateTaskStatus', 'TaskController::updateTaskStatus'); // Met à jour le statut d'une tâche
 
 	// Routes pour PriorityController
 	$routes->get('priorities/create', 'PriorityController::create'); // Formulaire de création de priorité
