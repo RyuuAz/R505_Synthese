@@ -63,6 +63,8 @@ class AuthController extends BaseController
     {
         $userModel = new UserModel();
 
+        $firstname = $this->request->getPost('first_name');
+        $lastname = $this->request->getPost('last_name');
         $email = $this->request->getPost('email');
         $password = $this->request->getPost('password');
         $passwordConfirm = $this->request->getPost('password_confirm');
@@ -77,6 +79,8 @@ class AuthController extends BaseController
         }
 
         $data = [
+            'first_name' => $firstname,
+            'last_name' => $lastname,
             'email' => $email,
             'password' => password_hash($password, PASSWORD_DEFAULT),
             'is_active' => false

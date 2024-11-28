@@ -17,6 +17,14 @@
                         <?php if (session()->getFlashdata('success')): ?>
                             <div class="alert alert-success"><?= session()->getFlashdata('success') ?></div>
                         <?php endif; ?>
+                        <!-- Champ Prénom -->
+                        <div class="mb-3 d-flex justify-content-center">
+                            <input type="text" class="form-control w-75" id="first_name" name="first_name" placeholder="Prénom" required />
+                        </div>
+                        <!-- Champ Nom -->
+                        <div class="mb-3 d-flex justify-content-center">
+                            <input type="text" class="form-control w-75" id="last_name" name="last_name" placeholder="Nom" required />
+                        </div>
                         <!-- Champ E mail -->
                         <div class="mb-3 d-flex justify-content-center">
                             <input type="email" class="form-control w-75" id="email" name="email" placeholder="E-mail" required />

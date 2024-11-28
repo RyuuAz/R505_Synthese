@@ -34,6 +34,8 @@ class UserController extends BaseController
         }
 
         // Récupération des données
+        $firstname = $this->request->getPost('first_name');
+        $lastname = $this->request->getPost('last_name');
         $email = $this->request->getPost('email');
         $password = $this->request->getPost('password');
         $confirmPassword = $this->request->getPost('confirm_password');
@@ -53,7 +55,11 @@ class UserController extends BaseController
         }
 
         // Mise à jour des informations
-        $data = ['email' => $email];
+        $data = [
+            'first_name' => $firstname,
+            'last_name' => $lastname,
+            'email' => $email
+        ];
         if (!empty($password)) {
             $data['password'] = password_hash($password, PASSWORD_DEFAULT);
         }
