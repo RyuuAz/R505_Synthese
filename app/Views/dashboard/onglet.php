@@ -41,47 +41,58 @@
             </div>
 
             <div class="modal fade" id="AjoutTache" tabindex="-1" aria-labelledby="ajouttache" aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="ajouttache">Création d'une nouvelle tâche</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form action="dashboard/addLoneTask" method="post">
+                            <form action="dashboard/addLoneTask" method="post" class="needs-validation" novalidate>
+                                <div class="row">
+                                    <!-- Champ nom de la tâche -->
+                                    <div class="col-md-12 mb-3">
+                                        <?php echo form_label('Nom de la tâche:', 'nomTache', ['class' => 'form-label']); ?>
+                                        <?php echo form_input('nomTache', '', ['class' => 'form-control', 'required' => true]); ?>
+                                    </div>
 
-                                <?php echo form_label('Nom de la tâche:', 'nomTache'); ?>
-                                <?php echo form_input('nomTache', '', ['class' => 'form-control']); ?>
+                                    <!-- Champ description -->
+                                    <div class="col-md-12 mb-3">
+                                        <?php echo form_label('Description de la tâche:', 'descriptionTache', ['class' => 'form-label']); ?>
+                                        <?php echo form_textarea('descriptionTache', '', [
+                                            'class' => 'form-control',
+                                            'style' => 'height: 75px;',
+                                            'required' => true
+                                        ]); ?>
+                                    </div>
 
-                                <?php echo form_label('Description de la tâche:', 'descriptionTache'); ?>
-                                <?php echo form_textarea('descriptionTache', '', ['class' => 'form-control']); ?>
+                                    <!-- Champ priorité -->
+                                    <div class="col-md-6 mb-3">
+                                        <?php 
+                                            echo form_label('Choisissez votre priorité :', 'menuSelection', ['class' => 'form-label mb-0']); // Retrait de la marge inférieure
+                                            $options = [];
+                                            foreach ($priorities as $priority) {
+                                                $options[$priority['prio_id']] = $priority['name'];
+                                            }
+                                            echo form_dropdown('menuSelection', $options, '', [
+                                                'id' => 'menuSelection', 
+                                                'class' => 'form-select',
+                                                'required' => true
+                                            ]); 
+                                        ?>
+                                    </div>
 
-                                <?php 
-                                    echo form_label('Choisissez votre priorité :', 'menuSelection', ['class' => 'form-label']); 
-
-                                    // Préparation des options pour le dropdown
-                                    $options = [];
-                                    foreach ($priorities as $priority) {
-                                        $options[$priority['prio_id']] = $priority['name'];
-                                    }
-
-                                    var_dump($options);
-
-                                    // Génération du dropdown
-                                    echo form_dropdown('menuSelection', $options, '', [
-                                        'id' => 'menuSelection', 
-                                        'class' => 'form-select'
-                                    ]); 
-                                ?>
-
-                                <?php echo form_label('Date de fin de la tâche:', 'dateTache'); ?>
-                                <?php echo form_input(['type' => 'date', 'name' => 'datetache', 'class' => 'form-control']); ?>
+                                    <!-- Champ date de fin -->
+                                    <div class="col-md-6 mb-3">
+                                        <?php echo form_label('Date de fin de la tâche:', 'dateTache', ['class' => 'form-label mb-0']); // Retrait de la marge inférieure ?>
+                                        <?php echo form_input(['type' => 'date', 'name' => 'datetache', 'class' => 'form-control', 'required' => true]); ?>
+                                    </div>
+                                </div>
                         </div>
                         <div class="modal-footer">
                             <?php echo form_submit('submit', 'Créer la tâche', ['class' => 'btn btn-primary']); ?>
                             <?php echo form_close(); ?>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-
                         </div>
                     </div>
                 </div>
@@ -90,12 +101,88 @@
             <?php
                 if ((isset($tasks) && !empty($tasks))) : ?>
                     <?php foreach ($tasks as $task): ?>
-                        <?php echo \App\Views\dashboard\component\TaskCase::genererBandeauTache($task['tsk_id']
-                        ,$task["title"],$task['due_date'],$task['description']) ?>
+                        <?php foreach ($priorities as $priority): ?>
+                            <?php if ($priority['prio_id'] === $task['prio_id'])
+                                echo \App\Views\dashboard\component\TaskCase::genererBandeauTache($task['tsk_id'],$task["title"],$task['due_date'],$task['description'] ,$priority['color'], ["commentaire 1"]); ?>
+                        <?php endforeach; ?>
                     <?php endforeach; ?>
                 <?php else: ?>
                     <p>Aucune tâche pour ce projet.</p>
                 <?php endif; ?>
+
+                <div class="row mt-4">
+        <!-- Colonne À faire -->
+        <div class="col-md-4">
+            <div class="column-header text-center bg-warning text-white p-2 rounded mb-3">
+                <h3>À faire</h3>
+            </div>
+            <div class="task-list">
+                <?php if (!empty($tachesParStatut['a_faire'])): ?>
+                    <?php foreach ($tachesParStatut['a_faire'] as $tache): ?>
+                        <div class="card mb-3 shadow">
+                            <div class="card-body">
+                                <h5 class="card-title"><?= htmlspecialchars($tache["title"]); ?></h5>
+                                <p class="card-text"><?= htmlspecialchars($tache["description"]); ?></p>
+                                <p class="card-text text-end">
+                                    <small class="text-muted">Échéance : <?= htmlspecialchars($tache["due_date"]); ?></small>
+                                </p>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p class="text-muted text-center">Aucune tâche à faire.</p>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <!-- Colonne En cours -->
+        <div class="col-md-4">
+            <div class="column-header text-center bg-info text-white p-2 rounded mb-3">
+                <h3>En cours</h3>
+            </div>
+            <div class="task-list">
+                <?php if (!empty($tachesParStatut['en_cours'])): ?>
+                    <?php foreach ($tachesParStatut['en_cours'] as $tache): ?>
+                        <div class="card mb-3 shadow">
+                            <div class="card-body">
+                                <h5 class="card-title"><?= htmlspecialchars($tache["title"]); ?></h5>
+                                <p class="card-text"><?= htmlspecialchars($tache["description"]); ?></p>
+                                <p class="card-text text-end">
+                                    <small class="text-muted">Échéance : <?= htmlspecialchars($tache["due_date"]); ?></small>
+                                </p>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p class="text-muted text-center">Aucune tâche en cours.</p>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <!-- Colonne Terminé -->
+        <div class="col-md-4">
+            <div class="column-header text-center bg-success text-white p-2 rounded mb-3">
+                <h3>Terminé</h3>
+            </div>
+            <div class="task-list">
+                <?php if (!empty($tachesParStatut['termine'])): ?>
+                    <?php foreach ($tachesParStatut['termine'] as $tache): ?>
+                        <div class="card mb-3 shadow">
+                            <div class="card-body">
+                                <h5 class="card-title"><?= htmlspecialchars($tache["title"]); ?></h5>
+                                <p class="card-text"><?= htmlspecialchars($tache["description"]); ?></p>
+                                <p class="card-text text-end">
+                                    <small class="text-muted">Échéance : <?= htmlspecialchars($tache["due_date"]); ?></small>
+                                </p>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p class="text-muted text-center">Aucune tâche terminée.</p>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
         </div>
     </div>
 
@@ -195,16 +282,3 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<style>
-.card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transform: scale(1.02); /* Léger agrandissement */
-    transition: all 0.2s ease-in-out;
-    cursor: pointer;
-}
-.card {
-    visibility: visible !important; /* Assure que les cartes restent visibles */
-    opacity: 1 !important;          /* Assure une opacité complète */
-}
-
-</style>

@@ -2,8 +2,9 @@
 namespace App\Views\Dashboard\Component;
 use App\Models\TaskModel;
 
+
 class TaskCase {
-    static function genererBandeauTache($tsk_id,$titre, $date, $description, $commentaires = []) {
+    static function genererBandeauTache($tsk_id,$titre, $date, $description, $bgColor, $commentaires = []) {
 
         $model = new TaskModel();
         $commentaires = $model->getComments($tsk_id);
@@ -15,7 +16,7 @@ class TaskCase {
                 $commentairesHTML .= '
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <p class="mb-0 text-dark">' . htmlspecialchars($commentaire['content']) . '</p>
-                    <div class="d-flex">
+                    <div class="d-flex">    
                         <!-- Icône de crayon pour l\'édition avec bouton stylisé -->
                         <button class="btn btn-sm btn-outline-primary me-2">
                             <i class="bi bi-pencil"></i>
@@ -36,12 +37,11 @@ class TaskCase {
         $textarea = form_textarea('content', 'Contenu du commentaire', ['class' => 'form-control']);
         $submit = form_submit('submit', 'Mettre un commentaire', ['class' => 'btn btn-primary']);
 
-    
         // Générer le bandeau HTML
         return '
         <div class="container mt-0 p-0 mb-3">
             <!-- Barre principale -->
-            <div class="task-bar d-flex align-items-center justify-content-between bg-orange p-3">
+            <div class="task-bar d-flex align-items-center justify-content-between" style="background-color: ' . htmlspecialchars($bgColor) . '; padding: 1rem;">
                 <div class="d-flex align-items-center">
                     <!-- Affichage du titre et de la date d\'échéance -->
                     <strong class="me-3">' . htmlspecialchars($titre) . '</strong>
@@ -57,19 +57,19 @@ class TaskCase {
                     </button>
                 </div>
             </div>
-    
+
             <!-- Contenu dépliable -->
             <div id="task-details-' . md5($titre) . '" class="collapse mt-0 p-0">
-                <div class="task-details bg-orange p-3">
+                <div class="task-details" style="background-color: ' . htmlspecialchars($bgColor) . '"; padding: 1rem;">
                     <!-- Description -->
                     <div class="task-description">
                         <strong>Description :</strong>
                         <p>' . htmlspecialchars($description) . '</p>
                     </div>
-    
+
                     <!-- Séparation entre la description et les commentaires -->
                     <hr class="my-3" />
-    
+
                     <!-- Commentaires -->
                     <div class="task-comments">
                         <strong>Commentaires :</strong>
@@ -112,4 +112,3 @@ class TaskCase {
         ';
     }
 }
-?>
