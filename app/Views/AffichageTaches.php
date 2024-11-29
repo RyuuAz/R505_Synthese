@@ -7,7 +7,8 @@ echo view('common/head', [
 <?php 
 
 echo view('DefaultTaskView',[
-    'tachesParStatut' => $taches
+    'tachesParStatut' => $taches,
+    'tasks' => $tasks
 ]);
 
 

@@ -14,7 +14,7 @@
                                 <p class="task-desc"><?= htmlspecialchars($tache["description"]); ?></p>
                                 <p class="task-date">Échéance : <?= htmlspecialchars($tache["due_date"]); ?></p>
                                 <div class="task-actions">
-                                    <button class="edit-btn" onclick="openModal(this.closest('.task-card'))" title="Modifier">
+                                    <button class="edit-btn" onclick="openModalEditTask(this.closest('.task-card'))" title="Modifier">
                                         ✏️
                                     </button>
                                     <button class="delete-btn" onclick="deleteTask(<?= $tache['tsk_id']; ?>)" title="Supprimer">
@@ -42,7 +42,7 @@
                                 <p class="task-desc"><?= htmlspecialchars($tache["description"]); ?></p>
                                 <p class="task-date">Échéance : <?= htmlspecialchars($tache["due_date"]); ?></p>
                                 <div class="task-actions">
-                                    <button class="edit-btn" onclick="openModal(this.closest('.task-card'))" title="Modifier">
+                                    <button class="edit-btn" onclick="openModalEditTask(this.closest('.task-card'))" title="Modifier">
                                         ✏️
                                     </button>
                                     <button class="delete-btn" onclick="deleteTask(<?= $tache['tsk_id']; ?>)" title="Supprimer">
@@ -70,7 +70,7 @@
                                 <p class="task-desc"><?= htmlspecialchars($tache["description"]); ?></p>
                                 <p class="task-date">Échéance : <?= htmlspecialchars($tache["due_date"]); ?></p>
                                 <div class="task-actions">
-                                    <button class="edit-btn" onclick="openModal(this.closest('.task-card'))" title="Modifier">
+                                    <button class="edit-btn" onclick="openModalEditTask(this.closest('.task-card'))" title="Modifier">
                                         ✏️
                                     </button>
                                     <button class="delete-btn" onclick="deleteTask(<?= $tache['tsk_id']; ?>)" title="Supprimer">
@@ -87,6 +87,24 @@
             </div>
         </section>
 
+        <!-- Modal des commentaires -->
+        <div id="comments-modal" class="popup-overlay" style="display:none;">
+
+            <div class="popup-content">
+
+                <?php
+                    $model = new \App\Models\CommentModel();
+                    $comments = $model->getCommentsByTask($task['tsk_id']);
+                    if(isset($tasks))
+                        foreach ($tasks as $task) {
+                            echo \App\Controllers\TaskController::genererBandeauTache($task['tsk_id'], $task['title'], $task['due_date'], $task['description'], $task['bgColor'], $comments);
+                        }
+                ?>
+
+            </div>
+
+
+        <!-- Modal de modification de tâche -->
         <div id="edit-modal" class="popup-overlay" style="display:none;">
 
             <div class="popup-content">
@@ -280,7 +298,7 @@
             .catch(error => console.error('Erreur:', error));
     }
 
-    function openModal(task) {
+    function openModalEditTask(task) {
         document.getElementById("modal-task-id").value = task.dataset.taskId;
         document.getElementById("modal-task-title").value = task.querySelector(".task-title").innerText;
         document.getElementById("modal-task-desc").value = task.querySelector(".task-desc").innerText;
@@ -294,10 +312,9 @@
         document.body.style.overflow = "auto"; // Restaure le scroll
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-        document.querySelectorAll(".task-card").forEach(card => {
-            card.addEventListener("dblclick", () => openModal(card));
-        });
-    });
+    function openCommentsModal(task) {
+        document.getElementById("comments-modal").style.display = "flex";
+        document.body.style.overflow = "hidden"; // Empêche le scroll en arrière-plan
+    }
 
 </script>
