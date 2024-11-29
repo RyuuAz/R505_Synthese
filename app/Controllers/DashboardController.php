@@ -70,13 +70,13 @@ class DashboardController extends BaseController
         if ($this->request->getMethod() === 'POST') {
             $model = new ProjectModel();
             $model->add([
-                'title' => $this->request->getPost('nomProjet'),
-                'description' => $this->request->getPost('descriptionProjet'),
+                'title' => $this->request->getPost('title'),
+                'description' => $this->request->getPost('description'),
                 'usr_id' => (int) session()->get('user_id')
             ]);
             session()->setFlashdata('active_tab', 'projects');
         }
-        return redirect()->to('/dashboard');
+        return  redirect()->to('/projects');
     }
 
     /**

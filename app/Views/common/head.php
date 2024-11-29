@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $titre ?></title>
+     <link href="<?= base_url(relativePath: 'assets/css/global.css') ?>" rel="stylesheet">
     <style>
         /* Styles pour le header */
         body {
@@ -44,7 +45,7 @@
             color: #ffeb3b;
         }
     </style>
-    <link href="assets/css/global.css" rel="stylesheet">
+   
 </head>
 <body>
     <!-- Header -->
