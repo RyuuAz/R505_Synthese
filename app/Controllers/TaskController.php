@@ -86,6 +86,34 @@ class TaskController extends BaseController
         'priorities' => $priorities] );
     }
 
+    /** 
+     * Méthode qui affiche toutes les tâches sans projet
+     * @return string Vue avec les tâches
+     */
+    public function showSingleTask()
+    {
+        // Récupérer l'ID de l'utilisateur connecté
+        $userId = (int) session()->get('user_id');
+
+        $taskModel = new TaskModel();
+        $commentModel = new CommentModel();
+        $priorityModel = new PriorityModel();
+
+        // Récupérer les tâches de l'utilisateur
+        $tasks = $taskModel->getTasksByUserWithoutProject($userId);
+
+        // Récupérer les commentaires de l'utilisateur
+        $commentaires = $commentModel->getCommentsByUser($userId);
+
+        // Récupérer les priorités de l'utilisateur
+        $priorities = $priorityModel->getPrioritiesByUser($userId);
+    
+        return view('singleTasks', [
+        'tasks' => $tasks,
+        'commentaires' => $commentaires,
+        'priorities' => $priorities] );
+    }
+
     static function genererBandeauTache($tsk_id, $titre, $date, $description, $bgColor, $commentaires = []) {
         // Convertir les commentaires en HTML si le tableau n'est pas vide
         $commentairesHTML = '';
