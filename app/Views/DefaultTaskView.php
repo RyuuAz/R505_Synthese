@@ -92,16 +92,10 @@
 
             <div class="popup-content">
 
-                <?php
-                    $model = new \App\Models\CommentModel();
-                    $comments = $model->getCommentsByTask($task['tsk_id']);
-                    if(isset($tasks))
-                        foreach ($tasks as $task) {
-                            echo \App\Controllers\TaskController::genererBandeauTache($task['tsk_id'], $task['title'], $task['due_date'], $task['description'], $task['bgColor'], $comments);
-                        }
-                ?>
+                
 
             </div>
+        </div>
 
 
         <!-- Modal de modification de tâche -->
@@ -362,15 +356,55 @@
     }
 
 
-    function openCommentsModal(task) {
-        document.getElementById("comments-modal").style.display = "flex";
-        document.body.style.overflow = "hidden"; // Empêche le scroll en arrière-plan
-    }
+   //Fonction qui détecte les cliques sur les cards
+    document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('task-card')) {
+            const taskId = event.target.dataset.taskId;
+            const taskStatus = event.target.dataset.taskStatus;
 
-    document.addEventListener("DOMContentLoaded", () => {
-        document.querySelectorAll(".task-card").forEach(card => {
-            card.addEventListener("dblclick", () => openModal(card));
-        });
+            // Récupérer les commentaires via AJAX
+            fetch('/comments/getCommentsByTaskId', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '<?= csrf_hash(); ?>'
+                },
+                body: JSON.stringify({ taskId: taskId })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const commentsContainer = document.querySelector('#comments-modal .popup-content');
+                    commentsContainer.innerHTML = ''; // Réinitialise le contenu
+
+                    // Ajoute chaque commentaire dans le modal
+                    data.forEach(comment => {
+                        commentsContainer.innerHTML += `
+                            <div class="comment">
+                                <p>${comment.content}</p>
+                                <button class="delete-comment" onclick="deleteComment(${comment.id})">Supprimer</button>
+                            </div>
+                        `;
+                    });
+                })
+                .catch(error => console.error('Erreur:', error));
+
+            // Ajouter les commentaires à la tâche
+            document.getElementById('comments-modal').dataset.taskId = taskId;
+            document.getElementById('comments-modal').dataset.taskStatus = taskStatus;
+
+            // Afficher le modal
+            document.getElementById('comments-modal').style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Empêche le scroll en arrière-plan
+        }
     });
+
+    //Fonction pour fermer le modal
+    document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('popup-overlay')) {
+            document.getElementById('comments-modal').style.display = 'none';
+            document.body.style.overflow = 'auto'; // Restaure le scroll
+        }
+    });
+
 
 </script>

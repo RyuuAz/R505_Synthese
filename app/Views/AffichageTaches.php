@@ -12,13 +12,13 @@ echo view('common/head', [
 
 <div id="tasksContainer">
     <?php 
-    // Afficher les tâches par défaut (Toutes les tâches)
+    // Afficher les tâches par statut
     echo view('DefaultTaskView', [
-        'tachesParStatut' => $taches,
-    'tasks' => $tasks
+        'tachesParStatut' => $taches,   // Tâches classées par statut
     ]);
     ?>
 </div>
+
 
 <script>
     function loadTasks(filterType) {

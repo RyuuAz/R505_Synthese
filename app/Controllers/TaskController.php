@@ -64,13 +64,15 @@ class TaskController extends BaseController
      */
     public function showSingleTask()
     {
-        $userId = session()->get('user_id'); // Récupère l'utilisateur connecté
-        $tasks = $this->taskModel->getTasksByUserWithoutProject($userId); // Récupère les tâches de l'utilisateur
+        // Récupération des tâches
+        $tasks = $this->taskModel->getTasksByUserWithoutProject($userId); // Assurez-vous que cette ligne renvoie bien des données
         $tachesParStatut = [
             'a_faire' => [],
             'en_cours' => [],
             'termine' => []
         ];
+
+        // Tri des tâches par statut
         foreach ($tasks as $tache) {
             switch ($tache['status']) {
                 case 'pending':
@@ -84,8 +86,14 @@ class TaskController extends BaseController
                     break;
             }
         }
-        return view('AffichageTaches', ['taches' => $tachesParStatut]); // Passe les tâches à la vue
+
+        // Envoie les deux variables à la vue
+        return view('AffichageTaches', [
+            'taches' => $tachesParStatut,  // Tâches par statut
+        ]);
     }
+
+
 
     /** 
      * Méthode qui affiche toutes les tâches
@@ -114,7 +122,11 @@ class TaskController extends BaseController
                     break;
             }
         }
-        return view('AffichageTaches', ['taches' => $tachesParStatut, 'tasks' => $tasks]); // Passe les tâches à la vue
+        // Transmettre à la vue les deux variables
+        return view('AffichageTaches', [
+            'taches' => $tachesParStatut,  // Liste des tâches par statut
+            'tasks' => $tasks             // Liste complète des tâches
+        ]);
 
         
         // Récupérer l'ID de l'utilisateur connecté
