@@ -56,6 +56,24 @@
                 </div>
             </div>
         </section>
+
+        <div id="edit-modal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+                <h2>Modifier la tâche</h2>
+                <form id="edit-task-form" method="POST" action="/updateTaskStatus">
+                    <input type="hidden" name="tsk_id" id="modal-task-id">
+                    <label for="title">Titre :</label>
+                    <input type="text" name="title" id="modal-task-title" required>
+                    <label for="description">Description :</label>
+                    <textarea name="description" id="modal-task-desc" required></textarea>
+                    <label for="due_date">Échéance :</label>
+                    <input type="date" name="due_date" id="modal-task-date" required>
+                    <button type="submit">Enregistrer</button>
+                </form>
+            </div>
+        </div>
+
     </main>
 </div>
 
@@ -175,6 +193,34 @@
     color: #bdc3c7;
     font-size: 1rem;
 }
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+}
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
 </style>
 
 
@@ -221,4 +267,23 @@
             .then(data => console.log('Statut mis à jour:', data))
             .catch(error => console.error('Erreur:', error));
     }
+
+    function openModal(task) {
+        document.getElementById("modal-task-id").value = task.dataset.taskId;
+        document.getElementById("modal-task-title").value = task.querySelector(".task-title").innerText;
+        document.getElementById("modal-task-desc").value = task.querySelector(".task-desc").innerText;
+        document.getElementById("modal-task-date").value = task.querySelector(".task-date").innerText.split(" : ")[1];
+        document.getElementById("edit-modal").style.display = "flex";
+    }
+
+    function closeModal() {
+        document.getElementById("edit-modal").style.display = "none";
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".task-card").forEach(card => {
+            card.addEventListener("dblclick", () => openModal(card));
+        });
+    });
+
 </script>

@@ -64,6 +64,30 @@ class TaskController extends BaseController
      */
     public function showAllTasks()
     {
+
+        $userId = session()->get('user_id'); // Récupère l'utilisateur connecté
+        $tasks = $this->taskModel->getTasksByUser($userId); // Récupère les tâches de l'utilisateur
+        $tachesParStatut = [
+            'a_faire' => [],
+            'en_cours' => [],
+            'termine' => []
+        ];
+        foreach ($tasks as $tache) {
+            switch ($tache['status']) {
+                case 'pending':
+                    $tachesParStatut['a_faire'][] = $tache;
+                    break;
+                case 'overdue':
+                    $tachesParStatut['en_cours'][] = $tache;
+                    break;
+                case 'completed':
+                    $tachesParStatut['termine'][] = $tache;
+                    break;
+            }
+        }
+        return view('AffichageTaches', ['taches' => $tachesParStatut]); // Passe les tâches à la vue
+
+        
         // Récupérer l'ID de l'utilisateur connecté
         $userId = (int) session()->get('user_id');
 
@@ -81,34 +105,6 @@ class TaskController extends BaseController
         $priorities = $priorityModel->getPrioritiesByUser($userId);
     
         return view('allTasks', [
-        'tasks' => $tasks,
-        'commentaires' => $commentaires,
-        'priorities' => $priorities] );
-    }
-
-    /** 
-     * Méthode qui affiche toutes les tâches sans projet
-     * @return string Vue avec les tâches
-     */
-    public function showSingleTask()
-    {
-        // Récupérer l'ID de l'utilisateur connecté
-        $userId = (int) session()->get('user_id');
-
-        $taskModel = new TaskModel();
-        $commentModel = new CommentModel();
-        $priorityModel = new PriorityModel();
-
-        // Récupérer les tâches de l'utilisateur
-        $tasks = $taskModel->getTasksByUserWithoutProject($userId);
-
-        // Récupérer les commentaires de l'utilisateur
-        $commentaires = $commentModel->getCommentsByUser($userId);
-
-        // Récupérer les priorités de l'utilisateur
-        $priorities = $priorityModel->getPrioritiesByUser($userId);
-    
-        return view('singleTasks', [
         'tasks' => $tasks,
         'commentaires' => $commentaires,
         'priorities' => $priorities] );
