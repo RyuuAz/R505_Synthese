@@ -47,6 +47,8 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 	$routes->post('settings/update-priority/(:num)', 'SettingsController::updatePriority/$1');
 
 	$routes->get('projects', 'ProjectController::index');
+	$routes->get('tasks', 'TaskController::index');
+	$routes->get('AllTask', 'TaskController::AllTask');
 
 	// Routes pour UserController
 	$routes->get('users', 'UserController::index'); // Liste des utilisateurs
@@ -63,14 +65,17 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 	$routes->post('ajouterTacheProjet', 'ProjectController::addTaskForProject'); // Ajout d'une tâche à un projet
 
 	// Routes pour TaskController
+	$routes->get('/singleTasks', 'TaskController::showSingleTask'); // Liste des tâches
+	$routes->get('/tasks', 'TaskController::showAllTasks'); // Formulaire de modification de tâche
 	$routes->get('task/create', 'TaskController::create'); // Formulaire de création de tâche
 	$routes->post('task/store', 'TaskController::store'); // Traitement de la création
-	$routes->get('task/delete/(:num)', 'TaskController::delete/$1'); // Suppression d'une tâche
-	$routes->get('task/user/(:num)', 'TaskController::listByUser/$1'); // Tâches d'un utilisateur
-	$routes->get('task/project/(:num)', 'TaskController::listByProject/$1'); // Tâches d'un projet
-	$routes->get('task/user-without-project/(:num)', 'TaskController::listByUserWithoutProject/$1'); // Tâches d'un utilisateur sans projet
-	$routes->get('task/show/(:num)', 'TaskController::show/$1'); // Affiche les commentaires d'une tâche
+	$routes->post('/task/update', 'TaskController::update'); // Suppression d'une tâche
 	$routes->post('updateTaskStatus', 'TaskController::updateTaskStatus'); // Met à jour le statut d'une tâche
+	$routes->get('tasks/delay-tasks', 'TaskController::delayTaskFilter');
+	$routes->get('tasks/priority-tasks', 'TaskController::priorityTaskFilter');
+	$routes->get('tasks/due-date-tasks', 'TaskController::tasksByDueDate');
+	$routes->get('tasks/all-tasks', 'TaskController::allTasks');
+	$routes->post('task/delete/(:num)', 'TaskController::delete/$1'); // Suppression d'une tâche
 
 	// Routes pour PriorityController
 	$routes->get('priorities/create', 'PriorityController::create'); // Formulaire de création de priorité

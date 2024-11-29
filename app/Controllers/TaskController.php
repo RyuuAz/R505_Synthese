@@ -20,6 +20,31 @@ class TaskController extends BaseController
         helper('form');
     }
 
+    public function index()
+    {
+        $userId = session()->get('user_id'); // Récupère l'utilisateur connecté
+        $tasks = $this->taskModel->getTasksByUser($userId); // Récupère les tâches de l'utilisateur
+        $tachesParStatut = [
+            'a_faire' => [],
+            'en_cours' => [],
+            'termine' => []
+        ];
+        foreach ($tasks as $tache) {
+            switch ($tache['status']) {
+                case 'pending':
+                    $tachesParStatut['a_faire'][] = $tache;
+                    break;
+                case 'overdue':
+                    $tachesParStatut['en_cours'][] = $tache;
+                    break;
+                case 'completed':
+                    $tachesParStatut['termine'][] = $tache;
+                    break;
+            }
+        }
+        return view('AffichageTaches', ['taches' => $tachesParStatut]); // Passe les tâches à la vue
+    }
+
     /**
      * Affiche le formulaire de création de tâche
      * @return string Vue du formulaire
@@ -32,6 +57,158 @@ class TaskController extends BaseController
 
         return view('task/create', ['priorities' => $priorities]); // Passe les priorités à la vue
     }
+
+    /**
+     * Méthode qui affiche toutes les tâches sans projet
+     * @return string Vue avec les tâches
+     */
+    public function showSingleTask()
+    {
+        // Récupération des tâches
+        $tasks = $this->taskModel->getTasksByUserWithoutProject($userId); // Assurez-vous que cette ligne renvoie bien des données
+        $tachesParStatut = [
+            'a_faire' => [],
+            'en_cours' => [],
+            'termine' => []
+        ];
+
+        // Tri des tâches par statut
+        foreach ($tasks as $tache) {
+            switch ($tache['status']) {
+                case 'pending':
+                    $tachesParStatut['a_faire'][] = $tache;
+                    break;
+                case 'overdue':
+                    $tachesParStatut['en_cours'][] = $tache;
+                    break;
+                case 'completed':
+                    $tachesParStatut['termine'][] = $tache;
+                    break;
+            }
+        }
+
+        // Envoie les deux variables à la vue
+        return view('AffichageTaches', [
+            'taches' => $tachesParStatut,  // Tâches par statut
+        ]);
+    }
+
+
+
+    /** 
+     * Méthode qui affiche toutes les tâches
+     * @return string Vue avec les tâches
+     */
+    public function showAllTasks()
+    {
+
+        $userId = session()->get('user_id'); // Récupère l'utilisateur connecté
+        $tasks = $this->taskModel->getTasksByUser($userId); // Récupère les tâches de l'utilisateur
+        $tachesParStatut = [
+            'a_faire' => [],
+            'en_cours' => [],
+            'termine' => []
+        ];
+        foreach ($tasks as $tache) {
+            switch ($tache['status']) {
+                case 'pending':
+                    $tachesParStatut['a_faire'][] = $tache;
+                    break;
+                case 'overdue':
+                    $tachesParStatut['en_cours'][] = $tache;
+                    break;
+                case 'completed':
+                    $tachesParStatut['termine'][] = $tache;
+                    break;
+            }
+        }
+        // Transmettre à la vue les deux variables
+        return view('AffichageTaches', [
+            'taches' => $tachesParStatut,  // Liste des tâches par statut
+            'tasks' => $tasks             // Liste complète des tâches
+        ]);
+
+        
+        // Récupérer l'ID de l'utilisateur connecté
+        $userId = (int) session()->get('user_id');
+
+        $taskModel = new TaskModel();
+        $commentModel = new CommentModel();
+        $priorityModel = new PriorityModel();
+
+        // Récupérer les tâches de l'utilisateur
+        $tasks = $taskModel->getTasksByUser($userId);
+
+        // Récupérer les commentaires de l'utilisateur
+        $commentaires = $commentModel->getCommentsByUser($userId);
+
+        // Récupérer les priorités de l'utilisateur
+        $priorities = $priorityModel->getPrioritiesByUser($userId);
+    
+        return view('allTasks', [
+        'tasks' => $tasks,
+        'commentaires' => $commentaires,
+        'priorities' => $priorities] );
+    }
+
+    static function genererBandeauTache($tsk_id, $titre, $date, $description, $bgColor, $commentaires = []) {
+        // Générer HTML des commentaires
+        $commentairesHTML = !empty($commentaires) 
+            ? implode('', array_map(function ($commentaire) {
+                return '
+                <div class="editable-parent d-flex justify-content-between align-items-center mb-2">
+                    <div class="editable-comment" data-comment-id="' . htmlspecialchars($commentaire['cmt_id']) . '">
+                        <p class="mb-0 text-dark comment-text">' . htmlspecialchars($commentaire['content']) . '</p>
+                        <input class="form-control comment-input d-none" type="text" value="' . htmlspecialchars($commentaire['content']) . '">
+                    </div>
+                    <div class="d-flex">
+                        <button class="btn btn-sm btn-outline-primary me-2 edit-btn" data-comment-id="' . htmlspecialchars($commentaire['cmt_id']) . '">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-success me-2 validate-btn d-none" data-comment-id="' . htmlspecialchars($commentaire['cmt_id']) . '">
+                            <i class="bi bi-check-lg"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger">
+                            <a class="danger" href="comments/delete/' . htmlspecialchars($commentaire['cmt_id']) . '">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </button>
+                    </div>
+                </div>';
+            }, $commentaires))
+            : '<p>Aucun commentaire.</p>';
+    
+        // Formulaire d'ajout de commentaire
+        $formulaireCommentaires = '
+            <form action="comments/store" method="post">
+                ' . form_hidden('tsk_id', $tsk_id) . '
+                ' . form_textarea('content', '', ['class' => 'form-control', 'placeholder' => 'Écrire un commentaire...']) . '
+                ' . form_submit('submit', 'Ajouter un commentaire', ['class' => 'btn btn-primary mt-2']) . '
+            </form>
+        ';
+    
+        // Bandeau principal
+        return '
+            <div id="task-details-' . md5($titre) . '" class=" mt-0 p-0">
+                <div class="task-details" style="background-color: ' . htmlspecialchars($bgColor) . '; padding: 1rem;">
+                    <!-- Description -->
+                    <div class="task-description">
+                        <strong>Description :</strong>
+                        <p>' . htmlspecialchars($description) . '</p>
+                    </div>
+                    <hr class="my-3" />
+                    <!-- Commentaires -->
+                    <div class="task-comments">
+                        <strong>Commentaires :</strong>
+                        ' . $commentairesHTML . '
+                        <hr class="my-3" />
+                        ' . $formulaireCommentaires . '
+                    </div>
+                </div>
+            </div>
+        </div>';
+    }
+    
 
     /**
      * Traite le formulaire de création de tâche
@@ -64,24 +241,25 @@ class TaskController extends BaseController
         return view('edit', ['task' => $task]);
     }
 
-    public function update($id)
+    public function update()
     {
         $model = new TaskModel();
+        $id = $this->request->getPost('tsk_id');
         $data = [
             'title' => $this->request->getPost('title'),
             'description' => $this->request->getPost('description'),
             'due_date' => $this->request->getPost('due_date'),
         ];
 
-        $model->update($id, $data);
-        return redirect()->to('/dashboard');
+        $model->upd($id, $data);
+        return redirect()->back();
     }
 
     // Supprime une tâche
     public function delete($id)
     {
         $this->taskModel->del($id);
-        return redirect()->to('/tasks')->with('success', 'Tâche supprimée.');
+        return redirect()->back();
     }
 
     /**
@@ -145,5 +323,65 @@ class TaskController extends BaseController
         $data = $this->request->getJSON();
         $this->taskModel->update($data->id, ['status' => $data->status]);
         return $this->response->setJSON(['status' => 'success']);
+    }
+
+    public function delayTaskFilter()
+    {
+        $userId = session()->get('user_id');
+        $tasks = $this->taskModel->getTasksByUser($userId);
+        $delayedTasks = [];
+        foreach ($tasks as $task) {
+            if (strtotime($task['due_date']) < time()) {
+                $delayedTasks[] = $task;
+            }
+        }
+        return view('filteredTaskView', ['tasks' => $delayedTasks]);
+    }
+
+    public function priorityTaskFilter()
+    {
+        $userId = session()->get('user_id');
+        
+        $tasks = $this->taskModel->getTasksByUser($userId);
+
+        // Tri des tâches par priorité (ordre décroissant, 10 étant la plus haute priorité)
+        usort($tasks, function ($a, $b) {
+            return $b['prio_id'] <=> $a['prio_id'];
+        });
+
+        return view('filteredTaskView', ['tasks' => $tasks]);
+    }
+
+    public function tasksByDueDate()
+    {
+        $userId = session()->get('user_id'); // Récupérer l'utilisateur connecté
+        $tasks = $this->taskModel->getTasksByUserOrderByDueDate($userId); // Appel de la méthode du modèle
+        
+        return view('filteredTaskView', ['tasks' => $tasks]); // Envoyer les tâches triées à la vue
+    }
+
+    public function allTasks()
+    {
+        $userId = session()->get('user_id'); // Récupérer l'utilisateur connecté
+        $tasks = $this->taskModel->getTasksByUser($userId); // Appel de la méthode du modèle
+        $tachesParStatut = [
+            'a_faire' => [],
+            'en_cours' => [],
+            'termine' => []
+        ];
+        foreach ($tasks as $tache) {
+            switch ($tache['status']) {
+                case 'pending':
+                    $tachesParStatut['a_faire'][] = $tache;
+                    break;
+                case 'overdue':
+                    $tachesParStatut['en_cours'][] = $tache;
+                    break;
+                case 'completed':
+                    $tachesParStatut['termine'][] = $tache;
+                    break;
+            }
+        }
+        return view('DefaultTaskView', ['tachesParStatut' => $tachesParStatut]); // Passe les tâches à la vue
     }
 }

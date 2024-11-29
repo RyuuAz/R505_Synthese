@@ -97,50 +97,6 @@
                     </div>
                 </div>
             </div>
-            
-            <?php
-
-                if (isset($tasks) && !empty($tasks)) :
-                    // Organiser les commentaires par tâche pour un accès rapide
-                    $commentairesParTache = [];
-                    foreach ($commentaires as $commentaire) {
-                        $tsk_id = $commentaire['tsk_id'];
-                        if (!isset($commentairesParTache[$tsk_id])) {
-                            $commentairesParTache[$tsk_id] = [];
-                        }
-                        $commentairesParTache[$tsk_id][] = $commentaire;
-                    }
-
-                    // Parcourir les tâches
-                    foreach ($tasks as $task):
-                        // Trouver la priorité associée
-                        $priorityColor = '';
-                        foreach ($priorities as $priority) {
-                            if ($priority['prio_id'] === $task['prio_id']) {
-                                $priorityColor = $priority['color'];
-                                break;
-                            }
-                        }
-
-                        // Récupérer les commentaires associés à la tâche
-                        $commentairesTrie = $commentairesParTache[$task['tsk_id']] ?? [];
-
-                        // Générer le bandeau pour la tâche
-                        echo \App\Views\dashboard\component\TaskCase::genererBandeauTache(
-                            $task['tsk_id'],
-                            $task['title'],
-                            $task['due_date'],
-                            $task['description'],
-                            $priorityColor,
-                            $commentairesTrie
-                        );
-                    endforeach;
-                    var_dump($commentaires);
-                    var_dump($commentairesParTache);
-                    var_dump($commentairesTrie);
-                else: ?>
-                    <p>Aucune tâche pour ce projet.</p>
-                <?php endif; ?>
 
 
                 <div class="row mt-4">

@@ -67,6 +67,16 @@ class CommentModel extends Model
         return $this->findAll($id);
     }
 
+    /**
+     * Récuper les commentaires d'un utilisateur
+     * @param int $userId ID de l'utilisateur
+     * @return array Liste des commentaires
+     */
+    public function getCommentsByUser(int $userId)
+    {
+        return $this->where('usr_id', $userId)->findAll();
+    }
+
    /**
     * Met à jour un commentaire
     * @param int $id ID du commentaire

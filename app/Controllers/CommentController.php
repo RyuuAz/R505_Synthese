@@ -74,5 +74,4 @@ class CommentController extends BaseController
             return $this->response->setJSON(['success' => false, 'message' => 'Invalid data']);
         }
     }
-    
 }
