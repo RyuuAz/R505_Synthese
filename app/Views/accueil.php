@@ -40,6 +40,7 @@ include 'common/head.php';
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
             transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
         }
 
         .category-card:hover {
@@ -78,7 +79,7 @@ include 'common/head.php';
         <h1>Bienvenue sur votre gestionnaire de tâches</h1>
         <div class="categories">
             <!-- Tâche unique -->
-            <a href="/single-task" class="text-decoration-none"><div class="category-card">
+            <a href="/tasks" class="text-decoration-none"><div class="category-card">
                 <i class="bi bi-check-circle"></i>
                 <h3>Tâche unique</h3>
             </div></a>
@@ -87,7 +88,6 @@ include 'common/head.php';
             <a href="/projects" class="text-decoration-none"><div class="category-card">
                 <i class="bi bi-folder"></i>
                 <h3>Projets</h3>
-               Accéder
             </div></a>
 
             <!-- Toutes les tâches -->

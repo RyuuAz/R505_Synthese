@@ -26,7 +26,6 @@ class ProjectController extends BaseController
     {
         $userId = (int) session()->get('user_id'); // Récupère l'utilisateur connecté
         $projects = $this->projectModel->getProjectsByUser($userId); // Récupère les projets de l'utilisateur
-        
         return view('AffichageProject', ['projects' => $projects]); // Passe les projets à la vue
         
     }
