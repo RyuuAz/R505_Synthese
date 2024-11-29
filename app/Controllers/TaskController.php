@@ -247,7 +247,7 @@ class TaskController extends BaseController
     public function delete($id)
     {
         $this->taskModel->del($id);
-        return redirect()->to('/tasks')->with('success', 'Tâche supprimée.');
+        return redirect()->back();
     }
 
     /**
@@ -326,4 +326,50 @@ class TaskController extends BaseController
         return view('filteredTaskView', ['tasks' => $delayedTasks]);
     }
 
+    public function priorityTaskFilter()
+    {
+        $userId = session()->get('user_id');
+        
+        $tasks = $this->taskModel->getTasksByUser($userId);
+
+        // Tri des tâches par priorité (ordre décroissant, 10 étant la plus haute priorité)
+        usort($tasks, function ($a, $b) {
+            return $b['prio_id'] <=> $a['prio_id'];
+        });
+
+        return view('filteredTaskView', ['tasks' => $tasks]);
+    }
+
+    public function tasksByDueDate()
+    {
+        $userId = session()->get('user_id'); // Récupérer l'utilisateur connecté
+        $tasks = $this->taskModel->getTasksByUserOrderByDueDate($userId); // Appel de la méthode du modèle
+        
+        return view('filteredTaskView', ['tasks' => $tasks]); // Envoyer les tâches triées à la vue
+    }
+
+    public function allTasks()
+    {
+        $userId = session()->get('user_id'); // Récupérer l'utilisateur connecté
+        $tasks = $this->taskModel->getTasksByUser($userId); // Appel de la méthode du modèle
+        $tachesParStatut = [
+            'a_faire' => [],
+            'en_cours' => [],
+            'termine' => []
+        ];
+        foreach ($tasks as $tache) {
+            switch ($tache['status']) {
+                case 'pending':
+                    $tachesParStatut['a_faire'][] = $tache;
+                    break;
+                case 'overdue':
+                    $tachesParStatut['en_cours'][] = $tache;
+                    break;
+                case 'completed':
+                    $tachesParStatut['termine'][] = $tache;
+                    break;
+            }
+        }
+        return view('DefaultTaskView', ['tachesParStatut' => $tachesParStatut]); // Passe les tâches à la vue
+    }
 }
