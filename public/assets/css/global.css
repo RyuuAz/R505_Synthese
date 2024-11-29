@@ -348,3 +348,27 @@ body {
         font-size: 1.2rem;
     }
 }
+
+/* Conteneur général */
+.task-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 colonnes */
+    gap: 20px; /* Espacement entre les éléments */
+    justify-content: center; /* Centrer horizontalement */
+    align-items: center; /* Centrer verticalement */
+    min-height: 100vh; /* Hauteur minimale pour centrer verticalement */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .task-container {
+        grid-template-columns: repeat(2, 1fr); /* Passe à 2 colonnes sur les écrans moyens */
+    }
+}
+
+@media (max-width: 480px) {
+    .task-container {
+        grid-template-columns: 1fr; /* Passe à 1 colonne sur les petits écrans */
+    }
+}
