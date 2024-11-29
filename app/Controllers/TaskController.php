@@ -20,6 +20,31 @@ class TaskController extends BaseController
         helper('form');
     }
 
+    public function index()
+    {
+        $userId = session()->get('user_id'); // Récupère l'utilisateur connecté
+        $tasks = $this->taskModel->getTasksByUser($userId); // Récupère les tâches de l'utilisateur
+        $tachesParStatut = [
+            'a_faire' => [],
+            'en_cours' => [],
+            'termine' => []
+        ];
+        foreach ($tasks as $tache) {
+            switch ($tache['status']) {
+                case 'pending':
+                    $tachesParStatut['a_faire'][] = $tache;
+                    break;
+                case 'overdue':
+                    $tachesParStatut['en_cours'][] = $tache;
+                    break;
+                case 'completed':
+                    $tachesParStatut['termine'][] = $tache;
+                    break;
+            }
+        }
+        return view('AffichageTaches', ['taches' => $tachesParStatut]); // Passe les tâches à la vue
+    }
+
     /**
      * Affiche le formulaire de création de tâche
      * @return string Vue du formulaire
