@@ -67,6 +67,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 	$routes->get('/tasks', 'TaskController::showAllTasks'); // Formulaire de modification de tâche
 	$routes->get('task/create', 'TaskController::create'); // Formulaire de création de tâche
 	$routes->post('task/store', 'TaskController::store'); // Traitement de la création
+	$routes->post('/task/update', 'TaskController::update'); // Suppression d'une tâche
 	$routes->post('updateTaskStatus', 'TaskController::updateTaskStatus'); // Met à jour le statut d'une tâche
 
 	// Routes pour PriorityController

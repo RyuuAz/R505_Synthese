@@ -232,16 +232,17 @@ class TaskController extends BaseController
         return view('edit', ['task' => $task]);
     }
 
-    public function update($id)
+    public function update()
     {
         $model = new TaskModel();
+        $id = $this->request->getPost('tsk_id');
         $data = [
             'title' => $this->request->getPost('title'),
             'description' => $this->request->getPost('description'),
             'due_date' => $this->request->getPost('due_date'),
         ];
 
-        $model->update($id, $data);
+        $model->upd($id, $data);
         return redirect()->to('/dashboard');
     }
 
