@@ -139,4 +139,11 @@ class TaskController extends BaseController
             'comments' => $comments
         ]);
     }
+
+    public function updateTaskStatus()
+    {
+        $data = $this->request->getJSON();
+        $this->taskModel->update($data->id, ['status' => $data->status]);
+        return $this->response->setJSON(['status' => 'success']);
+    }
 }
