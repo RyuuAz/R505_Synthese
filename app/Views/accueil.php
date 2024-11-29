@@ -1,8 +1,8 @@
 
 
 <?php 
-$titre = "Accueil";
-include 'common/head.php';
+    $titre = "Accueil";
+    include 'common/head.php';
 ?>
 
 <!DOCTYPE html>

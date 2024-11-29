@@ -63,6 +63,8 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 	$routes->post('ajouterTacheProjet', 'ProjectController::addTaskForProject'); // Ajout d'une tâche à un projet
 
 	// Routes pour TaskController
+	$routes->get('/single-task', 'TaskController::getSingleTask'); // Liste des tâches
+	$routes->get('/tasks', 'TaskController::showAllTasks'); // Formulaire de modification de tâche
 	$routes->get('task/create', 'TaskController::create'); // Formulaire de création de tâche
 	$routes->post('task/store', 'TaskController::store'); // Traitement de la création
 	$routes->get('task/delete/(:num)', 'TaskController::delete/$1'); // Suppression d'une tâche
