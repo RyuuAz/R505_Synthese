@@ -45,7 +45,7 @@ class DashboardController extends BaseController
             }
         }
 
-        echo view('dashboard/dashboard', [
+        echo view('accueil', [
             'tasks' => $tasks,
             'commentaires' => $commentaires,
             'tachesParStatut' => $tachesParStatut,
@@ -124,5 +124,39 @@ class DashboardController extends BaseController
         return view('task/create', ['priorities' => $priorities]);
     }
 
+    public function deleteLoneTask($id)
+    {
+        $model = new TaskModel();
+        $model->delete($id);
+        return redirect()->to('/dashboard');
+    }
 
+    public function UpdateLoneTask($id)
+    {
+        $priorityModel = new PriorityModel();
+        $taskModel = new TaskModel();
+
+        // Si la méthode HTTP est POST, traite le formulaire
+        if ($this->request->getMethod() === 'POST') {
+            // Définir les règles de validation
+            $validationRules = [
+                'nomTache' => 'required|max_length[255]',
+                'dateTache' => 'required|valid_date',
+                'prio_id' => 'required|integer',
+            ];
+
+            // Ajouter la tâche dans la base de données
+            $data = [
+                'prio_id' =>(int) $this->request->getPost('menuSelection'), // ID de la priorité sélectionnée
+                'title' => $this->request->getPost('nomTache'),
+                'description' => $this->request->getPost('descriptionTache'),
+                'due_date' => $this->request->getPost('datetache'),
+            ];
+            $taskModel->upd($data);
+
+            
+
+            return redirect()->to('/dashboard')->with('success', 'Tâche ajoutée avec succès.');
+        }
+    }
 }

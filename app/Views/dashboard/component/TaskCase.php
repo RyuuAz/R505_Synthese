@@ -53,7 +53,9 @@ class TaskCase {
                 <div class="d-flex align-items-center">
                     <!-- Icônes d\'édition et de suppression -->
                     <button class="icon-btn me-3"><i class="bi bi-pencil"></i></button>
-                    <button class="icon-btn me-3"><i class="bi bi-trash"></i></button>
+                    <a href="/dashboard/deleteLoneTask/' . $tsk_id . '" class="icon-btn me-3">
+                        <i class="bi bi-trash"></i>
+                    </a>
                     <!-- Bouton de dépliement -->
                     <button class="icon-btn" data-bs-toggle="collapse" data-bs-target="#task-details-' . md5($titre) . '" aria-expanded="false">
                         <i type="button" class="bi bi-chevron-right rotate-icon"></i>
