@@ -42,7 +42,7 @@ class DashboardController extends BaseController
             }
         }
 
-        echo view('dashboard/dashboard', [
+        echo view('accueil', [
             'tasks' => $tasks,
             'tachesParStatut' => $tachesParStatut,
             'projects' => $projects,
