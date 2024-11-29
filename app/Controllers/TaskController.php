@@ -243,7 +243,7 @@ class TaskController extends BaseController
         ];
 
         $model->upd($id, $data);
-        return redirect()->to('/dashboard');
+        return redirect()->back();
     }
 
     // Supprime une tâche
