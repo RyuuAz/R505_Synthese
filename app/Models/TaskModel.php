@@ -92,4 +92,14 @@ class TaskModel extends Model
         return $this->where('usr_id', $userId)->where('prj_id', null)->findAll();
     }
 
+    /** 
+     * Récupère toutes les tâches d'un utilisateur rangées par date d'échéance de la plus proche à la plus lointaine
+     * @param int $userId ID de l'utilisateur
+     * @return array Liste des tâches
+     */
+    public function getTasksByUserOrderByDueDate(int $userId)
+    {
+        return $this->where('usr_id', $userId)->orderBy('due_date', 'ASC')->findAll();
+    }
+
 }

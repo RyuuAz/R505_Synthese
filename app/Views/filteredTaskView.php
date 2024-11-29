@@ -1,7 +1,3 @@
-<?php 
-$titre = "Accueil";
-include 'common/head.php';
-?>
 <?php if (empty($tasks)): ?>
     <p>Pas de tâches en retard</p>
 <?php else: ?>

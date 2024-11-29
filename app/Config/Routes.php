@@ -71,6 +71,10 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 	$routes->post('task/store', 'TaskController::store'); // Traitement de la création
 	$routes->post('/task/update', 'TaskController::update'); // Suppression d'une tâche
 	$routes->post('updateTaskStatus', 'TaskController::updateTaskStatus'); // Met à jour le statut d'une tâche
+	$routes->get('tasks/delay-tasks', 'TaskController::delayTaskFilter');
+	$routes->get('tasks/priority-tasks', 'TaskController::priorityTaskFilter');
+	$routes->get('tasks/due-date-tasks', 'TaskController::tasksByDueDate');
+	$routes->get('tasks/all-tasks', 'TaskController::allTasks');
 	$routes->post('task/delete/(:num)', 'TaskController::delete/$1'); // Suppression d'une tâche
 
 	// Routes pour PriorityController
