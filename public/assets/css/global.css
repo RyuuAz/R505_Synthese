@@ -32,13 +32,121 @@
     transform: rotate(90deg); /* Rotation de 90° vers la droite */
 }
 
-.card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transform: scale(1.02); /* Léger agrandissement */
-    transition: all 0.2s ease-in-out;
-    cursor: pointer;
+
+
+/* styles communs */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
 }
+
+.header {
+    background: linear-gradient(135deg, #ff70a1, #ff8670);
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    height: 80px;
+}
+
 .card {
-    visibility: visible !important; /* Assure que les cartes restent visibles */
-    opacity: 1 !important;          /* Assure une opacité complète */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.card .card-title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.column-header {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.task-list p.text-muted {
+    margin-top: 10px;
+    font-style: italic;
+}
+
+
+.task-column {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.task-list {
+    background-color: #fdfdfd;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 10px;
+    min-height: 60vh;
+    overflow-y: auto;
+    margin-top: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s;
+}
+
+.task-list:hover {
+    background-color: #f8f9fa;
+}
+
+.task-card {
+    border: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.task-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.column-header {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.card-title {
+    color: #343a40;
+}
+
+.text-muted {
+    font-size: 0.85rem;
+}
+.text-decoration-none{
+    text-decoration: none;
+    color: inherit;
+
+}
+
+.card-accueil {
+    height: 150px;
+    width: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8f9fa;
+}
+
+/* Apparence mobile */
+@media (max-width: 768px) {
+    .task-list {
+        min-height: 40vh;
+    }
+
+    .column-header {
+        font-size: 1.2rem;
+    }
 }

@@ -22,9 +22,13 @@ class ProjectController extends BaseController
     }
 
     // Affiche le formulaire de création de projet
-    public function create()
+    public function index()
     {
-        return view('project/create');
+        $userId = (int) session()->get('user_id'); // Récupère l'utilisateur connecté
+        $projects = $this->projectModel->getProjectsByUser($userId); // Récupère les projets de l'utilisateur
+        
+        return view('AffichageProject', ['projects' => $projects]); // Passe les projets à la vue
+        
     }
 
     // Traite le formulaire de création

@@ -1,3 +1,8 @@
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+
+
+
 <?php
 
 echo view('common/head', [
@@ -5,99 +10,189 @@ echo view('common/head', [
 ]);
 ?>
 
+<div class="modern-container">
+    <header class="project-header">
+        <h1><?= htmlspecialchars($projet['title']) ?></h1>
+        <p class="project-description"><?= htmlspecialchars($projet['description']) ?></p>
+    </header>
 
-<div class="container mt-4">
-    <h1 class="text-center mb-4"><?= htmlspecialchars($projet['title']) ?></h1>
-    <p class="text-center text-muted"><?= htmlspecialchars($projet['description']) ?></p>
-
-    <h2 class="text-center mt-5">Tâches</h2>
-
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AjoutTache">
-        Ajouter une tâche
-    </button>
-
-    <!-- Modal d'ajout de tâche (inchangé) -->
-    <div class="modal fade" id="AjoutTache" tabindex="-1" aria-labelledby="ajouttache" aria-hidden="true">
-        <!-- Votre contenu de modal ici -->
-    </div>
-
-    <div class="row mt-4">
-        <!-- Colonne À faire -->
-        <div class="col-md-4">
-            <div class="column-header text-center bg-warning text-white p-2 rounded">
-                <h3>À faire</h3>
-            </div>
-            <div class="task-list" id="todo" ondragover="allowDrop(event)" ondrop="drop(event, 'pending')">
-                <?php if (!empty($tachesParStatut['a_faire'])): ?>
-                    <?php foreach ($tachesParStatut['a_faire'] as $tache): ?>
-                        <div class="card mb-3 shadow" id="task-<?= $tache['tsk_id']; ?>" draggable="true"
-                            ondragstart="drag(event)" data-task-id="<?= $tache['tsk_id']; ?>" data-task-status="a_faire">
-                            <div class="card-body">
-                                <h5 class="card-title"><?= htmlspecialchars($tache["title"]); ?></h5>
-                                <p class="card-text"><?= htmlspecialchars($tache["description"]); ?></p>
-                                <p class="card-text text-end">
-                                    <small class="text-muted">Échéance : <?= htmlspecialchars($tache["due_date"]); ?></small>
-                                </p>
+    <main>
+        <section class="tasks-section">
+            <div class="task-column" id="todo" ondragover="allowDrop(event)" ondrop="drop(event, 'pending')">
+                <h3 class="column-title todo-title">À Faire</h3>
+                <div class="task-list">
+                    <?php if (!empty($tachesParStatut['a_faire'])): ?>
+                        <?php foreach ($tachesParStatut['a_faire'] as $tache): ?>
+                            <div class="task-card" id="task-<?= $tache['tsk_id']; ?>" draggable="true"
+                                ondragstart="drag(event)" data-task-id="<?= $tache['tsk_id']; ?>" data-task-status="a_faire">
+                                <h4 class="task-title"><?= htmlspecialchars($tache["title"]); ?></h4>
+                                <p class="task-desc"><?= htmlspecialchars($tache["description"]); ?></p>
+                                <span class="task-date">Échéance : <?= htmlspecialchars($tache["due_date"]); ?></span>
                             </div>
-                        </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p class="text-muted text-center">Aucune tâche à faire.</p>
-                <?php endif; ?>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p class="empty-column">Pas de tâches.</p>
+                    <?php endif; ?>
+                </div>
             </div>
-        </div>
 
-        <!-- Colonne En cours -->
-        <div class="col-md-4">
-            <div class="column-header text-center bg-info text-white p-2 rounded">
-                <h3>En cours</h3>
-            </div>
-            <div class="task-list" id="in_progress" ondragover="allowDrop(event)" ondrop="drop(event, 'overdue')">
-                <?php if (!empty($tachesParStatut['en_cours'])): ?>
-                    <?php foreach ($tachesParStatut['en_cours'] as $tache): ?>
-                        <div class="card mb-3 shadow" id="task-<?= $tache['tsk_id']; ?>" draggable="true"
-                            ondragstart="drag(event)" data-task-id="<?= $tache['tsk_id']; ?>" data-task-status="en_cours">
-                            <div class="card-body">
-                                <h5 class="card-title"><?= htmlspecialchars($tache["title"]); ?></h5>
-                                <p class="card-text"><?= htmlspecialchars($tache["description"]); ?></p>
-                                <p class="card-text text-end">
-                                    <small class="text-muted">Échéance : <?= htmlspecialchars($tache["due_date"]); ?></small>
-                                </p>
+            <div class="task-column" id="in_progress" ondragover="allowDrop(event)" ondrop="drop(event, 'overdue')">
+                <h3 class="column-title in-progress-title">En Cours</h3>
+                <div class="task-list">
+                    <?php if (!empty($tachesParStatut['en_cours'])): ?>
+                        <?php foreach ($tachesParStatut['en_cours'] as $tache): ?>
+                            <div class="task-card" id="task-<?= $tache['tsk_id']; ?>" draggable="true"
+                                ondragstart="drag(event)" data-task-id="<?= $tache['tsk_id']; ?>" data-task-status="en_cours">
+                                <h4 class="task-title"><?= htmlspecialchars($tache["title"]); ?></h4>
+                                <p class="task-desc"><?= htmlspecialchars($tache["description"]); ?></p>
+                                <span class="task-date">Échéance : <?= htmlspecialchars($tache["due_date"]); ?></span>
                             </div>
-                        </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p class="text-muted text-center">Aucune tâche en cours.</p>
-                <?php endif; ?>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p class="empty-column">Pas de tâches.</p>
+                    <?php endif; ?>
+                </div>
             </div>
-        </div>
 
-        <!-- Colonne Terminé -->
-        <div class="col-md-4">
-            <div class="column-header text-center bg-success text-white p-2 rounded">
-                <h3>Terminé</h3>
-            </div>
-            <div class="task-list" id="done" ondragover="allowDrop(event)" ondrop="drop(event, 'completed')">
-                <?php if (!empty($tachesParStatut['termine'])): ?>
-                    <?php foreach ($tachesParStatut['termine'] as $tache): ?>
-                        <div class="card mb-3 shadow" id="task-<?= $tache['tsk_id']; ?>" draggable="true"
-                            ondragstart="drag(event)" data-task-id="<?= $tache['tsk_id']; ?>" data-task-status="termine">
-                            <div class="card-body">
-                                <h5 class="card-title"><?= htmlspecialchars($tache["title"]); ?></h5>
-                                <p class="card-text"><?= htmlspecialchars($tache["description"]); ?></p>
-                                <p class="card-text text-end">
-                                    <small class="text-muted">Échéance : <?= htmlspecialchars($tache["due_date"]); ?></small>
-                                </p>
+            <div class="task-column" id="done" ondragover="allowDrop(event)" ondrop="drop(event, 'completed')">
+                <h3 class="column-title done-title">Terminé</h3>
+                <div class="task-list">
+                    <?php if (!empty($tachesParStatut['termine'])): ?>
+                        <?php foreach ($tachesParStatut['termine'] as $tache): ?>
+                            <div class="task-card" id="task-<?= $tache['tsk_id']; ?>" draggable="true"
+                                ondragstart="drag(event)" data-task-id="<?= $tache['tsk_id']; ?>" data-task-status="termine">
+                                <h4 class="task-title"><?= htmlspecialchars($tache["title"]); ?></h4>
+                                <p class="task-desc"><?= htmlspecialchars($tache["description"]); ?></p>
+                                <span class="task-date">Échéance : <?= htmlspecialchars($tache["due_date"]); ?></span>
                             </div>
-                        </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p class="text-muted text-center">Aucune tâche terminée.</p>
-                <?php endif; ?>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p class="empty-column">Pas de tâches.</p>
+                    <?php endif; ?>
+                </div>
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
 </div>
+
+<style>
+/* Conteneur principal */
+.modern-container {
+    font-family: 'Inter', sans-serif;
+    padding: 20px;
+    background-color: #f5f7fa;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* En-tête */
+.project-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.project-header h1 {
+    font-size: 2.5rem;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.project-description {
+    font-size: 1.2rem;
+    color: #7f8c8d;
+}
+
+/* Section des colonnes */
+.tasks-section {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+}
+
+/* Colonnes */
+.task-column {
+    flex: 1;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 75vh;
+    overflow-y: auto;
+}
+
+.column-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.todo-title {
+    color: #f39c12;
+}
+
+.in-progress-title {
+    color: #3498db;
+}
+
+.done-title {
+    color: #2ecc71;
+}
+
+/* Liste des tâches */
+.task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Carte tâche */
+.task-card {
+    background-color: #ecf0f1;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    cursor: grab;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.task-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.task-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.task-desc {
+    font-size: 1rem;
+    color: #7f8c8d;
+    margin: 10px 0;
+}
+
+.task-date {
+    font-size: 0.9rem;
+    color: #95a5a6;
+    text-align: right;
+}
+
+/* Texte colonne vide */
+.empty-column {
+    text-align: center;
+    color: #bdc3c7;
+    font-size: 1rem;
+}
+</style>
+
+
 
 <script>
     // Permet le dépôt
@@ -117,9 +212,13 @@ echo view('common/head', [
         const taskElement = document.getElementById(taskId);
 
         // Trouve la zone cible (toujours la div "task-list")
-        const taskList = event.target.closest(".task-list");
-        if (taskList) {
-            taskList.appendChild(taskElement); // Ajoute la tâche à la fin de la liste
+        const taskColumn = event.target.closest(".task-column").id;
+        const col =document.getElementById(taskColumn);
+        
+        console.log(taskColumn);
+        if (taskColumn) {
+            
+            col.querySelector(".task-list").appendChild(taskElement); // Ajoute la tâche à la fin de la liste
         } else {
             console.error("Impossible de trouver une liste de tâches cible.");
         }
@@ -140,57 +239,5 @@ echo view('common/head', [
 </script>
 
 
-<style>
-    /* Conteneur des colonnes */
-    .task-list {
-        background-color: #f8f9fa; /* Couleur d'arrière-plan claire */
-        border: 1px solid #dee2e6; /* Bordure fine */
-        border-radius: 8px; /* Coins arrondis */
-        padding: 10px;
-        min-height: 60vh; /* Assure une hauteur minimale */
-        overflow-y: auto; /* Barre de défilement si contenu dépasse */
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Légère ombre */
-    }
 
-    /* Colonnes */
-    .col-md-4 {
-        padding: 15px; /* Ajoute de l'espace autour */
-    }
-
-    /* En-têtes de colonnes */
-    .column-header {
-        font-size: 1.5rem;
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
-
-    /* Tâches (cartes) */
-    .card {
-        margin-bottom: 10px;
-        border: 1px solid #ddd; /* Bordure fine */
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Effet visuel */
-    }
-
-    /* Amélioration du texte */
-    .card-title {
-        font-weight: bold;
-        color: #333;
-    }
-
-    .card-text {
-        font-size: 0.9rem;
-        color: #555;
-    }
-
-    /* Apparence mobile */
-    @media (max-width: 768px) {
-        .task-list {
-            min-height: 40vh; /* Réduit la hauteur minimale */
-        }
-    }
 </style>
