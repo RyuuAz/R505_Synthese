@@ -1,8 +1,8 @@
 
 
 <?php 
-$titre = "Accueil";
-include 'common/head.php';
+    $titre = "Accueil";
+    include 'common/head.php';
 ?>
 
 <!DOCTYPE html>
@@ -79,7 +79,7 @@ include 'common/head.php';
         <h1>Bienvenue sur votre gestionnaire de tâches</h1>
         <div class="categories">
             <!-- Tâche unique -->
-            <a href="/tasks" class="text-decoration-none"><div class="category-card">
+            <a href="/singleTasks" class="text-decoration-none"><div class="category-card">
                 <i class="bi bi-check-circle"></i>
                 <h3>Tâche unique</h3>
             </div></a>

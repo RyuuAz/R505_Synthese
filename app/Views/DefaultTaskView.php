@@ -56,6 +56,34 @@
                 </div>
             </div>
         </section>
+
+        <div id="edit-modal" class="modal" style="display:none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Modifier la tâche</h5>
+                        <span class="close-btn" onclick="closeModal()">&times;</span>
+                    </div>
+                    <div class="modal-body">
+                        <form id="edit-task-form" method="POST" action="/task/update">
+                            <input type="hidden" name="tsk_id" id="modal-task-id">
+                            <div class="mb-3">
+                                <input type="text" name="title" id="modal-task-title" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <textarea name="description" id="modal-task-desc" class="form-control" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <input type="date" name="due_date" id="modal-task-date" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </main>
 </div>
 
@@ -175,6 +203,78 @@
     color: #bdc3c7;
     font-size: 1rem;
 }
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.3s ease;
+    z-index: 1050;
+}
+.modal-dialog {
+    max-width: 500px;
+    width: 100%;
+    background: #fff;
+    border-radius: 0.3rem;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    animation: fadeIn 0.3s ease;
+}
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    border: none;
+}
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #dee2e6;
+    background-color: #f8f9fa;
+}
+.modal-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+.close-btn {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #000;
+    cursor: pointer;
+    border: none;
+    background: none;
+    line-height: 1;
+}
+.modal-body {
+    padding: 1rem;
+}
+.btn {
+    display: inline-block;
+    font-weight: 400;
+    color: #fff;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    background-color: #007bff;
+    border: 1px solid #007bff;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.25rem;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+
 </style>
 
 
@@ -221,4 +321,25 @@
             .then(data => console.log('Statut mis à jour:', data))
             .catch(error => console.error('Erreur:', error));
     }
+
+    function openModal(task) {
+        document.getElementById("modal-task-id").value = task.dataset.taskId;
+        document.getElementById("modal-task-title").value = task.querySelector(".task-title").innerText;
+        document.getElementById("modal-task-desc").value = task.querySelector(".task-desc").innerText;
+        document.getElementById("modal-task-date").value = task.querySelector(".task-date").innerText.split(" : ")[1];
+        document.getElementById("edit-modal").style.display = "flex";
+        document.body.style.overflow = "hidden"; // Empêche le scroll en arrière-plan
+    }
+
+    function closeModal() {
+        document.getElementById("edit-modal").style.display = "none";
+        document.body.style.overflow = "auto"; // Restaure le scroll
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".task-card").forEach(card => {
+            card.addEventListener("dblclick", () => openModal(card));
+        });
+    });
+    
 </script>

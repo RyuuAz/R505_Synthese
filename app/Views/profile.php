@@ -1,4 +1,5 @@
 <?php echo view('common/head', ['titre' => 'Profile']); ?>
+
 <div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
@@ -43,24 +44,20 @@
 								<div class="modal-body">
 									<!-- Formulaire de modification -->
 									<form method="post" action="/users/update">
+										<?= csrf_field() ?>
 										<div class="mb-3">
-											<label for="firstname" class="form-label">Prénom</label>
 											<input type="text" class="form-control" id="firstname" name="first_name" value="<?= esc($user['first_name']) ?>" required>
 										</div>
 										<div class="mb-3">
-											<label for="lastname" class="form-label">Nom</label>
 											<input type="text" class="form-control" id="lastname" name="last_name" value="<?= esc($user['last_name']) ?>" required>
 										</div>
 										<div class="mb-3">
-											<label for="email" class="form-label">E-mail</label>
 											<input type="email" class="form-control" id="email" name="email" value="<?= esc($user['email']) ?>" required>
 										</div>
 										<div class="mb-3">
-											<label for="password" class="form-label">Nouveau mot de passe</label>
 											<input type="password" class="form-control" id="password" name="password" required>
 										</div>
 										<div class="mb-3">
-											<label for="confirm_password" class="form-label">Confirmez le mot de passe</label>
 											<input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
 										</div>
 										<button type="submit" class="btn btn-primary w-100">Mettre à jour</button>
@@ -75,7 +72,7 @@
 					</div>
 
                     
-
+							
                     <!-- Bouton de suppression -->
 					<div class="mt-3">
 						<button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#ConfirmerSuppression">

@@ -65,13 +65,11 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 	$routes->post('ajouterTacheProjet', 'ProjectController::addTaskForProject'); // Ajout d'une tâche à un projet
 
 	// Routes pour TaskController
+	$routes->get('/singleTasks', 'TaskController::showSingleTask'); // Liste des tâches
+	$routes->get('/tasks', 'TaskController::showAllTasks'); // Formulaire de modification de tâche
 	$routes->get('task/create', 'TaskController::create'); // Formulaire de création de tâche
 	$routes->post('task/store', 'TaskController::store'); // Traitement de la création
-	$routes->get('task/delete/(:num)', 'TaskController::delete/$1'); // Suppression d'une tâche
-	$routes->get('task/user/(:num)', 'TaskController::listByUser/$1'); // Tâches d'un utilisateur
-	$routes->get('task/project/(:num)', 'TaskController::listByProject/$1'); // Tâches d'un projet
-	$routes->get('task/user-without-project/(:num)', 'TaskController::listByUserWithoutProject/$1'); // Tâches d'un utilisateur sans projet
-	$routes->get('task/show/(:num)', 'TaskController::show/$1'); // Affiche les commentaires d'une tâche
+	$routes->post('/task/update', 'TaskController::update'); // Suppression d'une tâche
 	$routes->post('updateTaskStatus', 'TaskController::updateTaskStatus'); // Met à jour le statut d'une tâche
 
 	// Routes pour PriorityController
@@ -81,7 +79,8 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 
 	// Routes pour CommentController
 	$routes->get('comments/create', 'CommentController::create'); // Formulaire d'ajout de commentaire
-	//$routes->post('comments/store', 'CommentController::store'); // Traitement de l'ajout
+	$routes->post('comments/store', 'CommentController::store'); // Traitement de l'ajout
+	$routes->post('comments/update/(:num)', 'CommentController::update/$1'); // Mise à jour d'un commentaire
 	$routes->get('comments/delete/(:num)', 'CommentController::delete/$1'); // Suppression d'un commentaire
 
 	// Routes pour NotificationController

@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\ProjectModel;
 use App\Models\TaskModel;
 use App\Models\PriorityModel;
+use App\Models\CommentModel;
 
 class DashboardController extends BaseController
 {
@@ -16,9 +17,11 @@ class DashboardController extends BaseController
     public function index()
     {
         $model = new TaskModel();
+        $modelComments = new CommentModel();
         $modelpriority = new PriorityModel();
         $projectModel = new ProjectModel();
         $tasks = $model->getTasksByUser(session()->get('user_id'));
+        $commentaires = $modelComments->getCommentById(session()->get('user_id'));
         $projects = $projectModel->getProjectsByUser(session()->get('user_id'));
         $priorities = $modelpriority->getPrioritiesByUser(session()->get('user_id'));
 
@@ -44,6 +47,7 @@ class DashboardController extends BaseController
 
         echo view('accueil', [
             'tasks' => $tasks,
+            'commentaires' => $commentaires,
             'tachesParStatut' => $tachesParStatut,
             'projects' => $projects,
             'priorities' => $priorities
