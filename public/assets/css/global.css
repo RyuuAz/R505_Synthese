@@ -1,39 +1,3 @@
-.hover-danger:hover {
-    color: #dc3545 !important; /* Rouge (danger) de Bootstrap */
-}
-
-.task-bar {
-    background-color: #ff7f00; /* Couleur orange */
-    color: white;
-    border-radius: 5px;
-    padding: 10px;
-}
-
-.task-bar .icon-btn {
-    background: none;
-    border: none;
-    color: white;
-}
-
-.task-bar .icon-btn:hover {
-    color: #000000;
-}
-
-.task-details {
-    background-color: #fff3e0; /* Fond légèrement orangé */
-    border: 1px solid #ff7f00;
-    padding: 10px;
-}
-
-.rotate-icon {
-    transition: transform 0.3s ease-in-out; /* Animation fluide */
-}
-.rotate-icon.rotated {
-    transform: rotate(90deg); /* Rotation de 90° vers la droite */
-}
-
-
-
 /* styles communs */
 body {
     font-family: Arial, sans-serif;
@@ -292,7 +256,7 @@ body {
 }
 
 .submit-btn {
-    background-color: #2ecc71;
+    background-color: #ff8670;
     color: #fff;
     padding: 10px 20px;
     border: none;

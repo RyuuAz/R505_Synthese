@@ -57,30 +57,30 @@
             </div>
         </section>
 
-        <div id="edit-modal" class="modal" style="display:none;">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Modifier la tâche</h5>
-                        <span class="close-btn" onclick="closeModal()">&times;</span>
-                    </div>
-                    <div class="modal-body">
+        <div id="edit-modal" class="popup-overlay" style="display:none;">
+            
+                <div class="popup-content">
+                    
+                        <h5 class=>Modifier la tâche</h5>
+                    
                         <form id="edit-task-form" method="POST" action="/task/update">
                             <input type="hidden" name="tsk_id" id="modal-task-id">
                             <div class="mb-3">
-                                <input type="text" name="title" id="modal-task-title" class="form-control" required>
+                                <input type="text" name="title" id="modal-task-title"  required>
                             </div>
                             <div class="mb-3">
-                                <textarea name="description" id="modal-task-desc" class="form-control" required></textarea>
+                                <textarea name="description" id="modal-task-desc"  required></textarea>
                             </div>
                             <div class="mb-3">
-                                <input type="date" name="due_date" id="modal-task-date" class="form-control" required>
+                                <input type="date" name="due_date" id="modal-task-date"  required>
                             </div>
-                            <button type="submit" class="btn btn-primary">Enregistrer</button>
-                        </form>
-                    </div>
+                            <div class="popup-buttons"><button type="submit" class="submit-btn">Enregistrer</button>
+                            <button type=""button class="cancel-btn" onclick="closeModal()" >Fermer</button>
+                        </div>
+                            </form>
+                   
                 </div>
-            </div>
+            
         </div>
 
 
