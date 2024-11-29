@@ -18,6 +18,7 @@
         'commentaires' => $commentaires,
         'projects' => $projects,
         'priorities' => $priorities
-    ]); ?>
-    <?php echo view('common/foot');
+    ]); 
+    echo "<script src='/assets/js/comments.js'></script>";
+    echo view('common/foot');
 ?>

@@ -49,4 +49,30 @@ class CommentController extends BaseController
         $this->commentModel->del($id);
         return redirect()->to('/dashboard')->with('success', 'Commentaire supprimé.');
     }
+    
+    public function update($commentId)
+    {
+        $data = $this->request->getJSON(); // Récupérer les données envoyées par le client (JSON)
+
+        $commentId = $data->id;
+        $content = $data->content;
+
+        if (null !== $data) {
+            $commentModel = new CommentModel();
+            $comment = $commentModel->find($commentId);
+
+            if ($comment) {
+                if ($commentModel->updateComment($commentId, $content)) {
+                    return $this->response->setJSON(['success' => true]);
+                } else {
+                    return $this->response->setJSON(['success' => false, 'message' => 'Error saving comment']);
+                }
+            } else {
+                return $this->response->setJSON(['success' => false, 'message' => 'Comment not found']);
+            }
+        } else {
+            return $this->response->setJSON(['success' => false, 'message' => 'Invalid data']);
+        }
+    }
+    
 }

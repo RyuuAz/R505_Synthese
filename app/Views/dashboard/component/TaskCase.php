@@ -8,16 +8,25 @@ class TaskCase {
         if (!empty($commentaires)) {
             foreach ($commentaires as $commentaire) {
                 $commentairesHTML .= '
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <p class="mb-0 text-dark">' . htmlspecialchars($commentaire['content']) . '</p>
-                    <div class="d-flex">    
-                        <!-- Icône d\'édition -->
-                        <button class="btn btn-sm btn-outline-primary me-2">
+                <div class="editable-parent d-flex justify-content-between align-items-center mb-2">
+                    <div class="editable-comment" data-comment-id="' . htmlspecialchars($commentaire['cmt_id']) . '">
+                        <p class="mb-0 text-dark comment-text">' . htmlspecialchars($commentaire['content']) . '</p>
+                        <input class="form-control comment-input d-none" type="text" value="' . htmlspecialchars($commentaire['content']) . '">
+                    </div>
+                    <div class="d-flex">
+                        <!-- Bouton d\'édition -->
+                        <button class="btn btn-sm btn-outline-primary me-2 edit-btn" data-comment-id="' . htmlspecialchars($commentaire['cmt_id']) . '">
                             <i class="bi bi-pencil"></i>
                         </button>
-                        <!-- Icône de suppression -->
+                        <button class="btn btn-sm btn-outline-success me-2 validate-btn d-none" data-comment-id="' . htmlspecialchars($commentaire['cmt_id']) . '">
+                            <i class="bi bi-check-lg"></i>
+                        </button>
+
+                        <!-- Bouton de suppression -->
                         <button class="btn btn-sm btn-outline-danger">
-                            <a class="danger" href="comments/delete/'. $commentaire['cmt_id'] .'"><i class="bi bi-trash"></i></a>
+                            <a class="danger" href="comments/delete/' . htmlspecialchars($commentaire['cmt_id']) . '">
+                                <i class="bi bi-trash"></i>
+                            </a>
                         </button>
                     </div>
                 </div>';

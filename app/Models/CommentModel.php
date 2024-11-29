@@ -66,4 +66,15 @@ class CommentModel extends Model
     {
         return $this->findAll($id);
     }
+
+   /**
+    * Met à jour un commentaire
+    * @param int $id ID du commentaire
+    * @param string $data Données du commentaire à mettre à jour
+    * @return bool Succès ou échec de l'opération
+    */
+    public function updateComment(int $id, $content)
+    {
+        return $this->update($id, ['content' => $content]);
+    }
 }
