@@ -47,6 +47,8 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 	$routes->post('settings/update-priority/(:num)', 'SettingsController::updatePriority/$1');
 
 	$routes->get('projects', 'ProjectController::index');
+	$routes->get('tasks', 'TaskController::index');
+	$routes->get('AllTask', 'TaskController::AllTask');
 
 	// Routes pour UserController
 	$routes->get('users', 'UserController::index'); // Liste des utilisateurs

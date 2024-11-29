@@ -47,7 +47,7 @@
             color: #ffeb3b;
         }
     </style>
-    <link href="assets/css/global.css" rel="stylesheet">
+   
 </head>
 <body>
     <!-- Header -->
