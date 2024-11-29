@@ -26,11 +26,8 @@ CREATE TYPE task_status AS ENUM ('a_faire', 'en_cours', 'termine');
 -- Création des types ENUM pour les notifications
 CREATE TYPE notification_type AS ENUM (
     'rappel',
-    'activation',
-    'reset'
+    'retard'
 );
-
-CREATE TYPE notification_status AS ENUM ('a_faire', 'en_cours', 'termine');
 
 -- Table users
 CREATE TABLE users (
@@ -80,7 +77,7 @@ CREATE TABLE tasks (
     title VARCHAR(255) NOT NULL,
     description TEXT,
     due_date DATE,
-    status task_status DEFAULT 'pending',
+    status task_status DEFAULT 'a_faire',
     tsk_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     tsk_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -99,7 +96,7 @@ CREATE TABLE comments (
 CREATE TABLE notifications (
     notif_id SERIAL PRIMARY KEY,
     usr_id INT REFERENCES users(usr_id) ON DELETE CASCADE,
+    prj_id INT REFERENCES project(prj_id) ON DELETE CASCADE,
     type notification_type NOT NULL,
-    status notification_status DEFAULT 'pending',
     notif_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
