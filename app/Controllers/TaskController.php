@@ -250,7 +250,7 @@ class TaskController extends BaseController
     public function delete($id)
     {
         $this->taskModel->del($id);
-        return redirect()->to('/tasks')->with('success', 'Tâche supprimée.');
+        return redirect()->back();
     }
 
     /**

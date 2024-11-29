@@ -294,6 +294,31 @@
         document.body.style.overflow = "auto"; // Restaure le scroll
     }
 
+    // Fonction pour supprimer une tâche
+    function deleteTask(taskId) {
+        if (confirm("Voulez-vous vraiment supprimer cette tâche ?")) {
+            fetch(`/task/delete/${taskId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '<?= csrf_hash(); ?>'
+                },
+                body: JSON.stringify({ id: taskId })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById(`task-${taskId}`).remove(); // Retire la tâche de l'interface
+                        alert("Tâche supprimée avec succès !");
+                    } else {
+                        alert("Erreur lors de la suppression de la tâche.");
+                    }
+                })
+                .catch(error => console.error('Erreur:', error));
+        }
+    }
+
+
     document.addEventListener("DOMContentLoaded", () => {
         document.querySelectorAll(".task-card").forEach(card => {
             card.addEventListener("dblclick", () => openModal(card));
