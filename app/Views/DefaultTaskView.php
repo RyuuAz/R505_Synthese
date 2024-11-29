@@ -7,12 +7,22 @@
                 <div class="task-list">
                     <?php if (!empty($tachesParStatut['a_faire'])): ?>
                         <?php foreach ($tachesParStatut['a_faire'] as $tache): ?>
-                            <div class="task-card" id="task-<?= $tache['tsk_id']; ?>" draggable="true"
-                                ondragstart="drag(event)" data-task-id="<?= $tache['tsk_id']; ?>" data-task-status="a_faire">
+                            <div class="task-card" id="task-<?= $tache['tsk_id']; ?>" draggable="true" ondragstart="drag(event)"
+                                data-task-id="<?= $tache['tsk_id']; ?>"
+                                data-task-status="<?= htmlspecialchars($tache['status']); ?>">
                                 <h4 class="task-title"><?= htmlspecialchars($tache["title"]); ?></h4>
                                 <p class="task-desc"><?= htmlspecialchars($tache["description"]); ?></p>
-                                <span class="task-date">Échéance : <?= htmlspecialchars($tache["due_date"]); ?></span>
+                                <p class="task-date">Échéance : <?= htmlspecialchars($tache["due_date"]); ?></p>
+                                <div class="task-actions">
+                                    <button class="edit-btn" onclick="openModal(this.closest('.task-card'))" title="Modifier">
+                                        ✏️
+                                    </button>
+                                    <button class="delete-btn" onclick="deleteTask(<?= $tache['tsk_id']; ?>)" title="Supprimer">
+                                        🗑️
+                                    </button>
+                                </div>
                             </div>
+
                         <?php endforeach; ?>
                     <?php else: ?>
                         <p class="empty-column">Pas de tâches.</p>
@@ -25,12 +35,22 @@
                 <div class="task-list">
                     <?php if (!empty($tachesParStatut['en_cours'])): ?>
                         <?php foreach ($tachesParStatut['en_cours'] as $tache): ?>
-                            <div class="task-card" id="task-<?= $tache['tsk_id']; ?>" draggable="true"
-                                ondragstart="drag(event)" data-task-id="<?= $tache['tsk_id']; ?>" data-task-status="en_cours">
+                            <div class="task-card" id="task-<?= $tache['tsk_id']; ?>" draggable="true" ondragstart="drag(event)"
+                                data-task-id="<?= $tache['tsk_id']; ?>"
+                                data-task-status="<?= htmlspecialchars($tache['status']); ?>">
                                 <h4 class="task-title"><?= htmlspecialchars($tache["title"]); ?></h4>
                                 <p class="task-desc"><?= htmlspecialchars($tache["description"]); ?></p>
-                                <span class="task-date">Échéance : <?= htmlspecialchars($tache["due_date"]); ?></span>
+                                <p class="task-date">Échéance : <?= htmlspecialchars($tache["due_date"]); ?></p>
+                                <div class="task-actions">
+                                    <button class="edit-btn" onclick="openModal(this.closest('.task-card'))" title="Modifier">
+                                        ✏️
+                                    </button>
+                                    <button class="delete-btn" onclick="deleteTask(<?= $tache['tsk_id']; ?>)" title="Supprimer">
+                                        🗑️
+                                    </button>
+                                </div>
                             </div>
+
                         <?php endforeach; ?>
                     <?php else: ?>
                         <p class="empty-column">Pas de tâches.</p>
@@ -43,12 +63,22 @@
                 <div class="task-list">
                     <?php if (!empty($tachesParStatut['termine'])): ?>
                         <?php foreach ($tachesParStatut['termine'] as $tache): ?>
-                            <div class="task-card" id="task-<?= $tache['tsk_id']; ?>" draggable="true"
-                                ondragstart="drag(event)" data-task-id="<?= $tache['tsk_id']; ?>" data-task-status="termine">
+                            <div class="task-card" id="task-<?= $tache['tsk_id']; ?>" draggable="true" ondragstart="drag(event)"
+                                data-task-id="<?= $tache['tsk_id']; ?>"
+                                data-task-status="<?= htmlspecialchars($tache['status']); ?>">
                                 <h4 class="task-title"><?= htmlspecialchars($tache["title"]); ?></h4>
                                 <p class="task-desc"><?= htmlspecialchars($tache["description"]); ?></p>
-                                <span class="task-date">Échéance : <?= htmlspecialchars($tache["due_date"]); ?></span>
+                                <p class="task-date">Échéance : <?= htmlspecialchars($tache["due_date"]); ?></p>
+                                <div class="task-actions">
+                                    <button class="edit-btn" onclick="openModal(this.closest('.task-card'))" title="Modifier">
+                                        ✏️
+                                    </button>
+                                    <button class="delete-btn" onclick="deleteTask(<?= $tache['tsk_id']; ?>)" title="Supprimer">
+                                        🗑️
+                                    </button>
+                                </div>
                             </div>
+
                         <?php endforeach; ?>
                     <?php else: ?>
                         <p class="empty-column">Pas de tâches.</p>
@@ -57,30 +87,30 @@
             </div>
         </section>
 
-        <div id="edit-modal" class="modal" style="display:none;">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Modifier la tâche</h5>
-                        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <div id="edit-modal" class="popup-overlay" style="display:none;">
+
+            <div class="popup-content">
+
+                <h5 class=>Modifier la tâche</h5>
+
+                <form id="edit-task-form" method="POST" action="/task/update">
+                    <input type="hidden" name="tsk_id" id="modal-task-id">
+                    <div class="mb-3">
+                        <input type="text" name="title" id="modal-task-title" required>
                     </div>
-                    <div class="modal-body">
-                        <form id="edit-task-form" method="POST" action="/task/update">
-                            <input type="hidden" name="tsk_id" id="modal-task-id">
-                            <div class="mb-3">
-                                <input type="text" name="title" id="modal-task-title" class="form-control" required>
-                            </div>
-                            <div class="mb-3">
-                                <textarea name="description" id="modal-task-desc" class="form-control" required></textarea>
-                            </div>
-                            <div class="mb-3">
-                                <input type="date" name="due_date" id="modal-task-date" class="form-control" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Enregistrer</button>
-                        </form>
+                    <div class="mb-3">
+                        <textarea name="description" id="modal-task-desc" required></textarea>
                     </div>
-                </div>
+                    <div class="mb-3">
+                        <input type="date" name="due_date" id="modal-task-date" required>
+                    </div>
+                    <div class="popup-buttons"><button type="submit" class="submit-btn">Enregistrer</button>
+                        <button type="" button class="cancel-btn" onclick="closeModal()">Fermer</button>
+                    </div>
+                </form>
+
             </div>
+
         </div>
 
 
@@ -88,193 +118,121 @@
 </div>
 
 <style>
-/* Conteneur principal */
-.modern-container {
-    font-family: 'Inter', sans-serif;
-    padding: 20px;
-    background-color: #f5f7fa;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+    /* Conteneur principal */
+    .modern-container {
+        font-family: 'Inter', sans-serif;
+        padding: 20px;
+        background-color: #f5f7fa;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-/* En-tête */
-.project-header {
-    text-align: center;
-    margin-bottom: 30px;
-}
+    /* En-tête */
+    .project-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
 
-.project-header h1 {
-    font-size: 2.5rem;
-    color: #2c3e50;
-    margin-bottom: 10px;
-}
+    .project-header h1 {
+        font-size: 2.5rem;
+        color: #2c3e50;
+        margin-bottom: 10px;
+    }
 
-.project-description {
-    font-size: 1.2rem;
-    color: #7f8c8d;
-}
+    .project-description {
+        font-size: 1.2rem;
+        color: #7f8c8d;
+    }
 
-/* Section des colonnes */
-.tasks-section {
-    display: flex;
-    gap: 20px;
-    width: 100%;
-    max-width: 1200px;
-}
+    /* Section des colonnes */
+    .tasks-section {
+        display: flex;
+        gap: 20px;
+        width: 100%;
+        max-width: 1200px;
+    }
 
-/* Colonnes */
-.task-column {
-    flex: 1;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    height: 75vh;
-    width: 300vh;
-    overflow-y: auto;
-}
+    /* Colonnes */
+    .task-column {
+        flex: 1;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        height: 75vh;
+        width: 300vh;
+        overflow-y: auto;
+    }
 
-.column-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 15px;
-}
+    .column-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
 
-.todo-title {
-    color: #f39c12;
-}
+    .todo-title {
+        color: #f39c12;
+    }
 
-.in-progress-title {
-    color: #3498db;
-}
+    .in-progress-title {
+        color: #3498db;
+    }
 
-.done-title {
-    color: #2ecc71;
-}
+    .done-title {
+        color: #2ecc71;
+    }
 
-/* Liste des tâches */
-.task-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
+    /* Liste des tâches */
+    .task-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
 
-/* Carte tâche */
-.task-card {
-    background-color: #ecf0f1;
-    border-radius: 8px;
-    padding: 15px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    cursor: grab;
-    transition: transform 0.2s, box-shadow 0.2s;
-}
+    /* Carte tâche */
+    .task-card {
+        background-color: #ecf0f1;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        cursor: grab;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
 
-.task-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-}
+    .task-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    }
 
-.task-title {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #2c3e50;
-}
+    .task-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #2c3e50;
+    }
 
-.task-desc {
-    font-size: 1rem;
-    color: #7f8c8d;
-    margin: 10px 0;
-}
+    .task-desc {
+        font-size: 1rem;
+        color: #7f8c8d;
+        margin: 10px 0;
+    }
 
-.task-date {
-    font-size: 0.9rem;
-    color: #95a5a6;
-    text-align: right;
-}
+    .task-date {
+        font-size: 0.9rem;
+        color: #95a5a6;
+        text-align: right;
+    }
 
-/* Texte colonne vide */
-.empty-column {
-    text-align: center;
-    color: #bdc3c7;
-    font-size: 1rem;
-}
-
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: opacity 0.3s ease;
-    z-index: 1050;
-}
-.modal-dialog {
-    max-width: 500px;
-    width: 100%;
-    background: #fff;
-    border-radius: 0.3rem;
-    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.3);
-    overflow: hidden;
-    animation: fadeIn 0.3s ease;
-}
-.modal-content {
-    display: flex;
-    flex-direction: column;
-    border: none;
-}
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    border-bottom: 1px solid #dee2e6;
-    background-color: #f8f9fa;
-}
-.modal-title {
-    margin: 0;
-    font-size: 1.25rem;
-    font-weight: 500;
-}
-.close-btn {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #000;
-    cursor: pointer;
-    border: none;
-    background: none;
-    line-height: 1;
-}
-.modal-body {
-    padding: 1rem;
-}
-.btn {
-    display: inline-block;
-    font-weight: 400;
-    color: #fff;
-    text-align: center;
-    vertical-align: middle;
-    cursor: pointer;
-    background-color: #007bff;
-    border: 1px solid #007bff;
-    padding: 0.375rem 0.75rem;
-    border-radius: 0.25rem;
-    transition: background-color 0.15s ease, border-color 0.15s ease;
-}
-.btn-primary:hover {
-    background-color: #0056b3;
-    border-color: #004085;
-}
-
-
+    /* Texte colonne vide */
+    .empty-column {
+        text-align: center;
+        color: #bdc3c7;
+        font-size: 1rem;
+    }
 </style>
 
 
@@ -298,11 +256,11 @@
 
         // Trouve la zone cible (toujours la div "task-list")
         const taskColumn = event.target.closest(".task-column").id;
-        const col =document.getElementById(taskColumn);
-        
+        const col = document.getElementById(taskColumn);
+
         console.log(taskColumn);
         if (taskColumn) {
-            
+
             col.querySelector(".task-list").appendChild(taskElement); // Ajoute la tâche à la fin de la liste
         } else {
             console.error("Impossible de trouver une liste de tâches cible.");
@@ -341,5 +299,5 @@
             card.addEventListener("dblclick", () => openModal(card));
         });
     });
-    
+
 </script>

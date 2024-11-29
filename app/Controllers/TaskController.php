@@ -315,4 +315,18 @@ class TaskController extends BaseController
         $this->taskModel->update($data->id, ['status' => $data->status]);
         return $this->response->setJSON(['status' => 'success']);
     }
+
+    public function delayTaskFilter()
+    {
+        $userId = session()->get('user_id');
+        $tasks = $this->taskModel->getTasksByUser($userId);
+        $delayedTasks = [];
+        foreach ($tasks as $task) {
+            if (strtotime($task['due_date']) < time()) {
+                $delayedTasks[] = $task;
+            }
+        }
+        return view('filteredTaskView', ['tasks' => $delayedTasks]);
+    }
+
 }
