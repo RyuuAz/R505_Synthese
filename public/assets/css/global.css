@@ -225,6 +225,11 @@ body {
     flex-direction: column;
     gap: 15px;
 }
+.overdue {
+    color: red;
+    font-weight: bold;
+    
+}
 
 .popup-content label {
     font-size: 1rem;

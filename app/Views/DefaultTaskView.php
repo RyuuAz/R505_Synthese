@@ -12,7 +12,28 @@
                                 data-task-status="<?= htmlspecialchars($tache['status']); ?>">
                                 <h4 class="task-title"><?= htmlspecialchars($tache["title"]); ?></h4>
                                 <p class="task-desc"><?= htmlspecialchars($tache["description"]); ?></p>
-                                <p class="task-date">Échéance : <?= htmlspecialchars($tache["due_date"]); ?></p>
+                                <?php 
+                                    
+                                    $commentaireModel = new \App\Models\CommentModel();
+                                    $commentaires = $commentaireModel->getCommentsByTask($tache['tsk_id']);
+                                ?>
+                                <?php if (!empty($commentaires)): ?>
+                                    <p class="task-comment">Commentaires :</p>
+
+                                    <?php foreach ($commentaires as $commentaire): ?>
+                                        <p class="task-comment"><?= htmlspecialchars($commentaire["content"]); ?></p>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+
+                                <?php if ($tache["due_date"]): ?>
+                                    <?php $dueDate = new DateTime($tache["due_date"]); ?>
+                                    <?php if ($dueDate < new DateTime()): ?>
+                                        <p class="task-date" style="color:red">Échéance : <?= htmlspecialchars($tache["due_date"]); ?></p>
+                                    <?php else: ?>
+                                        <p class="task-date">Échéance : <?= htmlspecialchars($tache["due_date"]); ?></p>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                                    
                                 <div class="task-actions">
                                     <button class="edit-btn" onclick="openModal(this.closest('.task-card'))" title="Modifier">
                                         ✏️
@@ -40,6 +61,17 @@
                                 data-task-status="<?= htmlspecialchars($tache['status']); ?>">
                                 <h4 class="task-title"><?= htmlspecialchars($tache["title"]); ?></h4>
                                 <p class="task-desc"><?= htmlspecialchars($tache["description"]); ?></p>
+                                <?php 
+                                    
+                                    $commentaireModel = new \App\Models\CommentModel();
+                                    $commentaires = $commentaireModel->getCommentsByTask($tache['tsk_id']);
+                                ?>
+                                <?php if (!empty($commentaires)): ?>
+                                    <p class="task-comment">Commentaires :</p>
+                                    <?php foreach ($commentaires as $commentaire): ?>
+                                        <p class="task-comment"><?= htmlspecialchars($commentaire["content"]); ?></p>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
                                 <p class="task-date">Échéance : <?= htmlspecialchars($tache["due_date"]); ?></p>
                                 <div class="task-actions">
                                     <button class="edit-btn" onclick="openModal(this.closest('.task-card'))" title="Modifier">
@@ -68,6 +100,18 @@
                                 data-task-status="<?= htmlspecialchars($tache['status']); ?>">
                                 <h4 class="task-title"><?= htmlspecialchars($tache["title"]); ?></h4>
                                 <p class="task-desc"><?= htmlspecialchars($tache["description"]); ?></p>
+                                <?php 
+                                    
+                                    $commentaireModel = new \App\Models\CommentModel();
+                                    $commentaires = $commentaireModel->getCommentsByTask($tache['tsk_id']);
+                                ?>
+                                <?php if (!empty($commentaires)): ?>
+                                    <p class="task-comment">Commentaires :</p>
+
+                                    <?php foreach ($commentaires as $commentaire): ?>
+                                        <p class="task-comment"><?= htmlspecialchars($commentaire["content"]); ?></p>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
                                 <p class="task-date">Échéance : <?= htmlspecialchars($tache["due_date"]); ?></p>
                                 <div class="task-actions">
                                     <button class="edit-btn" onclick="openModal(this.closest('.task-card'))" title="Modifier">

@@ -11,8 +11,8 @@ echo view('common/head', [
     <button type="button" class="add-btn" data-filter="dueDate" onclick="loadTasks('dueDate')">Échéance</button>
 </div>
 
-<button type="button" class="add-btn" onclick=openTaskModal()>Créer une tâches</button>
-
+<div class="projects-header"><button type="button" class="add-btn" onclick=openTaskModal()>Créer une tâches</button>
+</div>
 <!-- Popup pour ajouter une tâche -->
 <div id="add-task-modal" class="popup-overlay" style="display:none;">
     <div class="popup-content">
