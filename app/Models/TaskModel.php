@@ -99,7 +99,7 @@ class TaskModel extends Model
      */
     public function getTasksByUserOrderByDueDate(int $userId)
     {
-        return $this->where('usr_id', $userId)->orderBy('due_date', 'ASC')->findAll();
+        return $this->where('usr_id', $userId)->where('status !=', 'completed')->orderBy('due_date', 'ASC')->findAll();
     }
 
 }

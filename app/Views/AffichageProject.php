@@ -8,7 +8,7 @@ echo view('common/head', [
 <div class="modern-container">
 <header class="projects-header">
         <h1>Mes Projets</h1>
-        <button class="add-project-btn" onclick="openPopup()">+ Ajouter un Projet</button>
+        <button class="add-btn" onclick="openPopup()">+ Ajouter un Projet</button>
     </header>
 
     <!-- Popup pour l'ajout de projet -->
