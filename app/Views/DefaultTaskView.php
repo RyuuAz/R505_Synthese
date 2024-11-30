@@ -341,7 +341,7 @@
     // Fonction pour supprimer une tâche
     function deleteTask(taskId) {
         if (confirm("Voulez-vous vraiment supprimer cette tâche ?")) {
-            fetch(`/task/delete/${taskId}`, {
+            fetch('/task/delete', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -353,6 +353,7 @@
                 .then(data => {
                     if (data.success) {
                         document.getElementById(`task-${taskId}`).remove(); // Retire la tâche de l'interface
+                        window.location.reload();
                         alert("Tâche supprimée avec succès !");
                     } else {
                         alert("Erreur lors de la suppression de la tâche.");

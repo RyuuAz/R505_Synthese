@@ -255,6 +255,13 @@ class TaskController extends BaseController
         $this->taskModel->del($id);
         return redirect()->to('/tasks');
     }
+    public function deleteBasic()
+    {
+        $data = $this->request->getJSON();
+        $this->taskModel->delete($data->id);
+        return $this->response->setJSON(['success' => 'success']);
+        
+    }
 
     /**
      * Récupère toutes les tâches d'un utilisateur
