@@ -21,7 +21,7 @@ DROP TYPE IF EXISTS notification_type CASCADE;
 DROP TYPE IF EXISTS notification_status CASCADE;
 
 -- Création des types ENUM pour les statuts des tâches et des projets
-CREATE TYPE task_status AS ENUM ('a_faire', 'en_cours', 'termine');
+CREATE TYPE task_status AS ENUM ('pending', 'completed', 'overdue');
 
 -- Création des types ENUM pour les notifications
 CREATE TYPE notification_type AS ENUM (
@@ -46,18 +46,19 @@ CREATE TABLE users (
 -- Table projects
 CREATE TABLE project (
     prj_id SERIAL PRIMARY KEY,
+    usr_id INT REFERENCES users(usr_id) ON DELETE CASCADE, -- supprimer si project_user est décommenté
     title VARCHAR(255) NOT NULL,
     description TEXT,
     prj_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     prj_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Table project_user (relation entre utilisateurs et projets)
+/*-- Table project_user (relation entre utilisateurs et projets)
 CREATE TABLE project_user (
     prj_id INT REFERENCES project(prj_id) ON DELETE CASCADE,
     usr_id INT REFERENCES users(usr_id) ON DELETE CASCADE,
     PRIMARY KEY (prj_id, usr_id) -- Clé primaire composée
-);
+);*/
 
 -- Table priority
 CREATE TABLE priority (
@@ -77,7 +78,7 @@ CREATE TABLE tasks (
     title VARCHAR(255) NOT NULL,
     description TEXT,
     due_date DATE,
-    status task_status DEFAULT 'a_faire',
+    status task_status DEFAULT 'pending',
     tsk_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     tsk_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
