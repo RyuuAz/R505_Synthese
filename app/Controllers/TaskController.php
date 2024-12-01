@@ -223,10 +223,11 @@ class TaskController extends BaseController
             'due_date' => $this->request->getPost('due_date'),
             'status' => 'pending'
         ];
+        
 
         $this->taskModel->add($data);
 
-        return redirect()->to('/tasks')->with('success', 'Tâche créée.');
+        return redirect()->back()->with('success', 'Tâche créée.');
     }
     public function edit($id)
     {
