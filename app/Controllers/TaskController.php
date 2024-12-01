@@ -103,7 +103,7 @@ class TaskController extends BaseController
 
         // Récupérer la valeur de $perPage depuis le fichier de config `Pager.php`
         $configPager = config(Pager::class);
-        $perPage = $configPager->perPage;
+        $perPage = 2;
 
         // Transmettre à la vue les deux variables
         return view('AffichageTaches', [
