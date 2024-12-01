@@ -71,27 +71,54 @@ class Database extends Config
     //        ],
     //    ];
 
-    public array $default = [
-        'DSN'        => '',
-        'hostname'   => 'localhost',
-        'username'   => 'gt220862',
-        'password'   => 'gt220862',
-        'database'   => 'gt220862',
-        'schema'     => 'public',
-        'DBDriver'   => 'Postgre',
-        'DBPrefix'   => '',
-        'pConnect'   => false,
-        'DBDebug'    => true,
-        'charset'    => 'utf8',
-        'swapPre'    => '',
-        'failover'   => [],
-        'port'       => 7777,
-        'dateFormat' => [
-            'date'     => 'Y-m-d',
-            'datetime' => 'Y-m-d H:i:s',
-            'time'     => 'H:i:s',
-        ],
-    ];
+      /**
+       * Sample database connection for Postgre.
+       *
+       * @var array<string, mixed>
+       */
+      public array $defaul = [
+          'DSN'        => '',
+          'hostname'   => 'localhost',
+          'username'   => 'gt220862',
+          'password'   => 'gt220862',
+          'database'   => 'gt220862',
+          'schema'     => 'public',
+          'DBDriver'   => 'Postgre',
+          'DBPrefix'   => '',
+          'pConnect'   => false,
+          'DBDebug'    => true,
+          'charset'    => 'utf8',
+          'swapPre'    => '',
+          'failover'   => [],
+          'port'       => 7777,
+          'dateFormat' => [
+              'date'     => 'Y-m-d',
+              'datetime' => 'Y-m-d H:i:s',
+              'time'     => 'H:i:s',
+          ],
+      ];
+      
+    //    /**
+    //     * Sample database connection for SQLite3.
+    //     *
+    //     * @var array<string, mixed>
+    //     */
+    //    public array $default = [
+    //        'database'    => 'database.db',
+    //        'DBDriver'    => 'SQLite3',
+    //        'DBPrefix'    => '',
+    //        'DBDebug'     => true,
+    //        'swapPre'     => '',
+    //        'failover'    => [],
+    //        'foreignKeys' => true,
+    //        'busyTimeout' => 1000,
+    //        'dateFormat'  => [
+    //            'date'     => 'Y-m-d',
+    //            'datetime' => 'Y-m-d H:i:s',
+    //            'time'     => 'H:i:s',
+    //        ],
+    //    ];
+
 
     //    /**
     //     * Sample database connection for SQLSRV.

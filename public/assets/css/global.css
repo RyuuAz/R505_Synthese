@@ -124,7 +124,7 @@ body {
     margin-bottom: 20px;
 }
 
-.add-project-btn {
+.add-btn {
     padding: 10px 20px;
     font-size: 1rem;
     color: #fff;
@@ -225,6 +225,11 @@ body {
     flex-direction: column;
     gap: 15px;
 }
+.overdue {
+    color: red;
+    font-weight: bold;
+    
+}
 
 .popup-content label {
     font-size: 1rem;
@@ -282,6 +287,51 @@ body {
 .cancel-btn:hover {
     background-color: #c0392b;
 }
+/* Conteneur de la liste déroulante */
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 14px;
+    color: #333;
+}
+
+/* Style de la liste déroulante */
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    appearance: none; /* Masque les styles natifs (utile pour uniformiser le design) */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='gray' class='bi bi-caret-down-fill' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658c-.566-.614-.106-1.658.707-1.658h9.684c.813 0 1.273 1.044.707 1.658L8.753 11.14a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px 16px;
+}
+
+/* Interaction au survol et focus */
+.form-group select:focus {
+    border-color: #007BFF;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    outline: none;
+}
+
+/* Style des options (utile pour un rendu natif mais propre) */
+.form-group select option {
+    padding: 10px;
+    font-size: 14px;
+}
+
 
 
 /* Message lorsqu'il n'y a aucun projet */

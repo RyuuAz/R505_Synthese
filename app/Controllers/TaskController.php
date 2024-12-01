@@ -42,7 +42,9 @@ class TaskController extends BaseController
                     break;
             }
         }
-        return view('AffichageTaches', ['taches' => $tachesParStatut]); // Passe les tâches à la vue
+        $priorityModel = new PriorityModel();
+        $priorities = $priorityModel->getPrioritiesByUser($userId);
+        return view('AffichageTaches', ['taches' => $tachesParStatut, 'priorities' => $priorities]);
     }
 
     /**
@@ -216,14 +218,15 @@ class TaskController extends BaseController
      */
     public function store()
     {
-        if (!$this->validate($this->rules)) {
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-        }
+       // if (!$this->validate($this->rules)) {
+      //      return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+      //  }
+        
 
         $data = [
-            'usr_id' => session()->get('usr_id'),
+            'usr_id' => session()->get('user_id'),
             'prio_id' => $this->request->getPost('prio_id'), // ID de la priorité sélectionnée
-            'prj_id' => $this->request->getPost('prj_id'),
+            'prj_id' => $this->request->getPost('prj_id') ?? null, // ID du projet sélectionné
             'title' => $this->request->getPost('title'),
             'description' => $this->request->getPost('description'),
             'due_date' => $this->request->getPost('due_date'),
@@ -232,7 +235,7 @@ class TaskController extends BaseController
 
         $this->taskModel->add($data);
 
-        return redirect()->to('/dashboard');
+        return redirect()->to('/tasks')->with('success', 'Tâche créée.');
     }
     public function edit($id)
     {
@@ -259,7 +262,14 @@ class TaskController extends BaseController
     public function delete($id)
     {
         $this->taskModel->del($id);
-        return redirect()->back();
+        return redirect()->to('/tasks');
+    }
+    public function deleteBasic()
+    {
+        $data = $this->request->getJSON();
+        $this->taskModel->delete($data->id);
+        return $this->response->setJSON(['success' => 'success']);
+        
     }
 
     /**
