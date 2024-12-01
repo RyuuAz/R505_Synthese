@@ -91,11 +91,11 @@
             </div></a>
 
             <!-- Toutes les tâches -->
-            <a href="/tasks" class="text-decoration-none"><div class="category-card">
+            <a href="/AllTasks" class="text-decoration-none"><div class="category-card">
                 <i class="bi bi-list-task"></i>
                 <h3>Toutes les tâches</h3>
-                
-            </div>
+
+            </div></a>
         </div>
     </section>
 </body>

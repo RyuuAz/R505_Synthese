@@ -23,7 +23,7 @@ class TaskController extends BaseController
     public function index()
     {
         $userId = session()->get('user_id'); // Récupère l'utilisateur connecté
-        $tasks = $this->taskModel->getTasksByUser($userId); // Récupère les tâches de l'utilisateur
+        $tasks = $this->taskModel->getTasksByUserWithoutProject($userId); // Récupère les tâches de l'utilisateur
         $tachesParStatut = [
             'a_faire' => [],
             'en_cours' => [],
@@ -42,9 +42,14 @@ class TaskController extends BaseController
                     break;
             }
         }
+
+        // Récupérer la valeur de $perPage depuis le fichier de config `Pager.php`
+        $configPager = config(Pager::class);
+        $perPage = 2;
+
         $priorityModel = new PriorityModel();
         $priorities = $priorityModel->getPrioritiesByUser($userId);
-        return view('AffichageTaches', ['taches' => $tachesParStatut, 'priorities' => $priorities]);
+        return view('AffichageTaches', ['taches' => $tachesParStatut, 'priorities' => $priorities, 'perPage' => $perPage]);
     }
 
     /**
@@ -60,43 +65,6 @@ class TaskController extends BaseController
         return view('task/create', ['priorities' => $priorities]); // Passe les priorités à la vue
     }
 
-    /**
-     * Méthode qui affiche toutes les tâches sans projet
-     * @return string Vue avec les tâches
-     */
-    public function showSingleTask()
-    {
-        // Récupération des tâches
-        $tasks = $this->taskModel->getTasksByUserWithoutProject($userId); // Assurez-vous que cette ligne renvoie bien des données
-        $tachesParStatut = [
-            'a_faire' => [],
-            'en_cours' => [],
-            'termine' => []
-        ];
-
-        // Tri des tâches par statut
-        foreach ($tasks as $tache) {
-            switch ($tache['status']) {
-                case 'pending':
-                    $tachesParStatut['a_faire'][] = $tache;
-                    break;
-                case 'overdue':
-                    $tachesParStatut['en_cours'][] = $tache;
-                    break;
-                case 'completed':
-                    $tachesParStatut['termine'][] = $tache;
-                    break;
-            }
-        }
-
-        // Envoie les deux variables à la vue
-        return view('AffichageTaches', [
-            'taches' => $tachesParStatut,  // Tâches par statut
-        ]);
-    }
-
-
-
     /** 
      * Méthode qui affiche toutes les tâches
      * @return string Vue avec les tâches
@@ -106,12 +74,17 @@ class TaskController extends BaseController
 
         $userId = session()->get('user_id'); // Récupère l'utilisateur connecté
         $tasks = $this->taskModel->getTasksByUser($userId); // Récupère les tâches de l'utilisateur
+        $commentModel = new CommentModel(); // Charge le modèle CommentModel
         $tachesParStatut = [
             'a_faire' => [],
             'en_cours' => [],
             'termine' => []
         ];
         foreach ($tasks as $tache) {
+
+            // Ajouter les commentaires liés à la tâche
+            $tache['comments'] = $commentModel->getCommentsByTask($tache['tsk_id']);
+
             switch ($tache['status']) {
                 case 'pending':
                     $tachesParStatut['a_faire'][] = $tache;
@@ -124,33 +97,20 @@ class TaskController extends BaseController
                     break;
             }
         }
+
+        $priorityModel = new PriorityModel();
+        $priorities = $priorityModel->getPrioritiesByUser($userId);
+
+        // Récupérer la valeur de $perPage depuis le fichier de config `Pager.php`
+        $configPager = config(Pager::class);
+        $perPage = $configPager->perPage;
+
         // Transmettre à la vue les deux variables
         return view('AffichageTaches', [
             'taches' => $tachesParStatut,  // Liste des tâches par statut
-            'tasks' => $tasks             // Liste complète des tâches
+            'priorities' => $priorities, // Priorités de l'utilisateur
+            'perPage' => $perPage // Nombre d'éléments par page
         ]);
-
-        
-        // Récupérer l'ID de l'utilisateur connecté
-        $userId = (int) session()->get('user_id');
-
-        $taskModel = new TaskModel();
-        $commentModel = new CommentModel();
-        $priorityModel = new PriorityModel();
-
-        // Récupérer les tâches de l'utilisateur
-        $tasks = $taskModel->getTasksByUser($userId);
-
-        // Récupérer les commentaires de l'utilisateur
-        $commentaires = $commentModel->getCommentsByUser($userId);
-
-        // Récupérer les priorités de l'utilisateur
-        $priorities = $priorityModel->getPrioritiesByUser($userId);
-    
-        return view('allTasks', [
-        'tasks' => $tasks,
-        'commentaires' => $commentaires,
-        'priorities' => $priorities] );
     }
 
     static function genererBandeauTache($tsk_id, $titre, $date, $description, $bgColor, $commentaires = []) {

@@ -102,4 +102,9 @@ class TaskModel extends Model
         return $this->where('usr_id', $userId)->where('status !=', 'completed')->orderBy('due_date', 'ASC')->findAll();
     }
 
+    public function getPaginatedTasks($perPage)
+    {
+        return $this->paginate($perPage);
+    }
+
 }

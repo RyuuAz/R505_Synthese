@@ -9,7 +9,8 @@
                         <?php foreach ($tachesParStatut['a_faire'] as $tache): ?>
                             <div class="task-card" id="task-<?= $tache['tsk_id']; ?>" draggable="true" ondragstart="drag(event)"
                                 data-task-id="<?= $tache['tsk_id']; ?>"
-                                data-task-status="<?= htmlspecialchars($tache['status']); ?>">
+                                data-task-status="<?= htmlspecialchars($tache['status']); ?>" 
+                                ondblclick="openCommentsModal(<?= $tache['tsk_id']; ?>)">
                                 <h4 class="task-title"><?= htmlspecialchars($tache["title"]); ?></h4>
                                 <p class="task-desc"><?= htmlspecialchars($tache["description"]); ?></p>
                                 <?php 
@@ -58,7 +59,8 @@
                         <?php foreach ($tachesParStatut['en_cours'] as $tache): ?>
                             <div class="task-card" id="task-<?= $tache['tsk_id']; ?>" draggable="true" ondragstart="drag(event)"
                                 data-task-id="<?= $tache['tsk_id']; ?>"
-                                data-task-status="<?= htmlspecialchars($tache['status']); ?>">
+                                data-task-status="<?= htmlspecialchars($tache['status']); ?>"
+                                ondblclick="openCommentsModal(<?= $tache['tsk_id']; ?>)">
                                 <h4 class="task-title"><?= htmlspecialchars($tache["title"]); ?></h4>
                                 <p class="task-desc"><?= htmlspecialchars($tache["description"]); ?></p>
                                 <?php 
@@ -97,7 +99,8 @@
                         <?php foreach ($tachesParStatut['termine'] as $tache): ?>
                             <div class="task-card" id="task-<?= $tache['tsk_id']; ?>" draggable="true" ondragstart="drag(event)"
                                 data-task-id="<?= $tache['tsk_id']; ?>"
-                                data-task-status="<?= htmlspecialchars($tache['status']); ?>">
+                                data-task-status="<?= htmlspecialchars($tache['status']); ?>"
+                                ondblclick="openCommentsModal(<?= $tache['tsk_id']; ?>)">
                                 <h4 class="task-title"><?= htmlspecialchars($tache["title"]); ?></h4>
                                 <p class="task-desc"><?= htmlspecialchars($tache["description"]); ?></p>
                                 <?php 
@@ -131,13 +134,13 @@
             </div>
         </section>
 
-        <!-- Modal des commentaires -->
-        <div id="comments-modal" class="popup-overlay" style="display:none;">
-
-            <div class="popup-content">
-
-                
-
+        <div id="commentsModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeCommentsModal()">&times;</span>
+                <h2>Commentaires pour la tâche</h2>
+                <div id="commentsList"></div>
+                <textarea id="newComment" placeholder="Ajouter un commentaire"></textarea>
+                <button onclick="addComment()">Ajouter</button>
             </div>
         </div>
 
@@ -289,6 +292,38 @@
         color: #bdc3c7;
         font-size: 1rem;
     }
+
+    .modal {
+    display: none; 
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
 </style>
 
 
@@ -375,74 +410,6 @@
         }
     }
 
-
-    // Fonction pour supprimer une tâche
-    function deleteTask(taskId) {
-        if (confirm("Voulez-vous vraiment supprimer cette tâche ?")) {
-            fetch(`/task/delete/${taskId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '<?= csrf_hash(); ?>'
-                },
-                body: JSON.stringify({ id: taskId })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        document.getElementById(`task-${taskId}`).remove(); // Retire la tâche de l'interface
-                        alert("Tâche supprimée avec succès !");
-                    } else {
-                        alert("Erreur lors de la suppression de la tâche.");
-                    }
-                })
-                .catch(error => console.error('Erreur:', error));
-        }
-    }
-
-
-   //Fonction qui détecte les cliques sur les cards
-    document.addEventListener('click', function (event) {
-        if (event.target.classList.contains('task-card')) {
-            const taskId = event.target.dataset.taskId;
-            const taskStatus = event.target.dataset.taskStatus;
-
-            // Récupérer les commentaires via AJAX
-            fetch('/comments/getCommentsByTaskId', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '<?= csrf_hash(); ?>'
-                },
-                body: JSON.stringify({ taskId: taskId })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    const commentsContainer = document.querySelector('#comments-modal .popup-content');
-                    commentsContainer.innerHTML = ''; // Réinitialise le contenu
-
-                    // Ajoute chaque commentaire dans le modal
-                    data.forEach(comment => {
-                        commentsContainer.innerHTML += `
-                            <div class="comment">
-                                <p>${comment.content}</p>
-                                <button class="delete-comment" onclick="deleteComment(${comment.id})">Supprimer</button>
-                            </div>
-                        `;
-                    });
-                })
-                .catch(error => console.error('Erreur:', error));
-
-            // Ajouter les commentaires à la tâche
-            document.getElementById('comments-modal').dataset.taskId = taskId;
-            document.getElementById('comments-modal').dataset.taskStatus = taskStatus;
-
-            // Afficher le modal
-            document.getElementById('comments-modal').style.display = 'flex';
-            document.body.style.overflow = 'hidden'; // Empêche le scroll en arrière-plan
-        }
-    });
-
     //Fonction pour fermer le modal
     document.addEventListener('click', function (event) {
         if (event.target.classList.contains('popup-overlay')) {
@@ -450,6 +417,52 @@
             document.body.style.overflow = 'auto'; // Restaure le scroll
         }
     });
+
+    function openCommentsModal(taskId) {
+        const modal = document.getElementById('commentsModal');
+        modal.style.display = "block";
+
+        const taskCard = document.getElementById(`task-${taskId}`);
+        // Récupérer les commentaires via AJAX
+        fetch('/comments/getCommentsByTaskId', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '<?= csrf_hash(); ?>'
+            },
+            body: JSON.stringify({ taskId: taskId })
+        })
+            .then(response => response.json())
+            .then(data => {
+                const commentsList = document.getElementById('commentsList');
+                commentsList.innerHTML = '';
+
+                data.forEach(comment => {
+                    // Affichage des commentaires
+                    commentsList.innerHTML += `<p>${comment.content}</p>`;
+                });
+            });
+    }
+
+    function closeCommentsModal() {
+        const modal = document.getElementById('commentsModal');
+        modal.style.display = "none";
+    }
+
+    function addComment(taskId) {
+        const newComment = document.getElementById('newComment').value;
+        if (newComment.trim() === '') return;
+
+        fetch('comments/store', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ task_id: taskId, text: newComment })
+        }).then(() => {
+            // Actualisez le modal après l'ajout
+            openCommentsModal(taskId);
+        });
+    }
+
 
 
 </script>
