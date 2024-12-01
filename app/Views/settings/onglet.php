@@ -1,161 +1,103 @@
-<!DOCTYPE html>
-<html lang="en">
+<div class="modern-container">
+    <header class="projects-header">
+        <h1>Gestion des Priorités</h1>
+        <button class="add-btn" onclick="openPopup()">+ Ajouter une Priorité</button>
+    </header>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paramètres - Priorités</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+    <!-- Popup pour l'ajout de priorité -->
+    <div id="popup-add-priority" class="popup-overlay" style="display: none;">
+        <div class="popup-content">
+            <h2>Ajouter une Priorité</h2>
+            <form id="add-priority-form" action="/settings/create-priority" method="POST">
+                <label for="name">Nom :</label>
+                <input type="text" id="name" name="name" required>
 
-<body>
-    <div class="container-fluid p-0">
-        <ul class="nav nav-tabs d-flex w-100" id="myTab" role="tablist">
-            <li class="nav-item flex-fill text-center" role="presentation">
-                <button class="nav-link active w-100" id="priorities-tab" data-bs-toggle="tab" data-bs-target="#priorities"
-                    type="button" role="tab" aria-controls="priorities" aria-selected="true">
-                    Priorités
-                </button>
-            </li>
-        </ul>
+                <label for="color">Couleur :</label>
+                <input type="color" id="color" name="color" required>
 
-        <div class="tab-content p-3">
-            <div class="tab-pane fade show active" id="priorities" role="tabpanel" aria-labelledby="priorities-tab">
+                <label for="ordre">Ordre :</label>
+                <select id="ordre" name="ordre" required>
+                    <option value="">-- Sélectionnez un ordre --</option>
+                    <?php for ($i = 1; $i <= 10; $i++): ?>
+                        <option value="<?= $i ?>"><?= $i ?></option>
+                    <?php endfor; ?>
+                </select>
 
-                <div class="container-fluid">
-                    <div class="d-flex justify-content-end pt-3">
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPriorityModal">
-                            <i class="bi bi-plus fs-3"></i> Ajouter une priorité
-                        </button>
-                    </div>
+                <div class="popup-buttons">
+                    <button type="submit" class="submit-btn">Ajouter</button>
+                    <button type="button" class="cancel-btn" onclick="closePopup()">Annuler</button>
                 </div>
-
-                <!-- Modal pour ajouter une priorité -->
-                <div class="modal fade" id="addPriorityModal" tabindex="-1" aria-labelledby="addPriorityModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="addPriorityModalLabel">Ajouter une priorité</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <?= form_open('settings/create-priority') ?>
-                                <div class="mb-3">
-                                    <?= form_label('Nom de la priorité', 'name', ['class' => 'form-label']) ?>
-                                    <?= form_input('name', '', ['class' => 'form-control', 'required' => 'required']) ?>
-                                </div>
-                                <!-- Sélecteur de couleur pour la priorité -->
-                                <div class="mb-3">
-                                    <?= form_label('Choisissez la couleur de la priorité:', 'color', ['class' => 'form-label']) ?>
-                                    <?= form_input(['type' => 'color', 'name' => 'color', 'class' => 'form-control', 'required' => 'required']) ?>
-                                </div>
-                                <div class="mb-3">
-                                    <?= form_label('Ordre (sélectionnez un chiffre)', 'ordre', ['class' => 'form-label']) ?>
-                                    <select name="ordre" class="form-select" required>
-                                        <option value="">-- Sélectionnez un ordre --</option>
-                                        <?php for ($i = 1; $i <= 10; $i++): ?>
-                                            <option value="<?= $i ?>"><?= $i ?></option>
-                                        <?php endfor; ?>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <?= form_submit('submit', 'Créer', ['class' => 'btn btn-primary']) ?>
-                                <?= form_close() ?>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <?php foreach ($priorities as $priority): ?>
-                    <div class="modal fade" id="editPriorityModal<?= esc($priority['prio_id']) ?>" tabindex="-1"
-                        aria-labelledby="editPriorityModalLabel<?= esc($priority['prio_id']) ?>" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="editPriorityModalLabel<?= esc($priority['prio_id']) ?>">
-                                        Modifier la priorité : <?= esc($priority['name']) ?>
-                                    </h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <?= form_open('settings/update-priority/' . $priority['prio_id']) ?>
-                                    <div class="mb-3">
-                                        <?= form_label('Nom de la priorité', 'name', ['class' => 'form-label']) ?>
-                                        <?= form_input(
-                                            'name',
-                                            esc($priority['name']),
-                                            ['class' => 'form-control', 'required' => 'required']
-                                        ) ?>
-                                    </div>
-                                    <div class="mb-3">
-                                        <?= form_label('Choisissez la couleur de la priorité :', 'color', ['class' => 'form-label']) ?>
-                                        <?= form_input([
-                                            'type' => 'color',
-                                            'name' => 'color',
-                                            'value' => esc($priority['color']),
-                                            'class' => 'form-control',
-                                            'required' => 'required'
-                                        ]) ?>
-                                    </div>
-                                    <div class="mb-3">
-                                        <?= form_label('Ordre (sélectionnez un chiffre)', 'ordre', ['class' => 'form-label']) ?>
-                                        <select name="ordre" class="form-select" required>
-                                            <option value="">-- Sélectionnez un ordre --</option>
-                                            <?php for ($i = 1; $i <= 10; $i++): ?>
-                                                <option value="<?= $i ?>" <?= ($i == $priority['ordre']) ? 'selected' : '' ?>>
-                                                    <?= $i ?>
-                                                </option>
-                                            <?php endfor; ?>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <?= form_submit('submit', 'Modifier', ['class' => 'btn btn-primary']) ?>
-                                    <?= form_close() ?>
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-
-                <h2 class="mt-4">Vos Priorités</h2>
-                <ul class="list-group">
-                    <?php if (!empty($priorities)): ?>
-                        <?php foreach ($priorities as $priority): ?>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span>
-                                    <span style="color: <?= esc($priority['color']) ?>;">■</span>
-                                    <?= esc($priority['name']) ?> (Ordre : <?= esc($priority['ordre']) ?>)
-                                </span>
-                                <div>
-                                    <!-- Bouton Modifier -->
-                                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                                        data-bs-target="#editPriorityModal<?= esc($priority['prio_id']) ?>">
-                                        Modifier
-                                    </button>
-
-                                    <!-- Bouton Supprimer -->
-                                    <a href="<?= site_url('settings/delete-priority/' . $priority['prio_id']) ?>"
-                                        class="btn btn-danger btn-sm">
-                                        Supprimer
-                                    </a>
-                                </div>
-                            </li>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <li class="list-group-item">Aucune priorité définie.</li>
-                    <?php endif; ?>
-                </ul>
-
-
-            </div>
+            </form>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+    <!-- Affichage des priorités -->
+    <?php if (!empty($priorities)): ?>
+        <div class="projects-grid">
+            <?php foreach ($priorities as $priority): ?>
+                <div class="project-card priority-card d-flex justify-content-between align-items-center" style="border-left: 4px solid <?= htmlspecialchars($priority['color']) ?>">
+                    <div>
+                        <h5 class="project-title mb-0"><?= htmlspecialchars($priority['name']) ?> (Ordre : <?= htmlspecialchars($priority['ordre']) ?>)</h5>
+                    </div>
+                    <div>
+                        <button class="btn btn-warning btn-sm me-2" onclick="openEditPopup(<?= $priority['prio_id'] ?>)">Modifier</button>
+                        <a href="<?= site_url('settings/delete-priority/' . $priority['prio_id']) ?>" class="btn btn-danger btn-sm">Supprimer</a>
+                    </div>
+                </div>
 
-</html>
+                <!-- Popup pour modifier une priorité -->
+                <div id="popup-edit-priority-<?= $priority['prio_id'] ?>" class="popup-overlay" style="display: none;">
+                    <div class="popup-content">
+                        <h2>Modifier la Priorité</h2>
+                        <form action="/settings/update-priority/<?= $priority['prio_id'] ?>" method="POST">
+                            <label for="name-<?= $priority['prio_id'] ?>">Nom :</label>
+                            <input type="text" id="name-<?= $priority['prio_id'] ?>" name="name" value="<?= htmlspecialchars($priority['name']) ?>" required>
+
+                            <label for="color-<?= $priority['prio_id'] ?>">Couleur :</label>
+                            <input type="color" id="color-<?= $priority['prio_id'] ?>" name="color" value="<?= htmlspecialchars($priority['color']) ?>" required>
+
+                            <label for="ordre-<?= $priority['prio_id'] ?>">Ordre :</label>
+                            <select id="ordre-<?= $priority['prio_id'] ?>" name="ordre" required>
+                                <option value="">-- Sélectionnez un ordre --</option>
+                                <?php for ($i = 1; $i <= 10; $i++): ?>
+                                    <option value="<?= $i ?>" <?= ($i == $priority['ordre']) ? 'selected' : '' ?>><?= $i ?></option>
+                                <?php endfor; ?>
+                            </select>
+
+                            <div class="popup-buttons">
+                                <button type="submit" class="submit-btn">Modifier</button>
+                                <button type="button" class="cancel-btn" onclick="closeEditPopup(<?= $priority['prio_id'] ?>)">Annuler</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    <?php else: ?>
+        <p class="empty-projects-message">Aucune priorité définie pour le moment.</p>
+    <?php endif; ?>
+</div>
+
+<script>
+    // Ouvre la popup d'ajout
+    function openPopup() {
+        document.getElementById("popup-add-priority").style.display = "flex";
+    }
+
+    // Ferme la popup d'ajout
+    function closePopup() {
+        document.getElementById("popup-add-priority").style.display = "none";
+    }
+
+    // Ouvre la popup de modification
+    function openEditPopup(priorityId) {
+        document.getElementById(`popup-edit-priority-${priorityId}`).style.display = "flex";
+    }
+
+    // Ferme la popup de modification
+    function closeEditPopup(priorityId) {
+        document.getElementById(`popup-edit-priority-${priorityId}`).style.display = "none";
+    }
+</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">

@@ -57,6 +57,7 @@
             <a href="/dashboard">Accueil</a>
             <a href="/projects">Projets</a>
             <a href="/tasks">Tâches</a>
+            <a href="/settings">Paramètres</a>
             <a href="/users">Utilisateurs</a>
             <a href="/logout">Déconnexion</a>
         </nav>
