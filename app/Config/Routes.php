@@ -88,7 +88,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 	$routes->get('comments/create', 'CommentController::create'); // Formulaire d'ajout de commentaire
 	$routes->post('comments/store', 'CommentController::store'); // Traitement de l'ajout
 	$routes->post('comments/update/(:num)', 'CommentController::update/$1'); // Mise à jour d'un commentaire
-	$routes->get('comments/delete/(:num)', 'CommentController::delete/$1'); // Suppression d'un commentaire
+	$routes->post('/comments/delete/(:num)', 'CommentController::delete/$1'); // Suppression d'un commentaire
 
 	// Routes pour NotificationController
 	$routes->get('notifications/create', 'NotificationController::create'); // Formulaire de création de notification

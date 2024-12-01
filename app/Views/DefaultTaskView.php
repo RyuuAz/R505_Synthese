@@ -1,4 +1,12 @@
 <div class="modern-container">
+<?php 
+// Créer un tableau associatif pour un accès rapide par prio_id
+$priorityColors = [];
+foreach ($priorities as $priority) {
+    $priorityColors[$priority['prio_id']] = $priority['color'];
+}
+?>
+
 
     <main>
         <section class="tasks-section">
@@ -9,8 +17,9 @@
                         <?php foreach ($tachesParStatut['a_faire'] as $tache): ?>
                             <div class="task-card" id="task-<?= $tache['tsk_id']; ?>" draggable="true" ondragstart="drag(event)"
                                 data-task-id="<?= $tache['tsk_id']; ?>"
-                                data-task-status="<?= htmlspecialchars($tache['status']); ?>" 
-                                ondblclick="openCommentsModal(<?= $tache['tsk_id']; ?>)">
+                                data-task-status="<?= htmlspecialchars($tache['status']); ?>"
+                                ondblclick="openCommentsModal(<?= $tache['tsk_id']; ?>)"
+                                style="background-color: <?= isset($priorityColors[$tache['prio_id']]) ? htmlspecialchars($priorityColors[$tache['prio_id']]) : '#ffffff'; ?>;">
                                 <h4 class="task-title"><?= htmlspecialchars($tache["title"]); ?></h4>
                                 <p class="task-desc"><?= htmlspecialchars($tache["description"]); ?></p>
                                 <?php
@@ -69,7 +78,8 @@
                             <div class="task-card" id="task-<?= $tache['tsk_id']; ?>" draggable="true" ondragstart="drag(event)"
                                 data-task-id="<?= $tache['tsk_id']; ?>"
                                 data-task-status="<?= htmlspecialchars($tache['status']); ?>"
-                                ondblclick="openCommentsModal(<?= $tache['tsk_id']; ?>)">
+                                ondblclick="openCommentsModal(<?= $tache['tsk_id']; ?>)"
+                                style="background-color: <?= isset($priorityColors[$tache['prio_id']]) ? htmlspecialchars($priorityColors[$tache['prio_id']]) : '#ffffff'; ?>;">
                                 <h4 class="task-title"><?= htmlspecialchars($tache["title"]); ?></h4>
                                 <p class="task-desc"><?= htmlspecialchars($tache["description"]); ?></p>
                                 <?php 
@@ -80,7 +90,17 @@
                                 <?php if (!empty($commentaires)): ?>
                                     <p class="task-comment">Commentaires :</p>
                                     <?php foreach ($commentaires as $commentaire): ?>
-                                        <p class="task-comment"><?= htmlspecialchars($commentaire["content"]); ?></p>
+                                        <div class="comment-container">
+                                            <p class="task-comment"><?= htmlspecialchars($commentaire["content"]); ?></p>
+                                            <div class="comment-actions">
+                                                <button class="edit-btn" onclick="openEditCommentModal(<?= $commentaire['cmt_id']; ?>, '<?= htmlspecialchars($commentaire["content"]); ?>')" title="Modifier">
+                                                    ✏️
+                                                </button>
+                                                <button class="delete-btn" onclick="deleteComment(<?= $commentaire['cmt_id']; ?>)" title="Supprimer">
+                                                    🗑
+                                                </button>
+                                            </div>
+                                        </div>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
                                 <p class="task-date">Échéance : <?= htmlspecialchars($tache["due_date"]); ?></p>
@@ -109,7 +129,8 @@
                             <div class="task-card" id="task-<?= $tache['tsk_id']; ?>" draggable="true" ondragstart="drag(event)"
                                 data-task-id="<?= $tache['tsk_id']; ?>"
                                 data-task-status="<?= htmlspecialchars($tache['status']); ?>"
-                                ondblclick="openCommentsModal(<?= $tache['tsk_id']; ?>)">
+                                ondblclick="openCommentsModal(<?= $tache['tsk_id']; ?>)"
+                                style="background-color: <?= isset($priorityColors[$tache['prio_id']]) ? htmlspecialchars($priorityColors[$tache['prio_id']]) : '#ffffff'; ?>;">
                                 <h4 class="task-title"><?= htmlspecialchars($tache["title"]); ?></h4>
                                 <p class="task-desc"><?= htmlspecialchars($tache["description"]); ?></p>
                                 <?php 
@@ -121,7 +142,17 @@
                                     <p class="task-comment">Commentaires :</p>
 
                                     <?php foreach ($commentaires as $commentaire): ?>
-                                        <p class="task-comment"><?= htmlspecialchars($commentaire["content"]); ?></p>
+                                        <div class="comment-container">
+                                            <p class="task-comment"><?= htmlspecialchars($commentaire["content"]); ?></p>
+                                            <div class="comment-actions">
+                                                <button class="edit-btn" onclick="openEditCommentModal(<?= $commentaire['cmt_id']; ?>, '<?= htmlspecialchars($commentaire["content"]); ?>')" title="Modifier">
+                                                    ✏️
+                                                </button>
+                                                <button class="delete-btn" onclick="deleteComment(<?= $commentaire['cmt_id']; ?>)" title="Supprimer">
+                                                    🗑
+                                                </button>
+                                            </div>
+                                        </div>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
                                 <p class="task-date">Échéance : <?= htmlspecialchars($tache["due_date"]); ?></p>
@@ -554,10 +585,41 @@
             .then(data => {
                 if (data.success) {
                     closeEditCommentModal();
+                    // Rafraîchit la page actuelle
+                    location.reload();
                 } else {
                 }
             })
             .catch(error => console.error('Erreur:', error));
+            
+
+    }
+
+    // Supprimer un commentaire
+    function deleteComment(commentId) {
+        if (confirm("Voulez-vous vraiment supprimer ce commentaire ?")) {
+            fetch(`/comments/delete/${commentId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '<?= csrf_hash(); ?>'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById(`comment-${commentId}`).remove();
+                        
+                    } else {
+                        alert("Erreur lors de la suppression du commentaire.");
+                    }
+                })
+                .catch(error => console.error('Erreur:', error));
+                 // Rafraîchit la page actuelle
+                 location.reload();
+               
+
+        }
     }
 
 
