@@ -76,7 +76,7 @@ class Database extends Config
        *
        * @var array<string, mixed>
        */
-      public array $defaul = [
+      public array $default = [
           'DSN'        => '',
           'hostname'   => 'localhost',
           'username'   => 'gt220862',
