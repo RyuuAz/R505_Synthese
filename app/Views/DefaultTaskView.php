@@ -13,8 +13,7 @@
                                 ondblclick="openCommentsModal(<?= $tache['tsk_id']; ?>)">
                                 <h4 class="task-title"><?= htmlspecialchars($tache["title"]); ?></h4>
                                 <p class="task-desc"><?= htmlspecialchars($tache["description"]); ?></p>
-                                <?php 
-                                    
+                                <?php
                                     $commentaireModel = new \App\Models\CommentModel();
                                     $commentaires = $commentaireModel->getCommentsByTask($tache['tsk_id']);
                                 ?>
@@ -22,7 +21,17 @@
                                     <p class="task-comment">Commentaires :</p>
 
                                     <?php foreach ($commentaires as $commentaire): ?>
-                                        <p class="task-comment"><?= htmlspecialchars($commentaire["content"]); ?></p>
+                                        <div class="comment-container">
+                                            <p class="task-comment"><?= htmlspecialchars($commentaire["content"]); ?></p>
+                                            <div class="comment-actions">
+                                                <button class="edit-btn" onclick="openEditCommentModal(<?= $commentaire['cmt_id']; ?>, '<?= htmlspecialchars($commentaire["content"]); ?>')" title="Modifier">
+                                                    ✏️
+                                                </button>
+                                                <button class="delete-btn" onclick="deleteComment(<?= $commentaire['cmt_id']; ?>)" title="Supprimer">
+                                                    🗑
+                                                </button>
+                                            </div>
+                                        </div>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
 
@@ -34,7 +43,7 @@
                                         <p class="task-date">Échéance : <?= htmlspecialchars($tache["due_date"]); ?></p>
                                     <?php endif; ?>
                                 <?php endif; ?>
-                                    
+
                                 <div class="task-actions">
                                     <button class="edit-btn" onclick="openModalEditTask(this.closest('.task-card'))" title="Modifier">
                                         ✏️
@@ -138,9 +147,25 @@
             <div class="modal-content">
                 <span class="close" onclick="closeCommentsModal()">&times;</span>
                 <h2>Commentaires pour la tâche</h2>
-                <div id="commentsList"></div>
-                <textarea id="newComment" placeholder="Ajouter un commentaire"></textarea>
-                <button onclick="addComment()">Ajouter</button>
+                <div id="commentsList">
+                    <!-- Liste des commentaires -->
+                </div>
+                <form id="addCommentForm" method="POST" action="/comments/store">
+                    <input type="hidden" name="tsk_id" id="task-id">
+                    <input type="hidden" name="usr_id" value="<?= session()->get('user_id'); ?>">
+                    <textarea name="content" placeholder="Ajouter un commentaire" required></textarea>
+                    <button type="submit">Ajouter</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal pour modifier un commentaire -->
+        <div id="editCommentModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeEditCommentModal()">&times;</span>
+                <h3>Modifier le commentaire</h3>
+                <textarea id="editCommentText"></textarea>
+                <button onclick="saveComment()">Enregistrer</button>
             </div>
         </div>
 
@@ -294,35 +319,89 @@
     }
 
     .modal {
-    display: none; 
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4);
+        display: none; 
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .comment-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
 }
-.modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
+
+.task-comment {
+    margin: 0;
+    flex: 1; /* Le commentaire occupe tout l'espace disponible */
 }
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+
+.comment-actions {
+    display: flex;
+    gap: 10px; /* Espacement entre les boutons */
 }
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
+
+.comment-actions button {
+    background-color: transparent;
+    border: none;
     cursor: pointer;
+    font-size: 16px;
 }
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-content textarea {
+    margin-bottom: 10px;
+    width: 100%;
+    height: 100px;
+}
+
+.close {
+    align-self: flex-end;
+    cursor: pointer;
+    font-size: 18px;
+}
+
 
 </style>
 
@@ -423,25 +502,7 @@
         modal.style.display = "block";
 
         const taskCard = document.getElementById(`task-${taskId}`);
-        // Récupérer les commentaires via AJAX
-        fetch('/comments/getCommentsByTaskId', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '<?= csrf_hash(); ?>'
-            },
-            body: JSON.stringify({ taskId: taskId })
-        })
-            .then(response => response.json())
-            .then(data => {
-                const commentsList = document.getElementById('commentsList');
-                commentsList.innerHTML = '';
-
-                data.forEach(comment => {
-                    // Affichage des commentaires
-                    commentsList.innerHTML += `<p>${comment.content}</p>`;
-                });
-            });
+        document.getElementById('task-id').value = taskId;
     }
 
     function closeCommentsModal() {
@@ -449,20 +510,55 @@
         modal.style.display = "none";
     }
 
-    function addComment(taskId) {
-        const newComment = document.getElementById('newComment').value;
-        if (newComment.trim() === '') return;
+    // Ouvrir le modal avec le commentaire actuel
+    function openEditCommentModal(commentId, commentText) {
+        const modal = document.getElementById('editCommentModal');
+        const textarea = document.getElementById('editCommentText');
 
-        fetch('comments/store', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ task_id: taskId, text: newComment })
-        }).then(() => {
-            // Actualisez le modal après l'ajout
-            openCommentsModal(taskId);
-        });
+        // Stocker l'ID du commentaire dans l'attribut data
+        modal.setAttribute('data-comment-id', commentId);
+        textarea.value = commentText;
+
+        // Afficher le modal
+        modal.style.display = 'block';
     }
 
+    // Fermer le modal
+    function closeEditCommentModal() {
+        const modal = document.getElementById('editCommentModal');
+        modal.style.display = 'none';
+    }
+
+    // Enregistrer les modifications
+    function saveComment() {
+        const modal = document.getElementById('editCommentModal');
+        const commentId = modal.getAttribute('data-comment-id');
+        const newText = document.getElementById('editCommentText').value;
+
+        if (newText.trim() === '') {
+            alert('Le commentaire ne peut pas être vide.');
+            return;
+        }
+
+        // Envoyer une requête AJAX pour modifier le commentaire vers comments/update/(:num)
+
+        fetch(`/comments/update/${commentId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '<?= csrf_hash(); ?>'
+            },
+            body: JSON.stringify({ id: commentId, content: newText })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    closeEditCommentModal();
+                } else {
+                }
+            })
+            .catch(error => console.error('Erreur:', error));
+    }
 
 
 </script>

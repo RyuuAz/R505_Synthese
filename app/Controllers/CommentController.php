@@ -49,7 +49,7 @@ class CommentController extends BaseController
         $this->commentModel->del($id);
         return redirect()->to('/dashboard')->with('success', 'Commentaire supprimé.');
     }
-    
+
     public function update($commentId)
     {
         $data = $this->request->getJSON(); // Récupérer les données envoyées par le client (JSON)
