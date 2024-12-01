@@ -1,4 +1,5 @@
 <?php echo view('common/head', ['titre' => 'Profile']); ?>
+<link rel="stylesheet" href="/assets/css/profile.css">
 
 <div class="container my-5">
     <div class="row justify-content-center">
@@ -26,96 +27,75 @@
 						<label for="email" class="form-label"> <?= esc($user['email']) ?></label>
 					</div>
 
-					<!-- Bouton de modifcation -->
-					<div class="mt-3">
-						<button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#ModificationUser">
-							Modifier mes informations
-						</button>
-					</div>
+					<!-- Boutons pour ouvrir les modals -->
+					<button class="btn btn-primary" onclick="openModal('editModal')">Modifier mes informations</button>
+					<button class="btn btn-danger" onclick="openModal('deleteModal')">Supprimer mon compte</button>
 
-					<!-- Modal de modification -->
-					<div class="modal fade" id="ModificationUser" tabindex="-1" aria-labelledby="modificationUser" aria-hidden="true">
-						<div class="modal-dialog">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title" id="modificationUser">Confirmer la modifcation ?</h5>
-									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
-								</div>
-								<div class="modal-body">
-									<!-- Formulaire de modification -->
-									<form method="post" action="/users/update">
-										<?= csrf_field() ?>
-										<div class="mb-3">
-											<input type="text" class="form-control" id="firstname" name="first_name" value="<?= esc($user['first_name']) ?>" required>
-										</div>
-										<div class="mb-3">
-											<input type="text" class="form-control" id="lastname" name="last_name" value="<?= esc($user['last_name']) ?>" required>
-										</div>
-										<div class="mb-3">
-											<input type="email" class="form-control" id="email" name="email" value="<?= esc($user['email']) ?>" required>
-										</div>
-										<div class="mb-3">
-											<input type="password" class="form-control" id="password" name="password" required>
-										</div>
-										<div class="mb-3">
-											<input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
-										</div>
-										<button type="submit" class="btn btn-primary w-100">Mettre à jour</button>
-									</form>
-								</div>
-								<div class="modal-footer">
-									<!-- Bouton pour fermer le modal -->
-									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-								</div>
-							</div>
-						</div>
-					</div>
-
-                    
-							
-                    <!-- Bouton de suppression -->
-					<div class="mt-3">
-						<button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#ConfirmerSuppression">
-							Supprimer mon compte
-						</button>
-					</div>
-
-					<!-- Modal de confirmation de suppression -->
-					<div class="modal fade" id="ConfirmerSuppression" tabindex="-1" aria-labelledby="confirmersuppressionLabel" aria-hidden="true">
-						<div class="modal-dialog">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title" id="confirmersuppressionLabel">Confirmer la suppression ?</h5>
-									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
-								</div>
-								<div class="modal-body">
-									Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.
-									<form action="/users/delete" method="post" class="mt-3">
-										<?= csrf_field() ?>
-										<!-- Champ de confirmation -->
-										<div class="mb-3">
-											<?php echo form_input('confirm', '', [
-												'class' => 'form-control', 
-												'required' => 'required', 
-												'placeholder' => 'Confirmer'
-											]); ?>
-										</div>
-										<!-- Bouton de confirmation -->
-										<button type="submit" class="btn btn-danger w-100">Confirmer</button>
-									</form>
-								</div>
-								<div class="modal-footer">
-									<!-- Bouton pour fermer le modal -->
-									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-								</div>
-							</div>
-						</div>
-					</div>
 
                 </div>
             </div>
+			<!-- Modal de modification -->
+			<div id="editModal" class="modal">
+				<div class="modal-header">
+					<h3 class="modal-title">Modifier mes informations</h3>
+					<button class="modal-close" onclick="closeModal('editModal')">&times;</button>
+				</div>
+				<div class="modal-body">
+					<form method="post" action="/users/update">
+						<?= csrf_field() ?>
+						<div class="mb-3">
+							<label for="firstname">Prénom :</label>
+							<input type="text" id="firstname" name="first_name" value="<?= esc($user['first_name']) ?>" required>
+						</div>
+						<div class="mb-3">
+							<label for="lastname">Nom :</label>
+							<input type="text" id="lastname" name="last_name" value="<?= esc($user['last_name']) ?>" required>
+						</div>
+						<div class="mb-3">
+							<label for="email">Email :</label>
+							<input type="email" id="email" name="email" value="<?= esc($user['email']) ?>" required>
+						</div>
+						<div class="mb-3">
+							<label for="password">Mot de passe :</label>
+							<input type="password" id="password" name="password">
+						</div>
+						<div class="mb-3">
+							<label for="confirm_password">Confirmer le mot de passe :</label>
+							<input type="password" id="confirm_password" name="confirm_password">
+						</div>
+						<div class="modal-footer">
+							<button class="btn btn-secondary" onclick="closeModal('editModal')">Annuler</button>
+							<button class="btn btn-primary" type="submit">Enregistrer</button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<!-- Modal de confirmation de suppression -->
+			<div id="deleteModal" class="modal">
+				<div class="modal-header">
+					<h3 class="modal-title">Confirmer la suppression</h3>
+					<button class="modal-close" onclick="closeModal('deleteModal')">&times;</button>
+				</div>
+				<div class="modal-body">
+					<p>Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.</p>
+					<form action="/users/delete" method="post">
+						<?= csrf_field() ?>
+						<div class="mb-3">
+							<input type="text" name="confirm" placeholder="Tapez CONFIRMER" required>
+						</div>
+						<button type="submit" class="btn btn-danger">Confirmer</button>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" onclick="closeModal('deleteModal')">Annuler</button>
+				</div>
+			</div>
+
         </div>
     </div>
 </div>
+
+<script src="/assets/js/profile.js"></script>
 
 <?php echo view('common/foot'); ?>

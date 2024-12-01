@@ -46,10 +46,17 @@ class CommentController extends BaseController
     // Supprime un commentaire
     public function delete($id)
     {
-        $this->commentModel->del($id);
-        return redirect()->to('/dashboard')->with('success', 'Commentaire supprimé.');
+        $commentModel = new CommentModel();
+        $comment = $commentModel->find($id);
+
+        if ($comment) {
+            $commentModel->del($id);
+            return redirect()->back()->with('success', 'Commentaire supprimé.');
+        } else {
+            return redirect()->back()->with('error', 'Commentaire introuvable.');
+        }
     }
-    
+
     public function update($commentId)
     {
         $data = $this->request->getJSON(); // Récupérer les données envoyées par le client (JSON)

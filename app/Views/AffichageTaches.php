@@ -3,7 +3,8 @@ echo view('common/head', [
     'titre' => 'Tâches'
 ]);
 ?>
-<div class="button-group">
+
+<div class="button-group d-flex-between p-3">
     <button type="button" class="add-btn " data-filter="all" onclick="loadTasks('all')">Toutes les
         tâches</button>
     <button type="button" class="add-btn" data-filter="delayed" onclick="loadTasks('delayed')">En retard</button>
@@ -52,10 +53,13 @@ echo view('common/head', [
     <?php
     // Afficher les tâches par défaut (Toutes les tâches)
     echo view('DefaultTaskView', [
-        'tachesParStatut' => $taches
+        'tachesParStatut' => $taches,   // Tâches classées par statut
+        'priorities' => $priorities,     // Priorités des tâches
+        'perPage' => $perPage           // Nombre de tâches par page
     ]);
     ?>
 </div>
+
 
 <script>
     function loadTasks(filterType) {
